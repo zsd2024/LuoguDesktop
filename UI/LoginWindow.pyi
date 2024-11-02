@@ -1,0 +1,16 @@
+from PIL import Image as Image
+from PyQt6.QtWidgets import QWidget
+from _typeshed import Incomplete as Incomplete
+from typing import Any
+
+class LoginInterface(QWidget):
+    cookies: dict[str, Any] | None
+    username_var: str
+    password_var: str
+    def __init__(self) -> None: ...
+    username_entry: Incomplete
+    password_entry: Incomplete
+    def initUI(self) -> None: ...
+    def on_login(self) -> None: ...
+    def show_error(self, message: str, title: str = '错误') -> None: ...
+    def crop_avatar_to_circle(self, avatar_image: Image.Image) -> Image.Image: ...
