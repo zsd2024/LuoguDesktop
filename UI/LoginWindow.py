@@ -17,7 +17,7 @@ from PyQt6.QtWidgets import (
 from PyQt6.QtGui import QPixmap
 from PIL import Image, ImageDraw
 from PIL.ImageQt import ImageQt
-from ..lib.user import login  # type: ignore
+from lib.user import login  # type: ignore
 from typing import Optional, Any
 from PyQt6.QtCore import Qt
 

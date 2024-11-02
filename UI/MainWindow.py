@@ -8,8 +8,8 @@ sys.path.append(
 from typing import Any, Optional
 
 
-from LupguDesktop.UI.LoginWindow import LoginInterface
-from LuoguDesktop.lib.user import fetch_user_data
+from .LoginWindow import LoginInterface
+from lib.user import fetch_user_data
 from PyQt6.QtWidgets import QApplication, QMainWindow, QMessageBox
 from PyQt6.QtGui import QAction
 
