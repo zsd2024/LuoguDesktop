@@ -1,9 +1,14 @@
 import sys
+import os
+
+sys.path.append(
+    os.path.dirname(os.path.abspath(__file__)) + "/../..",
+)  # 添加项目根目录到搜索路径
+
 from typing import Any, Optional
 
-sys.path.append(".")
 
-from LuoguDesktop.UI.LoginWindow import LoginInterface
+from LupguDesktop.UI.LoginWindow import LoginInterface
 from LuoguDesktop.lib.user import fetch_user_data
 from PyQt6.QtWidgets import QApplication, QMainWindow, QMessageBox
 from PyQt6.QtGui import QAction
