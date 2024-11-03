@@ -1,0 +1,9 @@
+import ddddocr
+
+user_headers: dict[str, str]
+cookies: dict[str, str]
+ocr: ddddocr.DdddOcr
+
+def fetch_user_data(uid: str) -> tuple[str | None, str | None]: ...
+def login(username: str, password: str) -> dict[str, str]: ...
+def process_captcha(captcha: bytes) -> str: ...
