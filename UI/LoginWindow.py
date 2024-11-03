@@ -14,10 +14,10 @@ from PyQt6.QtWidgets import (
     QMessageBox,
     QSizePolicy,
 )
-from PyQt6.QtGui import QPixmap
+from PyQt6.QtGui import QPixmap, QIcon
 from PIL import Image, ImageDraw
 from PIL.ImageQt import ImageQt
-from lib.user import login  # type: ignore
+from lib.user import login
 from typing import Optional, Any
 from PyQt6.QtCore import Qt
 
@@ -37,6 +37,13 @@ class LoginInterface(QWidget):
         self.setWindowTitle("登录 - LuoguQQ")
         self.setFixedSize(300, 400)  # 设置窗口大小
         self.setStyleSheet("background-color: #f1f1f1;")  # 设置背景颜色
+
+        # 设置窗口图标
+        pixmap = QPixmap()
+        pixmap.loadFromData(
+            requests.get("https://www.luogu.com.cn/favicon.ico").content
+        )
+        self.setWindowIcon(QIcon(pixmap))
 
         layout: QVBoxLayout = QVBoxLayout()
         layout.setAlignment(Qt.AlignmentFlag.AlignCenter)
