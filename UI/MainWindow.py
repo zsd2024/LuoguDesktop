@@ -1,6 +1,9 @@
 import sys
 import os
+from tokenize import tabsize
 from typing import Any, Optional
+
+from cv2 import log
 
 from UI.LoginWindow import LoginInterface
 from lib.user import fetch_user_data
@@ -10,6 +13,11 @@ from PyQt6.QtWidgets import (
     QMainWindow,
     QMessageBox,
     QGraphicsDropShadowEffect,
+    QTabWidget,
+    QWidget,
+    QVBoxLayout,
+    QHBoxLayout,
+    QLabel,
 )
 from PyQt6.QtGui import QAction, QPixmap, QIcon, QPainter, QColor
 from PyQt6.QtSvg import QSvgRenderer
@@ -52,6 +60,30 @@ class MainWindow(QMainWindow):
         menubar.setStyleSheet(
             "QMenuBar { background-color: rgba(255, 255, 255, 150); border: none; }"
         )
+
+        # 创建标签页
+        self.tabs = QTabWidget(self)
+        self.setCentralWidget(self.tabs)
+        # 添加样式表，确保标签的外观
+        self.tabs.setStyleSheet(
+            """
+            QTabBar::tab {
+                background: rgba(200, 200, 200, 150);   /* 标签背景色 */
+                color: black;                            /* 标签文字颜色 */
+                padding: 3px;                          /* 标签内边距 */
+                height: 10px;                           /* 标签高度 */
+                width: 50px;                           /* 标签宽度 */
+                text-align: left;                       /* 确保文本左对齐 */
+            }
+            QTabBar::tab:selected {
+                background: rgba(0, 200, 220, 200);  /* 选中标签的背景色 */
+                color: white;                           /* 选中标签的文字颜色 */
+            }
+        """
+        )
+
+        self.create_tabs()  # 创建标签页
+
         # 添加阴影效果
         shadow_effect = QGraphicsDropShadowEffect()
         shadow_effect.setOffset(2, 2)  # 阴影偏移
@@ -62,6 +94,15 @@ class MainWindow(QMainWindow):
         menubar.setGraphicsEffect(shadow_effect)
 
         if menubar:
+            # 创建“文件”菜单
+            file_menu = menubar.addMenu("文件")
+            if file_menu:
+                # 创建“退出”菜单项
+                exit_action = QAction("退出", self)
+                exit_action.triggered.connect(self.close)  # type: ignore
+                file_menu.addAction(exit_action)  # type: ignore
+                exit_action.setIcon(QIcon.fromTheme("application-exit"))  # 设置图标
+
             # 创建“账号”菜单
             account_menu = menubar.addMenu("账号")
 
@@ -74,6 +115,7 @@ class MainWindow(QMainWindow):
                 # 创建“退出登录”菜单项
                 logout_action = QAction("退出登录", self)
                 logout_action.triggered.connect(self.logout)  # type: ignore
+                logout_action.setObjectName("logout_action")  # 设置对象名称，方便查找
                 account_menu.addAction(logout_action)  # type: ignore
 
                 # 直接使用SVG字符串创建图标
@@ -88,6 +130,15 @@ class MainWindow(QMainWindow):
 
                 # 将QPixmap转换为QIcon，并设置为菜单图标
                 logout_action.setIcon(QIcon(pixmap))
+                logout_action.setEnabled(False)  # 登录后才可退出登录
+            # 创建“题目”菜单
+            problem_menu = menubar.addMenu("题目")
+            if problem_menu:
+                # 创建“查看题目”菜单项
+                view_problem_action = QAction("查看题目", self)
+                view_problem_action.triggered.connect(self.view_problem)  # type: ignore
+                problem_menu.addAction(view_problem_action)  # type: ignore
+
             # 创建“帮助”菜单
             help_menu = menubar.addMenu("帮助")
             if help_menu:
@@ -95,6 +146,39 @@ class MainWindow(QMainWindow):
                 about_action = QAction("关于", self)
                 about_action.triggered.connect(self.about)  # type: ignore
                 help_menu.addAction(about_action)  # type: ignore
+                about_action.setIcon(QIcon.fromTheme("help-about"))  # 设置图标
+        self.repaint()
+
+    def close_tab(self, index: int) -> None:
+        self.tabs.removeTab(index)
+
+    def create_tabs(self) -> None:
+        tab1 = QWidget()
+        tab2 = QWidget()
+        tab3 = QWidget()
+        self.tabs.addTab(tab1, "Tab 1")
+        self.tabs.addTab(tab2, "Tab 2")
+        self.tabs.addTab(tab3, "Tab 3")
+        tab1_layout = QVBoxLayout()
+        tab1.setLayout(tab1_layout)
+        tab2_layout = QHBoxLayout()
+        tab2.setLayout(tab2_layout)
+        tab3_layout = QHBoxLayout()
+        tab3.setLayout(tab3_layout)
+        tab1_layout.addWidget(QLabel("这是Tab 1内容"))
+        tab2_layout.addWidget(QLabel("这是Tab 2内容"))
+        tab2_layout.addWidget(QLabel("你好，世界！"))
+        tab3_layout.addWidget(QLabel("这是Tab 3内容"))
+        tab3_layout.addWidget(QLabel("test"))
+        tab1.setLayout(tab1_layout)
+        tab2.setLayout(tab2_layout)
+        tab3.setLayout(tab3_layout)
+        self.tabs.addTab(tab1, "Tab 1")
+        self.tabs.addTab(tab2, "Tab 2")
+        self.tabs.addTab(tab3, "Tab 3")
+
+    def view_problem(self) -> None:
+        pass
 
     def about(self) -> None:
         QMessageBox.about(
@@ -149,6 +233,9 @@ class MainWindow(QMainWindow):
                 self.statusbar.showMessage(
                     "洛谷账号登录失败，请先登录！"
                 )  # 更新状态栏信息
+                self.findChild(QAction, "logout_action").setEnabled(
+                    False
+                )  # 登录失败后禁用退出登录菜单项
             return
         else:
             if self.statusbar:
@@ -156,6 +243,9 @@ class MainWindow(QMainWindow):
                 self.statusbar.showMessage(
                     f"已登录，用户名：{self.username}"
                 )  # 更新状态栏信息
+                self.findChild(QAction, "logout_action").setEnabled(
+                    True
+                )  # 登录成功后可退出登录
 
     def logout(self) -> None:
         if not self.cookies:
@@ -167,6 +257,9 @@ class MainWindow(QMainWindow):
             self.statusbar.showMessage(
                 "洛谷账号已退出登录，请先登录！"
             )  # 更新状态栏信息
+            self.findChild(QAction, "logout_action").setEnabled(
+                False
+            )  # 退出登录后禁用退出登录菜单项
 
 
 if __name__ == "__main__":

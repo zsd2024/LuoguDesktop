@@ -1,0 +1,55 @@
+{
+    "python.analysis.autoImportCompletions": true,
+    "outline-map.follow": "viewport",
+    "terminal.integrated.fontFamily": "MesloLGS NF",
+    "editor.fontLigatures": true,
+    "terminal.integrated.profiles.windows": {
+        "MSYS2 - MSYS": {
+            "path": [
+                "D:/Greens/msys2/msys2_shell.cmd"
+            ],
+            "args": [
+                "-defterm",
+                "-here",
+                "-no-start",
+                "-msys"
+            ],
+            "icon": "terminal"
+        },
+        "MSYS2 - MINGW64": {
+            "path": [
+                "D:/Greens/msys2/msys2_shell.cmd"
+            ],
+            "args": [
+                "-defterm",
+                "-here",
+                "-no-start",
+                "-mingw64"
+            ],
+            "icon": "terminal"
+        },
+        "MSYS2 - UCRT64": {
+            "path": [
+                "D:/Greens/msys2/msys2_shell.cmd"
+            ],
+            "args": [
+                "-defterm",
+                "-here",
+                "-no-start",
+                "-ucrt64"
+            ],
+            "icon": "terminal"
+        }
+    },
+    "editor.insertSpaces": false,
+    "editor.tabSize": 4,
+    "editor.fontFamily": "'Fira Code','Consolas', '微软雅黑'",
+    "python.defaultInterpreterPath": "C:\\Users\\great\\AppData\\Local\\Programs\\Python\\Python312\\python.exe",
+    "outline-map.customFont": "[ 'Fira Code' | 'Fira Code' ]"
+    // "code-runner.languageIdToFileExtensionMap": {
+    //     "bat": ".bat",
+    //     "cpp": ".cpp",
+    //     "powershell": ".ps1",
+    //     "typescript": ".ts"
+    // }
+}
