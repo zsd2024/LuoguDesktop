@@ -42,11 +42,7 @@ class MainWindow(QMainWindow):
         self.load_background_image(get_background_url())
 
         # 设置窗口图标
-        pixmap = QPixmap()
-        pixmap.loadFromData(
-            requests.get("https://www.luogu.com.cn/favicon.ico").content
-        )
-        self.setWindowIcon(QIcon(pixmap))
+        self.setWindowIcon(QIcon(os.path.join(os.path.dirname(__file__),'..', "logo.svg")))
 
         # 创建状态栏
         self.statusbar = self.statusBar()  # 添加状态栏

@@ -1,7 +1,7 @@
 {
     "python.analysis.autoImportCompletions": true,
     "outline-map.follow": "viewport",
-    "terminal.integrated.fontFamily": "MesloLGS NF",
+    "terminal.integrated.fontFamily": "'MesloLGS NF','Fira Code', 'Consolas', '微软雅黑'",
     "editor.fontLigatures": true,
     "terminal.integrated.profiles.windows": {
         "MSYS2 - MSYS": {

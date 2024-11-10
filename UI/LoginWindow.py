@@ -39,11 +39,7 @@ class LoginInterface(QWidget):
         self.setStyleSheet("background-color: #f1f1f1;")  # 设置背景颜色
 
         # 设置窗口图标
-        pixmap = QPixmap()
-        pixmap.loadFromData(
-            requests.get("https://www.luogu.com.cn/favicon.ico").content
-        )
-        self.setWindowIcon(QIcon(pixmap))
+        self.setWindowIcon(QIcon(os.path.join(os.path.dirname(__file__),'..', "logo.svg")))
 
         layout: QVBoxLayout = QVBoxLayout()
         layout.setAlignment(Qt.AlignmentFlag.AlignCenter)
