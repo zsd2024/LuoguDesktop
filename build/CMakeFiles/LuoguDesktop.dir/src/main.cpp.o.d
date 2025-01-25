@@ -314,6 +314,8 @@ CMakeFiles/LuoguDesktop.dir/src/main.cpp.o: \
  /home/zyk/.tmp/LuoguDesktop/src/Login/LuoguLogin.h \
  /home/zyk/.tmp/Qt/5.15.2/gcc_64/include/QtCore/QByteArray \
  /home/zyk/.tmp/Qt/5.15.2/gcc_64/include/QtCore/qbytearray.h \
+ /home/zyk/.tmp/Qt/5.15.2/gcc_64/include/QtCore/QCoreApplication \
+ /home/zyk/.tmp/Qt/5.15.2/gcc_64/include/QtCore/qcoreapplication.h \
  /home/zyk/.tmp/Qt/5.15.2/gcc_64/include/QtCore/QJsonDocument \
  /home/zyk/.tmp/Qt/5.15.2/gcc_64/include/QtCore/qjsondocument.h \
  /home/zyk/.tmp/Qt/5.15.2/gcc_64/include/QtCore/qjsonvalue.h \
@@ -370,6 +372,21 @@ CMakeFiles/LuoguDesktop.dir/src/main.cpp.o: \
  /home/zyk/.tmp/Qt/5.15.2/gcc_64/include/QtNetwork/qnetworkrequest.h \
  /home/zyk/.tmp/Qt/5.15.2/gcc_64/include/QtNetwork/QNetworkAccessManager \
  /home/zyk/.tmp/Qt/5.15.2/gcc_64/include/QtNetwork/QNetworkRequest \
+ /home/zyk/.tmp/Qt/5.15.2/gcc_64/include/QtCore/QDebug \
+ /home/zyk/.tmp/Qt/5.15.2/gcc_64/include/QtCore/qdebug.h \
+ /usr/include/c++/13/random /usr/include/c++/13/cmath /usr/include/math.h \
+ /usr/include/x86_64-linux-gnu/bits/math-vector.h \
+ /usr/include/x86_64-linux-gnu/bits/libm-simd-decl-stubs.h \
+ /usr/include/x86_64-linux-gnu/bits/flt-eval-method.h \
+ /usr/include/x86_64-linux-gnu/bits/fp-logb.h \
+ /usr/include/x86_64-linux-gnu/bits/fp-fast.h \
+ /usr/include/x86_64-linux-gnu/bits/mathcalls-helper-functions.h \
+ /usr/include/x86_64-linux-gnu/bits/mathcalls.h \
+ /usr/include/x86_64-linux-gnu/bits/mathcalls-narrow.h \
+ /usr/include/x86_64-linux-gnu/bits/iscanonical.h \
+ /usr/include/c++/13/bits/random.h \
+ /usr/include/x86_64-linux-gnu/c++/13/bits/opt_random.h \
+ /usr/include/c++/13/bits/random.tcc \
  /home/zyk/.tmp/Qt/5.15.2/gcc_64/include/QtWidgets/QWidget \
  /home/zyk/.tmp/Qt/5.15.2/gcc_64/include/QtWidgets/QMessageBox \
  /home/zyk/.tmp/Qt/5.15.2/gcc_64/include/QtWidgets/qmessagebox.h \

@@ -3,6 +3,8 @@
   /home/zyk/.tmp/LuoguDesktop/src/Login/LuoguLogin.h \
   /home/zyk/.tmp/LuoguDesktop/src/Login/ui_Login.h \
   /home/zyk/.tmp/Qt/5.15.2/gcc_64/include/QtCore/QByteArray \
+  /home/zyk/.tmp/Qt/5.15.2/gcc_64/include/QtCore/QCoreApplication \
+  /home/zyk/.tmp/Qt/5.15.2/gcc_64/include/QtCore/QDebug \
   /home/zyk/.tmp/Qt/5.15.2/gcc_64/include/QtCore/QFlags \
   /home/zyk/.tmp/Qt/5.15.2/gcc_64/include/QtCore/QIODevice \
   /home/zyk/.tmp/Qt/5.15.2/gcc_64/include/QtCore/QJsonDocument \
@@ -309,6 +311,7 @@
   /usr/include/c++/13/pstl/glue_algorithm_defs.h \
   /usr/include/c++/13/pstl/glue_memory_defs.h \
   /usr/include/c++/13/pstl/glue_numeric_defs.h \
+  /usr/include/c++/13/random \
   /usr/include/c++/13/stdexcept \
   /usr/include/c++/13/streambuf \
   /usr/include/c++/13/string \
