@@ -1,0 +1,165 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>LuoguDesktop</class>
+ <widget class="QMainWindow" name="LuoguDesktop">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>800</width>
+    <height>600</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>LuoguDesktop</string>
+  </property>
+  <property name="windowIcon">
+   <iconset resource="../assets.qrc">
+    <normaloff>:/images/assets/logo.svg</normaloff>:/images/assets/logo.svg</iconset>
+  </property>
+  <widget class="QWidget" name="centralwidget"/>
+  <widget class="QMenuBar" name="menubar">
+   <property name="geometry">
+    <rect>
+     <x>0</x>
+     <y>0</y>
+     <width>800</width>
+     <height>23</height>
+    </rect>
+   </property>
+   <widget class="QMenu" name="File">
+    <property name="title">
+     <string>文件</string>
+    </property>
+    <addaction name="login"/>
+    <addaction name="logout"/>
+    <addaction name="separator"/>
+    <addaction name="settings"/>
+    <addaction name="exit"/>
+   </widget>
+   <widget class="QMenu" name="Problem">
+    <property name="title">
+     <string>题目</string>
+    </property>
+    <addaction name="show_problem"/>
+   </widget>
+   <widget class="QMenu" name="Discuss">
+    <property name="title">
+     <string>讨论</string>
+    </property>
+    <addaction name="all"/>
+    <addaction name="siteaffairs"/>
+    <addaction name="problem"/>
+    <addaction name="academics"/>
+    <addaction name="relevantaffairs"/>
+    <addaction name="service"/>
+    <addaction name="separator"/>
+    <addaction name="save_discuss"/>
+   </widget>
+   <widget class="QMenu" name="Help">
+    <property name="title">
+     <string>帮助</string>
+    </property>
+    <addaction name="help"/>
+    <addaction name="about"/>
+   </widget>
+   <widget class="QMenu" name="Article">
+    <property name="title">
+     <string>专栏</string>
+    </property>
+    <addaction name="article_mine"/>
+    <addaction name="article_ground"/>
+   </widget>
+   <addaction name="File"/>
+   <addaction name="Problem"/>
+   <addaction name="Discuss"/>
+   <addaction name="Article"/>
+   <addaction name="Help"/>
+  </widget>
+  <widget class="QStatusBar" name="statusbar"/>
+  <action name="login">
+   <property name="text">
+    <string>登录</string>
+   </property>
+  </action>
+  <action name="logout">
+   <property name="text">
+    <string>登出</string>
+   </property>
+  </action>
+  <action name="settings">
+   <property name="text">
+    <string>设置</string>
+   </property>
+  </action>
+  <action name="exit">
+   <property name="text">
+    <string>退出</string>
+   </property>
+  </action>
+  <action name="help">
+   <property name="text">
+    <string>帮助</string>
+   </property>
+  </action>
+  <action name="about">
+   <property name="text">
+    <string>关于</string>
+   </property>
+  </action>
+  <action name="show_problem">
+   <property name="text">
+    <string>查看题目</string>
+   </property>
+  </action>
+  <action name="article_mine">
+   <property name="text">
+    <string>我的专栏</string>
+   </property>
+  </action>
+  <action name="article_ground">
+   <property name="text">
+    <string>文章广场</string>
+   </property>
+  </action>
+  <action name="all">
+   <property name="text">
+    <string>全部板块</string>
+   </property>
+  </action>
+  <action name="siteaffairs">
+   <property name="text">
+    <string>站务版</string>
+   </property>
+  </action>
+  <action name="problem">
+   <property name="text">
+    <string>题目总版</string>
+   </property>
+  </action>
+  <action name="academics">
+   <property name="text">
+    <string>学术版</string>
+   </property>
+  </action>
+  <action name="relevantaffairs">
+   <property name="text">
+    <string>灌水区</string>
+   </property>
+  </action>
+  <action name="service">
+   <property name="text">
+    <string>工单反馈版</string>
+   </property>
+  </action>
+  <action name="save_discuss">
+   <property name="text">
+    <string>保存帖子</string>
+   </property>
+  </action>
+ </widget>
+ <resources>
+  <include location="../assets.qrc"/>
+ </resources>
+ <connections/>
+</ui>

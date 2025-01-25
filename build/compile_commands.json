@@ -1,0 +1,38 @@
+[
+{
+  "directory": "/home/zyk/.tmp/LuoguDesktop/build",
+  "command": "/usr/bin/c++ -DQT_CORE_LIB -DQT_GUI_LIB -DQT_NETWORK_LIB -DQT_WIDGETS_LIB -I/home/zyk/.tmp/LuoguDesktop/build -I/home/zyk/.tmp/LuoguDesktop -I/home/zyk/.tmp/LuoguDesktop/build/LuoguDesktop_autogen/include -isystem /home/zyk/.tmp/Qt/5.15.2/gcc_64/include -isystem /home/zyk/.tmp/Qt/5.15.2/gcc_64/include/QtWidgets -isystem /home/zyk/.tmp/Qt/5.15.2/gcc_64/include/QtGui -isystem /home/zyk/.tmp/Qt/5.15.2/gcc_64/include/QtCore -isystem /home/zyk/.tmp/Qt/5.15.2/gcc_64/./mkspecs/linux-g++ -isystem /home/zyk/.tmp/Qt/5.15.2/gcc_64/include/QtNetwork -g -std=gnu++11 -fPIC -o CMakeFiles/LuoguDesktop.dir/LuoguDesktop_autogen/mocs_compilation.cpp.o -c /home/zyk/.tmp/LuoguDesktop/build/LuoguDesktop_autogen/mocs_compilation.cpp",
+  "file": "/home/zyk/.tmp/LuoguDesktop/build/LuoguDesktop_autogen/mocs_compilation.cpp",
+  "output": "CMakeFiles/LuoguDesktop.dir/LuoguDesktop_autogen/mocs_compilation.cpp.o"
+},
+{
+  "directory": "/home/zyk/.tmp/LuoguDesktop/build",
+  "command": "/usr/bin/c++ -DQT_CORE_LIB -DQT_GUI_LIB -DQT_NETWORK_LIB -DQT_WIDGETS_LIB -I/home/zyk/.tmp/LuoguDesktop/build -I/home/zyk/.tmp/LuoguDesktop -I/home/zyk/.tmp/LuoguDesktop/build/LuoguDesktop_autogen/include -isystem /home/zyk/.tmp/Qt/5.15.2/gcc_64/include -isystem /home/zyk/.tmp/Qt/5.15.2/gcc_64/include/QtWidgets -isystem /home/zyk/.tmp/Qt/5.15.2/gcc_64/include/QtGui -isystem /home/zyk/.tmp/Qt/5.15.2/gcc_64/include/QtCore -isystem /home/zyk/.tmp/Qt/5.15.2/gcc_64/./mkspecs/linux-g++ -isystem /home/zyk/.tmp/Qt/5.15.2/gcc_64/include/QtNetwork -g -std=gnu++11 -fPIC -o CMakeFiles/LuoguDesktop.dir/src/LuoguDesktop.cpp.o -c /home/zyk/.tmp/LuoguDesktop/src/LuoguDesktop.cpp",
+  "file": "/home/zyk/.tmp/LuoguDesktop/src/LuoguDesktop.cpp",
+  "output": "CMakeFiles/LuoguDesktop.dir/src/LuoguDesktop.cpp.o"
+},
+{
+  "directory": "/home/zyk/.tmp/LuoguDesktop/build",
+  "command": "/usr/bin/c++ -DQT_CORE_LIB -DQT_GUI_LIB -DQT_NETWORK_LIB -DQT_WIDGETS_LIB -I/home/zyk/.tmp/LuoguDesktop/build -I/home/zyk/.tmp/LuoguDesktop -I/home/zyk/.tmp/LuoguDesktop/build/LuoguDesktop_autogen/include -isystem /home/zyk/.tmp/Qt/5.15.2/gcc_64/include -isystem /home/zyk/.tmp/Qt/5.15.2/gcc_64/include/QtWidgets -isystem /home/zyk/.tmp/Qt/5.15.2/gcc_64/include/QtGui -isystem /home/zyk/.tmp/Qt/5.15.2/gcc_64/include/QtCore -isystem /home/zyk/.tmp/Qt/5.15.2/gcc_64/./mkspecs/linux-g++ -isystem /home/zyk/.tmp/Qt/5.15.2/gcc_64/include/QtNetwork -g -std=gnu++11 -fPIC -o CMakeFiles/LuoguDesktop.dir/src/main.cpp.o -c /home/zyk/.tmp/LuoguDesktop/src/main.cpp",
+  "file": "/home/zyk/.tmp/LuoguDesktop/src/main.cpp",
+  "output": "CMakeFiles/LuoguDesktop.dir/src/main.cpp.o"
+},
+{
+  "directory": "/home/zyk/.tmp/LuoguDesktop/build",
+  "command": "/usr/bin/c++ -DQT_CORE_LIB -DQT_GUI_LIB -DQT_NETWORK_LIB -DQT_WIDGETS_LIB -I/home/zyk/.tmp/LuoguDesktop/build -I/home/zyk/.tmp/LuoguDesktop -I/home/zyk/.tmp/LuoguDesktop/build/LuoguDesktop_autogen/include -isystem /home/zyk/.tmp/Qt/5.15.2/gcc_64/include -isystem /home/zyk/.tmp/Qt/5.15.2/gcc_64/include/QtWidgets -isystem /home/zyk/.tmp/Qt/5.15.2/gcc_64/include/QtGui -isystem /home/zyk/.tmp/Qt/5.15.2/gcc_64/include/QtCore -isystem /home/zyk/.tmp/Qt/5.15.2/gcc_64/./mkspecs/linux-g++ -isystem /home/zyk/.tmp/Qt/5.15.2/gcc_64/include/QtNetwork -g -std=gnu++11 -fPIC -o CMakeFiles/LuoguDesktop.dir/src/Login/Login.cpp.o -c /home/zyk/.tmp/LuoguDesktop/src/Login/Login.cpp",
+  "file": "/home/zyk/.tmp/LuoguDesktop/src/Login/Login.cpp",
+  "output": "CMakeFiles/LuoguDesktop.dir/src/Login/Login.cpp.o"
+},
+{
+  "directory": "/home/zyk/.tmp/LuoguDesktop/build",
+  "command": "/usr/bin/c++ -DQT_CORE_LIB -DQT_GUI_LIB -DQT_NETWORK_LIB -DQT_WIDGETS_LIB -I/home/zyk/.tmp/LuoguDesktop/build -I/home/zyk/.tmp/LuoguDesktop -I/home/zyk/.tmp/LuoguDesktop/build/LuoguDesktop_autogen/include -isystem /home/zyk/.tmp/Qt/5.15.2/gcc_64/include -isystem /home/zyk/.tmp/Qt/5.15.2/gcc_64/include/QtWidgets -isystem /home/zyk/.tmp/Qt/5.15.2/gcc_64/include/QtGui -isystem /home/zyk/.tmp/Qt/5.15.2/gcc_64/include/QtCore -isystem /home/zyk/.tmp/Qt/5.15.2/gcc_64/./mkspecs/linux-g++ -isystem /home/zyk/.tmp/Qt/5.15.2/gcc_64/include/QtNetwork -g -std=gnu++11 -fPIC -o CMakeFiles/LuoguDesktop.dir/src/Login/LuoguLogin.cpp.o -c /home/zyk/.tmp/LuoguDesktop/src/Login/LuoguLogin.cpp",
+  "file": "/home/zyk/.tmp/LuoguDesktop/src/Login/LuoguLogin.cpp",
+  "output": "CMakeFiles/LuoguDesktop.dir/src/Login/LuoguLogin.cpp.o"
+},
+{
+  "directory": "/home/zyk/.tmp/LuoguDesktop/build",
+  "command": "/usr/bin/c++ -DQT_CORE_LIB -DQT_GUI_LIB -DQT_NETWORK_LIB -DQT_WIDGETS_LIB -I/home/zyk/.tmp/LuoguDesktop/build -I/home/zyk/.tmp/LuoguDesktop -I/home/zyk/.tmp/LuoguDesktop/build/LuoguDesktop_autogen/include -isystem /home/zyk/.tmp/Qt/5.15.2/gcc_64/include -isystem /home/zyk/.tmp/Qt/5.15.2/gcc_64/include/QtWidgets -isystem /home/zyk/.tmp/Qt/5.15.2/gcc_64/include/QtGui -isystem /home/zyk/.tmp/Qt/5.15.2/gcc_64/include/QtCore -isystem /home/zyk/.tmp/Qt/5.15.2/gcc_64/./mkspecs/linux-g++ -isystem /home/zyk/.tmp/Qt/5.15.2/gcc_64/include/QtNetwork -g -std=gnu++11 -fPIC -o CMakeFiles/LuoguDesktop.dir/LuoguDesktop_autogen/EWIEGA46WW/qrc_assets.cpp.o -c /home/zyk/.tmp/LuoguDesktop/build/LuoguDesktop_autogen/EWIEGA46WW/qrc_assets.cpp",
+  "file": "/home/zyk/.tmp/LuoguDesktop/build/LuoguDesktop_autogen/EWIEGA46WW/qrc_assets.cpp",
+  "output": "CMakeFiles/LuoguDesktop.dir/LuoguDesktop_autogen/EWIEGA46WW/qrc_assets.cpp.o"
+}
+]

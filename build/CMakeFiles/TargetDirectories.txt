@@ -1,0 +1,5 @@
+/home/zyk/.tmp/LuoguDesktop/build/CMakeFiles/LuoguDesktop.dir
+/home/zyk/.tmp/LuoguDesktop/build/CMakeFiles/edit_cache.dir
+/home/zyk/.tmp/LuoguDesktop/build/CMakeFiles/rebuild_cache.dir
+/home/zyk/.tmp/LuoguDesktop/build/CMakeFiles/LuoguDesktop_autogen_timestamp_deps.dir
+/home/zyk/.tmp/LuoguDesktop/build/CMakeFiles/LuoguDesktop_autogen.dir

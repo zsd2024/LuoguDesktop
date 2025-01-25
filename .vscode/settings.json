@@ -1,0 +1,53 @@
+{
+    "window.zoomLevel": 1,
+    "editor.formatOnPaste": true,
+    "editor.formatOnSave": true,
+    "editor.formatOnType": true,
+    "remote.autoForwardPorts": false,
+    // power mode 插件配置
+    "powermode.enabled": true, //启动效果
+    "powermode.presets": "particles",
+    "editor.fontFamily": "'Fira Code', Consolas, 'Courier New', monospace, '微软雅黑'",
+    "terminal.integrated.fontFamily": "FiraCode Nerd Font",
+    "editor.insertSpaces": false,
+    "powermode.combo.location": "off",
+    "powermode.shake.intensity": 1,
+    "powermode.explosions.frequency": 1,
+    "powermode.shake.enabled": false, // 关闭代码抖动 「建议关闭，开启容易眼睛花」
+    "background.fullscreen": {
+        "images": [
+            "https://static.jyshare.com/images/mix/rfwDB3L.png",
+            "https://static.jyshare.com/images/mix/code-wallpaper-22.jpg",
+            "https://static.jyshare.com/images/mix/maxresdefault.jpg",
+            "https://static.jyshare.com/images/mix/code-wallpaper-18.png",
+            "https://static.jyshare.com/images/mix/plief.jpg",
+            "https://static.jyshare.com/images/mix/code_by_rasmusir-d4a4dj2.jpg",
+            "https://static.jyshare.com/images/mix/code-wallpaper-6.png"
+        ],
+        "opacity": 0.1,
+        "size": "cover",
+        "position": "center",
+        "interval": 60,
+        "random": true
+    },
+    "clock.datetimeFormat": "HH:mm:ss",
+    "files.associations": {
+        "iostream": "cpp",
+        "qmainwindow": "cpp",
+        "qjsonobject": "cpp",
+        "qapplication": "cpp",
+        "qnetworkaccessmanager": "cpp",
+        "array": "cpp",
+        "*.tcc": "cpp",
+        "format": "cpp",
+        "istream": "cpp",
+        "tuple": "cpp",
+        "utility": "cpp",
+        "variant": "cpp"
+    },
+    "editor.fontLigatures": true,
+    "qtConfigure.gdbPath": "/usr/bin/gdb",
+    "qtConfigure.makePath": "/usr/bin/make",
+    "qtConfigure.qtDir": "/home/zyk/.tmp/Qt",
+    "qtConfigure.qtKitDir": "/home/zyk/.tmp/Qt/5.15.2/gcc_64"
+}
