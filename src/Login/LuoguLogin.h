@@ -5,15 +5,18 @@
 #include <QCoreApplication>
 #include <QJsonDocument>
 #include <QJsonObject>
+#include <QObject>
 #include <QPixmap>
+#include <QVector>
 #include <QString>
 #include <QNetworkAccessManager>
 #include <QNetworkReply>
 #include <QNetworkRequest>
 #include <QDebug>
 #include <random>
-class LuoguLogin
+class LuoguLogin : public QObject
 {
+	Q_OBJECT
 public:
 	LuoguLogin();
 	~LuoguLogin();
@@ -28,8 +31,13 @@ private:
 		"Mozilla/5.0 (Linux; Android 4.0.4; Galaxy Nexus Build/IMM76B) AppleWebKit/535.19 (KHTML, like Gecko) Chrome/18.0.1025.133 Mobile Safari/535.19",
 		"Mozilla/5.0 (Windows NT 6.2; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/27.0.1453.94 Safari/537.36"};
 	std::mt19937 gen;
-	QJsonObject getCsrfToken(QNetworkAccessManager &manager);
-	QJsonObject login(QString username, QString password, QString captcha, QNetworkAccessManager &manager);
+	QNetworkAccessManager manager;
+	QNetworkReply *getCsrfToken_reply = nullptr;
+	QNetworkReply *login_reply = nullptr;
+	QString csrf_token;
+	QJsonObject getCsrfToken();
+	void getCsrfToken_finished(QNetworkReply *reply);
+	QJsonObject login(QString username, QString password, QString captcha);
 };
 
 #endif // LUOGULOGIN_H

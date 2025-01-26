@@ -5,7 +5,7 @@ set(CMAKE_PREFIX_PATH "/home/zyk/.tmp/Qt/5.15.2/gcc_64") # Qt Kit Dir
 set(CMAKE_AUTOUIC ON)
 set(CMAKE_AUTOMOC ON)
 set(CMAKE_AUTORCC ON)
-set(CMAKE_CXX_STANDARD 11)
+set(CMAKE_CXX_STANDARD 14)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 find_package(Qt5 COMPONENTS Widgets Network REQUIRED) # Qt COMPONENTS
 aux_source_directory(./src srcs)

@@ -6,5 +6,5 @@ CXX_DEFINES = -DQT_CORE_LIB -DQT_GUI_LIB -DQT_NETWORK_LIB -DQT_WIDGETS_LIB
 
 CXX_INCLUDES = -I/home/zyk/.tmp/LuoguDesktop/build -I/home/zyk/.tmp/LuoguDesktop -I/home/zyk/.tmp/LuoguDesktop/build/LuoguDesktop_autogen/include -isystem /home/zyk/.tmp/Qt/5.15.2/gcc_64/include -isystem /home/zyk/.tmp/Qt/5.15.2/gcc_64/include/QtWidgets -isystem /home/zyk/.tmp/Qt/5.15.2/gcc_64/include/QtGui -isystem /home/zyk/.tmp/Qt/5.15.2/gcc_64/include/QtCore -isystem /home/zyk/.tmp/Qt/5.15.2/gcc_64/./mkspecs/linux-g++ -isystem /home/zyk/.tmp/Qt/5.15.2/gcc_64/include/QtNetwork
 
-CXX_FLAGS = -g -std=gnu++11 -fPIC
+CXX_FLAGS = -g -std=gnu++14 -fPIC
 

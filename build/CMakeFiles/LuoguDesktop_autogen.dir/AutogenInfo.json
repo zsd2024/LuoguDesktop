@@ -210,7 +210,7 @@
 	"MOC_PREDEFS_CMD" : 
 	[
 		"/usr/bin/c++",
-		"-std=gnu++11",
+		"-std=gnu++14",
 		"-dM",
 		"-E",
 		"-c",

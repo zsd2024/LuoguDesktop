@@ -12,13 +12,11 @@ LuoguLogin::~LuoguLogin()
 
 QJsonObject LuoguLogin::operator()(QString username, QString password, QString captcha)
 {
-	QNetworkAccessManager manager;
-	return login(username, password, captcha, manager);
+	return login(username, password, captcha);
 }
 
 QPixmap LuoguLogin::get_captcha()
 {
-	QNetworkAccessManager manager;
 	QNetworkRequest request(QUrl("https://www.luogu.com.cn/lg4/captcha"));
 	request.setRawHeader("user-agent", User_Agent.at(std::uniform_int_distribution<int>(0, User_Agent.size() - 1)(gen)).toUtf8());
 	request.setRawHeader("referer", "https://www.luogu.com.cn/login");
@@ -30,35 +28,56 @@ QPixmap LuoguLogin::get_captcha()
 	return captcha;
 }
 
-QJsonObject LuoguLogin::getCsrfToken(QNetworkAccessManager &manager)
+QJsonObject LuoguLogin::getCsrfToken()
 {
 	QNetworkRequest request(QUrl("https://www.luogu.com.cn/"));
-	// request.setRawHeader("user-agent", User_Agent.at(std::uniform_int_distribution<int>(0, User_Agent.size() - 1)(gen)).toUtf8());
-	// request.setRawHeader("referer", "https://www.luogu.com.cn/");
-	// request.setRawHeader("x-luogu-type", "content-only");
-	QNetworkReply *response = manager.get(request);
-	QByteArray byte_text = response->readAll();
-	QString text(byte_text);
-	qDebug() << text;
-	qDebug() << "getCsrfToken: error" << response->errorString();
-	qDebug() << "getCsrfToken: error code" << response->error();
-	qDebug() << "getCsrfToken: attribute" << response->attribute(QNetworkRequest::HttpStatusCodeAttribute);
-	if (response->error() != QNetworkReply::NoError)
-	{
-		throw std::runtime_error(response->errorString().toStdString());
-	}
-	if (text == "")
-	{
-		throw std::runtime_error("getCsrfToken: empty text");
-	}
-	QString csrf_token_text = text.split("<meta name=\"csrf-token\" content=\"")[1].split("\">")[0];
-	return {
-		{"csrf-token", csrf_token_text}};
+	request.setRawHeader("user-agent", User_Agent.at(std::uniform_int_distribution<int>(0, User_Agent.size() - 1)(gen)).toUtf8());
+	request.setRawHeader("referer", "https://www.luogu.com.cn/");
+	request.setRawHeader("x-luogu-type", "content-only");
+	QNetworkReply *getCsrfToken_reply = manager.get(request);
+	if (getCsrfToken_reply != nullptr)
+		getCsrfToken_reply->deleteLater();
+	QObject::connect(&manager, &QNetworkAccessManager::finished, this, &LuoguLogin::getCsrfToken_finished);
+	QEventLoop loop;
+	QObject::connect(getCsrfToken_reply, &QNetworkReply::finished, &loop, &QEventLoop::quit);
+	loop.exec();
+	return {{"csrf-token", csrf_token}};
 }
 
-QJsonObject LuoguLogin::login(QString username, QString password, QString captcha, QNetworkAccessManager &manager)
+void LuoguLogin::getCsrfToken_finished(QNetworkReply *reply)
 {
-	QJsonObject csrf_token = getCsrfToken(manager);
+	qDebug() << "getCsrfToken: finished";
+	QByteArray byte_text = reply->readAll();
+	QString text(byte_text);
+	qDebug() << "reply: " << text << reply->attribute(QNetworkRequest::HttpStatusCodeAttribute);
+	if (reply->attribute(QNetworkRequest::HttpStatusCodeAttribute).toInt() == 302)
+	{
+		QUrl redirectUrl = reply->attribute(QNetworkRequest::RedirectionTargetAttribute).toUrl();
+		qDebug() << "redirectUrl: " << redirectUrl;
+
+		QNetworkRequest request(redirectUrl);
+		request.setRawHeader("user-agent", User_Agent.at(std::uniform_int_distribution<int>(0, User_Agent.size() - 1)(gen)).toUtf8());
+		request.setRawHeader("referer", "https://www.luogu.com.cn/");
+		request.setRawHeader("x-luogu-type", "content-only");
+		QNetworkReply *getCsrfToken_reply = manager.get(request);
+		if (getCsrfToken_reply != nullptr)
+			getCsrfToken_reply->deleteLater();
+		QObject::connect(&manager, &QNetworkAccessManager::finished, this, &LuoguLogin::getCsrfToken_finished);
+		QEventLoop loop;
+		QObject::connect(getCsrfToken_reply, &QNetworkReply::finished, &loop, &QEventLoop::quit);
+		loop.exec();
+	}
+	else if (text != "")
+	{
+		csrf_token = text.split("<meta name=\"csrf-token\" content=\"")[1].split("\">")[0];
+		qDebug() << "csrf-token: " << csrf_token;
+	}
+}
+
+QJsonObject LuoguLogin::login(QString username, QString password, QString captcha)
+{
+	QJsonObject csrf_token = getCsrfToken();
+	qDebug() << csrf_token;
 	QNetworkRequest request(QUrl("https://www.luogu.com.cn/login"));
 	request.setRawHeader("user-agent", User_Agent.at(std::uniform_int_distribution<int>(0, User_Agent.size() - 1)(gen)).toUtf8());
 	request.setRawHeader("referer", "https://www.luogu.com.cn/login");
