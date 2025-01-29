@@ -42,7 +42,7 @@ jobs:
         run: |
           rm -rf build
           rm -rf CMakeCache.txt
-          cmake -S . -B build
+          cmake -DCMAKE_BUILD_TYPE=Release -S . -B build
           cmake --build build
       # 打包
       - name: package

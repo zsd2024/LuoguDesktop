@@ -59,7 +59,7 @@ jobs:
           call "C:\Program Files (x86)\Microsoft Visual Studio\2019\Enterprise\VC\Auxiliary\Build\vcvarsall.bat" ${{ matrix.msvc_arch }}
           rmdir /s /q build
           del /f /q CMakeCache.txt
-          cmake -S . -B build
+          cmake -DCMAKE_BUILD_TYPE=Release -S . -B build
           cmake --build build
           echo winSdkDir=%WindowsSdkDir% >> %GITHUB_ENV%
           echo winSdkVer=%WindowsSdkVersion% >> %GITHUB_ENV%
@@ -79,17 +79,7 @@ jobs:
            echo "::set-output name=packageName::$name"       
       # tag 查询github-Release
       # 上传artifacts          
-      - uses: actions/upload-artifact@v3
+      - uses: actions/upload-artifact@v4
         with:
           name: ${{ steps.package.outputs.packageName }}
           path: ${{ steps.package.outputs.packageName }}
-      # tag 上传Release
-      - name: uploadRelease
-        if: startsWith(github.event.ref, 'refs/tags/')
-        uses: svenstaro/upload-release-action@v2
-        with:
-          repo_token: ${{ secrets.GITHUB_TOKEN }}
-          file: ${{ steps.package.outputs.packageName }}.zip
-          asset_name: ${{ steps.package.outputs.packageName }}.zip
-          tag: ${{ github.ref }}
-          overwrite: true 
