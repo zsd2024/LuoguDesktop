@@ -39,5 +39,5 @@ jobs:
           fetch-depth: 1
       - name: build ubuntu
         run: |
-          cmake .
+          cmake -S . -B build
           cmake --build .

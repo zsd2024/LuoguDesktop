@@ -40,8 +40,8 @@ jobs:
           fetch-depth: 1
       - name: build macos
         run: |
-          qmake
-          make
+          cmake -S . -B build
+          cmake --build .
       # 打包
       - name: package
         run: |
