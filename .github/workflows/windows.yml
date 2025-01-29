@@ -60,7 +60,7 @@ jobs:
           rmdir /s /q build
           del /f /q CMakeCache.txt
           cmake -S . -B build
-          cmake --build .
+          cmake --build build
           echo winSdkDir=%WindowsSdkDir% >> %GITHUB_ENV%
           echo winSdkVer=%WindowsSdkVersion% >> %GITHUB_ENV%
           echo vcToolsInstallDir=%VCToolsInstallDir% >> %GITHUB_ENV%

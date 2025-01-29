@@ -42,4 +42,4 @@ jobs:
           rm -rf build
           rm -rf CMakeCache.txt
           cmake -S . -B build
-          cmake --build .
+          cmake --build build
