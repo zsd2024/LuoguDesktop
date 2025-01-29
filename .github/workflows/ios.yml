@@ -35,5 +35,6 @@ jobs:
       - name: build ios
         run: |
           rm -rf build
+          rm -rf CMakeCache.txt
           cmake -GX Xcode -DCMAKE_TOOLCHAIN_FILE=../ios.toolchain.cmake -DCMAKE_BUILD_TYPE=Release -DCMAKE_OSX_ARCHITECTURES=armv7 -DCMAKE_OSX_SYSROOT=iphoneos
           cmake --build .

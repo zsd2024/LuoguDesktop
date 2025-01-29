@@ -18,7 +18,7 @@ jobs:
     runs-on: ${{ matrix.os }}
     strategy:
       matrix:
-        os: [ubuntu-18.04,ubuntu-20.04]
+        os: [ubuntu-20.04,ubuntu-20.04]
         qt_ver: [5.15.2]
         qt_arch: [gcc_64]
         exclude: 
@@ -40,5 +40,6 @@ jobs:
       - name: build ubuntu
         run: |
           rm -rf build
+          rm -rf CMakeCache.txt
           cmake -S . -B build
           cmake --build .

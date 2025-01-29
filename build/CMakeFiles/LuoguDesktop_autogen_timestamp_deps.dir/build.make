@@ -67,8 +67,8 @@ include CMakeFiles/LuoguDesktop_autogen_timestamp_deps.dir/compiler_depend.make
 include CMakeFiles/LuoguDesktop_autogen_timestamp_deps.dir/progress.make
 
 CMakeFiles/LuoguDesktop_autogen_timestamp_deps: /home/zyk/.tmp/Qt/5.15.2/gcc_64/bin/uic
-CMakeFiles/LuoguDesktop_autogen_timestamp_deps: /home/zyk/.tmp/Qt/5.15.2/gcc_64/bin/moc
 CMakeFiles/LuoguDesktop_autogen_timestamp_deps: /home/zyk/.tmp/Qt/5.15.2/gcc_64/lib/libQt5Widgets.so.5.15.2
+CMakeFiles/LuoguDesktop_autogen_timestamp_deps: /home/zyk/.tmp/Qt/5.15.2/gcc_64/bin/moc
 CMakeFiles/LuoguDesktop_autogen_timestamp_deps: /home/zyk/.tmp/Qt/5.15.2/gcc_64/lib/libQt5Network.so.5.15.2
 
 LuoguDesktop_autogen_timestamp_deps: CMakeFiles/LuoguDesktop_autogen_timestamp_deps
