@@ -30,6 +30,7 @@ jobs:
           version: ${{ matrix.qt_ver }}
           target: ${{ matrix.qt_target }}
           arch: ${{ matrix.qt_arch }}  
+          modules: qtandroid
       - name: Install Qt
         uses: jurplel/install-qt-action@v4
         if: ${{ matrix.qt_ver == '5.15.2' }}
