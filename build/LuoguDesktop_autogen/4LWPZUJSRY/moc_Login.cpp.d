@@ -9,6 +9,7 @@
   /home/zyk/.tmp/Qt/5.15.2/gcc_64/include/QtCore/QIODevice \
   /home/zyk/.tmp/Qt/5.15.2/gcc_64/include/QtCore/QJsonDocument \
   /home/zyk/.tmp/Qt/5.15.2/gcc_64/include/QtCore/QJsonObject \
+  /home/zyk/.tmp/Qt/5.15.2/gcc_64/include/QtCore/QList \
   /home/zyk/.tmp/Qt/5.15.2/gcc_64/include/QtCore/QMetaType \
   /home/zyk/.tmp/Qt/5.15.2/gcc_64/include/QtCore/QObject \
   /home/zyk/.tmp/Qt/5.15.2/gcc_64/include/QtCore/QSharedDataPointer \
@@ -123,12 +124,16 @@
   /home/zyk/.tmp/Qt/5.15.2/gcc_64/include/QtGui/qtransform.h \
   /home/zyk/.tmp/Qt/5.15.2/gcc_64/include/QtGui/qwindowdefs.h \
   /home/zyk/.tmp/Qt/5.15.2/gcc_64/include/QtNetwork/QNetworkAccessManager \
+  /home/zyk/.tmp/Qt/5.15.2/gcc_64/include/QtNetwork/QNetworkCookie \
+  /home/zyk/.tmp/Qt/5.15.2/gcc_64/include/QtNetwork/QNetworkCookieJar \
   /home/zyk/.tmp/Qt/5.15.2/gcc_64/include/QtNetwork/QNetworkReply \
   /home/zyk/.tmp/Qt/5.15.2/gcc_64/include/QtNetwork/QNetworkRequest \
   /home/zyk/.tmp/Qt/5.15.2/gcc_64/include/QtNetwork/QSslConfiguration \
   /home/zyk/.tmp/Qt/5.15.2/gcc_64/include/QtNetwork/QSslPreSharedKeyAuthenticator \
   /home/zyk/.tmp/Qt/5.15.2/gcc_64/include/QtNetwork/qabstractsocket.h \
   /home/zyk/.tmp/Qt/5.15.2/gcc_64/include/QtNetwork/qnetworkaccessmanager.h \
+  /home/zyk/.tmp/Qt/5.15.2/gcc_64/include/QtNetwork/qnetworkcookie.h \
+  /home/zyk/.tmp/Qt/5.15.2/gcc_64/include/QtNetwork/qnetworkcookiejar.h \
   /home/zyk/.tmp/Qt/5.15.2/gcc_64/include/QtNetwork/qnetworkreply.h \
   /home/zyk/.tmp/Qt/5.15.2/gcc_64/include/QtNetwork/qnetworkrequest.h \
   /home/zyk/.tmp/Qt/5.15.2/gcc_64/include/QtNetwork/qssl.h \

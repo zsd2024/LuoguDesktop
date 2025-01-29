@@ -1,13 +1,13 @@
 /********************************************************************************
-** Form generated from reading UI file 'LoginxiTCdS.ui'
+** Form generated from reading UI file 'LoginLGsTae.ui'
 **
 ** Created by: Qt User Interface Compiler version 5.15.2
 **
 ** WARNING! All changes made in this file will be lost when recompiling UI file!
 ********************************************************************************/
 
-#ifndef LOGINXITCDS_H
-#define LOGINXITCDS_H
+#ifndef LOGINLGSTAE_H
+#define LOGINLGSTAE_H
 
 #include <QtCore/QVariant>
 #include <QtGui/QIcon>
@@ -42,7 +42,7 @@ public:
     QLabel *captcha_label;
     QHBoxLayout *Captcha_Input_Image;
     QLineEdit *captcha_lineEdit;
-    QLabel *captcha_image;
+    QPushButton *captcha_image;
     QPushButton *LoginButton;
     QLabel *Forget_password;
     QSpacerItem *verticalSpacer_4;
@@ -343,11 +343,11 @@ public:
         captcha_lineEdit->setObjectName(QString::fromUtf8("captcha_lineEdit"));
         captcha_lineEdit->setFont(font1);
         captcha_lineEdit->setStyleSheet(QString::fromUtf8("font-size: 16px;"));
-        captcha_lineEdit->setEchoMode(QLineEdit::Password);
+        captcha_lineEdit->setEchoMode(QLineEdit::Normal);
 
         Captcha_Input_Image->addWidget(captcha_lineEdit);
 
-        captcha_image = new QLabel(LoginWindow);
+        captcha_image = new QPushButton(LoginWindow);
         captcha_image->setObjectName(QString::fromUtf8("captcha_image"));
         captcha_image->setMinimumSize(QSize(90, 35));
 
@@ -594,4 +594,4 @@ namespace Ui {
 
 QT_END_NAMESPACE
 
-#endif // LOGINXITCDS_H
+#endif // LOGINLGSTAE_H

@@ -10,6 +10,8 @@
 #include <QVector>
 #include <QString>
 #include <QNetworkAccessManager>
+#include <QNetworkCookieJar>
+#include <QNetworkCookie>
 #include <QNetworkReply>
 #include <QNetworkRequest>
 #include <QDebug>
@@ -33,11 +35,16 @@ private:
 	std::mt19937 gen;
 	QNetworkAccessManager manager;
 	QNetworkReply *getCsrfToken_reply = nullptr;
+	QNetworkReply *get_captcha_reply = nullptr;
 	QNetworkReply *login_reply = nullptr;
 	QString csrf_token;
+	QPixmap captcha;
+	QString login_text;
 	QJsonObject getCsrfToken();
 	void getCsrfToken_finished(QNetworkReply *reply);
 	QJsonObject login(QString username, QString password, QString captcha);
+	void get_captcha_finished(QNetworkReply *reply);
+	void login_finished(QNetworkReply *reply);
 };
 
 #endif // LUOGULOGIN_H

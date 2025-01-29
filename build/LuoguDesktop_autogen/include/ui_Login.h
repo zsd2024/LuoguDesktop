@@ -42,7 +42,7 @@ public:
     QLabel *captcha_label;
     QHBoxLayout *Captcha_Input_Image;
     QLineEdit *captcha_lineEdit;
-    QLabel *captcha_image;
+    QPushButton *captcha_image;
     QPushButton *LoginButton;
     QLabel *Forget_password;
     QSpacerItem *verticalSpacer_4;
@@ -343,11 +343,11 @@ public:
         captcha_lineEdit->setObjectName(QString::fromUtf8("captcha_lineEdit"));
         captcha_lineEdit->setFont(font1);
         captcha_lineEdit->setStyleSheet(QString::fromUtf8("font-size: 16px;"));
-        captcha_lineEdit->setEchoMode(QLineEdit::Password);
+        captcha_lineEdit->setEchoMode(QLineEdit::Normal);
 
         Captcha_Input_Image->addWidget(captcha_lineEdit);
 
-        captcha_image = new QLabel(LoginWindow);
+        captcha_image = new QPushButton(LoginWindow);
         captcha_image->setObjectName(QString::fromUtf8("captcha_image"));
         captcha_image->setMinimumSize(QSize(90, 35));
 

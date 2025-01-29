@@ -4,7 +4,7 @@ LoginWindow::LoginWindow(QWidget *parent)
 	: QWidget(parent), ui(new Ui_LoginWindow)
 {
 	ui->setupUi(this);
-	ui->captcha_image->setPixmap(login.get_captcha());
+	connect(ui->captcha_image, &QPushButton::clicked, this, &LoginWindow::on_captcha_image_clicked);
 	connect(ui->LoginButton, &QPushButton::clicked, this, &LoginWindow::on_LoginButton_clicked);
 }
 
@@ -23,7 +23,7 @@ void LoginWindow::on_LoginButton_clicked()
 		{
 			// 弹出错误弹窗
 			QMessageBox::critical(this, "登录失败", res["error"].toString());
-			ui->captcha_image->setPixmap(login.get_captcha());
+			on_captcha_image_clicked();
 		}
 	}
 	catch (const std::exception &e)
@@ -31,4 +31,11 @@ void LoginWindow::on_LoginButton_clicked()
 		// 弹出错误弹窗
 		QMessageBox::critical(this, "登录失败", e.what());
 	}
+}
+
+void LoginWindow::on_captcha_image_clicked()
+{
+	QPixmap pixmap = QPixmap(login.get_captcha());
+	ui->captcha_image->setIcon(pixmap);
+	ui->captcha_image->setIconSize(pixmap.size());
 }

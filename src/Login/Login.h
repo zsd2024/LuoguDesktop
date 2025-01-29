@@ -12,9 +12,10 @@ class LoginWindow : public QWidget
 public:
 	LoginWindow(QWidget *parent = nullptr);
 	~LoginWindow();
-	void on_LoginButton_clicked();
 
 private:
 	Ui_LoginWindow *ui;
 	LuoguLogin login;
+	void on_LoginButton_clicked();
+	void on_captcha_image_clicked();
 };

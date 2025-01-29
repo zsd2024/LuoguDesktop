@@ -392,6 +392,7 @@
  mdp:/home/zyk/.tmp/Qt/5.15.2/gcc_64/include/QtCore/QIODevice
  mdp:/home/zyk/.tmp/Qt/5.15.2/gcc_64/include/QtCore/QJsonDocument
  mdp:/home/zyk/.tmp/Qt/5.15.2/gcc_64/include/QtCore/QJsonObject
+ mdp:/home/zyk/.tmp/Qt/5.15.2/gcc_64/include/QtCore/QList
  mdp:/home/zyk/.tmp/Qt/5.15.2/gcc_64/include/QtCore/QMetaType
  mdp:/home/zyk/.tmp/Qt/5.15.2/gcc_64/include/QtCore/QObject
  mdp:/home/zyk/.tmp/Qt/5.15.2/gcc_64/include/QtCore/QSharedDataPointer
@@ -491,12 +492,16 @@
  mdp:/home/zyk/.tmp/Qt/5.15.2/gcc_64/include/QtGui/qtransform.h
  mdp:/home/zyk/.tmp/Qt/5.15.2/gcc_64/include/QtGui/qwindowdefs.h
  mdp:/home/zyk/.tmp/Qt/5.15.2/gcc_64/include/QtNetwork/QNetworkAccessManager
+ mdp:/home/zyk/.tmp/Qt/5.15.2/gcc_64/include/QtNetwork/QNetworkCookie
+ mdp:/home/zyk/.tmp/Qt/5.15.2/gcc_64/include/QtNetwork/QNetworkCookieJar
  mdp:/home/zyk/.tmp/Qt/5.15.2/gcc_64/include/QtNetwork/QNetworkReply
  mdp:/home/zyk/.tmp/Qt/5.15.2/gcc_64/include/QtNetwork/QNetworkRequest
  mdp:/home/zyk/.tmp/Qt/5.15.2/gcc_64/include/QtNetwork/QSslConfiguration
  mdp:/home/zyk/.tmp/Qt/5.15.2/gcc_64/include/QtNetwork/QSslPreSharedKeyAuthenticator
  mdp:/home/zyk/.tmp/Qt/5.15.2/gcc_64/include/QtNetwork/qabstractsocket.h
  mdp:/home/zyk/.tmp/Qt/5.15.2/gcc_64/include/QtNetwork/qnetworkaccessmanager.h
+ mdp:/home/zyk/.tmp/Qt/5.15.2/gcc_64/include/QtNetwork/qnetworkcookie.h
+ mdp:/home/zyk/.tmp/Qt/5.15.2/gcc_64/include/QtNetwork/qnetworkcookiejar.h
  mdp:/home/zyk/.tmp/Qt/5.15.2/gcc_64/include/QtNetwork/qnetworkreply.h
  mdp:/home/zyk/.tmp/Qt/5.15.2/gcc_64/include/QtNetwork/qnetworkrequest.h
  mdp:/home/zyk/.tmp/Qt/5.15.2/gcc_64/include/QtNetwork/qssl.h
@@ -793,6 +798,7 @@
  mdp:/home/zyk/.tmp/Qt/5.15.2/gcc_64/include/QtCore/QIODevice
  mdp:/home/zyk/.tmp/Qt/5.15.2/gcc_64/include/QtCore/QJsonDocument
  mdp:/home/zyk/.tmp/Qt/5.15.2/gcc_64/include/QtCore/QJsonObject
+ mdp:/home/zyk/.tmp/Qt/5.15.2/gcc_64/include/QtCore/QList
  mdp:/home/zyk/.tmp/Qt/5.15.2/gcc_64/include/QtCore/QMetaType
  mdp:/home/zyk/.tmp/Qt/5.15.2/gcc_64/include/QtCore/QObject
  mdp:/home/zyk/.tmp/Qt/5.15.2/gcc_64/include/QtCore/QSharedDataPointer
@@ -907,12 +913,16 @@
  mdp:/home/zyk/.tmp/Qt/5.15.2/gcc_64/include/QtGui/qtransform.h
  mdp:/home/zyk/.tmp/Qt/5.15.2/gcc_64/include/QtGui/qwindowdefs.h
  mdp:/home/zyk/.tmp/Qt/5.15.2/gcc_64/include/QtNetwork/QNetworkAccessManager
+ mdp:/home/zyk/.tmp/Qt/5.15.2/gcc_64/include/QtNetwork/QNetworkCookie
+ mdp:/home/zyk/.tmp/Qt/5.15.2/gcc_64/include/QtNetwork/QNetworkCookieJar
  mdp:/home/zyk/.tmp/Qt/5.15.2/gcc_64/include/QtNetwork/QNetworkReply
  mdp:/home/zyk/.tmp/Qt/5.15.2/gcc_64/include/QtNetwork/QNetworkRequest
  mdp:/home/zyk/.tmp/Qt/5.15.2/gcc_64/include/QtNetwork/QSslConfiguration
  mdp:/home/zyk/.tmp/Qt/5.15.2/gcc_64/include/QtNetwork/QSslPreSharedKeyAuthenticator
  mdp:/home/zyk/.tmp/Qt/5.15.2/gcc_64/include/QtNetwork/qabstractsocket.h
  mdp:/home/zyk/.tmp/Qt/5.15.2/gcc_64/include/QtNetwork/qnetworkaccessmanager.h
+ mdp:/home/zyk/.tmp/Qt/5.15.2/gcc_64/include/QtNetwork/qnetworkcookie.h
+ mdp:/home/zyk/.tmp/Qt/5.15.2/gcc_64/include/QtNetwork/qnetworkcookiejar.h
  mdp:/home/zyk/.tmp/Qt/5.15.2/gcc_64/include/QtNetwork/qnetworkreply.h
  mdp:/home/zyk/.tmp/Qt/5.15.2/gcc_64/include/QtNetwork/qnetworkrequest.h
  mdp:/home/zyk/.tmp/Qt/5.15.2/gcc_64/include/QtNetwork/qssl.h
