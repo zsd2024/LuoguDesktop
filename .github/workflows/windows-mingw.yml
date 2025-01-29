@@ -30,7 +30,7 @@ jobs:
       targetName: LuoguDesktop.exe
     steps:
       - name: Install Qt
-        uses: jurplel/install-qt-action@v2
+        uses: jurplel/install-qt-action@v4
         with:
           version: ${{ matrix.qt_ver }}
           aqtversion: '==2.0.5'
