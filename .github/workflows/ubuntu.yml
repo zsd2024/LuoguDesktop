@@ -42,7 +42,7 @@ jobs:
           qmake
           make
       - name: 上传 Artifact
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@v4
         with:
-          name: HelloActions-Qt_${{ matrix.os }}_${{matrix.qt_ver}}.zip
+          name: LuoguDesktop_${{ matrix.os }}_${{matrix.qt_ver}}.zip
           path: bin/release

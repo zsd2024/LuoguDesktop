@@ -20,7 +20,7 @@ jobs:
         qt_ver: [5.15.2]
         qt_arch: [clang_64]
     env:
-      targetName: HelloActions-Qt
+      targetName: LuoguDesktop
     steps:
       # macos 11.0 默认环境变了,要指定
       - name: 准备环境变量
@@ -49,7 +49,7 @@ jobs:
           macdeployqt bin/release/${targetName}.app -qmldir=. -verbose=1 -dmg
       # 上传artifacts       
       - name: 上传 Artifact   
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@v4
         with:
           name: ${{ env.targetName }}_${{ matrix.os }}_${{matrix.qt_ver}}.zip
           path: bin/release/${{ env.targetName }}.app

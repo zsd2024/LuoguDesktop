@@ -37,6 +37,6 @@ jobs:
           qmake -r -spec macx-ios-clang CONFIG+=release CONFIG+=iphoneos
           make
       - name: 上传 Artifact
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@v4
         with:
-          name: HelloActions-Qt.ipa
+          name: LuoguDesktop.ipa
