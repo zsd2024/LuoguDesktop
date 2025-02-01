@@ -10,47 +10,46 @@ on:
       - '*.pro'
       - 'src/**'
       - '.github/workflows/macos.yml' 
-  workflow_dispatch:
 jobs:
   build:
     name: Build
     runs-on: ${{ matrix.os }}
     strategy:
       matrix:
-        os: [macos-latest,macos-latest]
+        os: [macos-latest]
         qt_ver: [5.15.2]
         qt_arch: [clang_64]
     env:
-      targetName: LuoguDesktop
+      targetName: HelloActions-Qt
     steps:
       # macos 11.0 默认环境变了,要指定
-      - name: prepare env
+      - name: 准备环境变量
         if: ${{ matrix.os == 'macos-latest' }}
         run: |
           softwareupdate --all --install --force
           sudo xcode-select --print-path
-          sudo xcode-select --switch /Library/Developer/CommandLineTools       
-      - name: Install Qt
-        uses: jurplel/install-qt-action@v4
+          sudo xcode-select --switch /Library/Developer/CommandLineTools
+      - name: 安装 Qt
+        uses: jurplel/install-qt-action@v2
         with:
           version: ${{ matrix.qt_ver }}
           cached: 'false'
-      - uses: actions/checkout@v2
+      - name: 拉取代码
+        uses: actions/checkout@v2
         with:
           fetch-depth: 1
-      - name: build macos
+      - name: 编译 MacOS app
         run: |
-          rm -rf build
-          rm -rf CMakeCache.txt
-          cmake -DCMAKE_BUILD_TYPE=Release -S . -B build
-          cmake --build build
+          qmake
+          make
       # 打包
-      - name: package
+      - name: 打包
         run: |
           # 拷贝依赖
           macdeployqt bin/release/${targetName}.app -qmldir=. -verbose=1 -dmg
-      # 上传artifacts          
-      - uses: actions/upload-artifact@v3
+      # 上传artifacts       
+      - name: 上传 Artifact   
+        uses: actions/upload-artifact@v2
         with:
           name: ${{ env.targetName }}_${{ matrix.os }}_${{matrix.qt_ver}}.zip
           path: bin/release/${{ env.targetName }}.app

@@ -1,18 +1,14 @@
 {
     "configurations": [
         {
-            "name": "Linux",
+            "name": "qt",
             "includePath": [
-                "${workspaceFolder}/**",
                 "/home/zyk/.tmp/Qt/5.15.2/gcc_64/include/**",
-                "/home/zyk/.tmp/Qt/5.15.2/gcc_64/include"
+                "${workspaceRoot}/**"
             ],
-            "defines": [],
-            "compilerPath": "/usr/bin/gcc",
-            "cStandard": "c17",
-            "cppStandard": "gnu++17",
-            "intelliSenseMode": "linux-gcc-x64",
-            "configurationProvider": "ms-vscode.cmake-tools"
+            "cStandard": "c11",
+            "cppStandard": "c++14",
+            "compilerPath": "/home/zyk/.tmp/Qt/5.15.2/gcc_64/bin/gcc"
         }
     ],
     "version": 4

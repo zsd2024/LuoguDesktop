@@ -10,11 +10,10 @@ on:
       - '*.pro'
       - 'src/**'
       - '.github/workflows/windows-mingw.yml' 
-  workflow_dispatch:
 jobs:
   build:
     name: Build
-    runs-on: windows-2019
+    runs-on: windows-latest
     strategy:
       matrix:
         include:
@@ -27,45 +26,44 @@ jobs:
             qt_tools: "tools_mingw,8.1.0-1-202004170606,qt.tools.win64_mingw810"
             qt_tools_mingw_install: mingw810_64
     env:
-      targetName: LuoguDesktop.exe
+      targetName: HelloActions-Qt.exe
     steps:
-      - name: Install Qt
-        uses: jurplel/install-qt-action@v4
+      - name: 安装 Qt
+        uses: jurplel/install-qt-action@v2
         with:
           version: ${{ matrix.qt_ver }}
           aqtversion: '==2.0.5'
           arch: ${{ matrix.qt_arch }}
           tools: ${{ matrix.qt_tools }}
           cached: 'false'
-      - uses: actions/checkout@v2
+      - name: 拉取代码
+        uses: actions/checkout@v2
         with:
           fetch-depth: 1
-      - name: Qt 5 environment configuration
+      - name: Qt 5 环境配置
         if: ${{ startsWith( matrix.qt_ver, 5 ) }}
         shell: pwsh
         run: |
           Write-Output "${{ env.Qt5_DIR }}/bin" | Out-File -FilePath $env:GITHUB_PATH -Encoding utf8 -Append
           Write-Output "${{ env.Qt5_DIR }}/../../Tools/${{ matrix.qt_tools_mingw_install }}/bin" | Out-File -FilePath $env:GITHUB_PATH -Encoding utf8 -Append
-      - name: Qt 6 environment configuration
+      - name: Qt 6 环境配置
         if: ${{ startsWith( matrix.qt_ver, 6 ) }}
         shell: pwsh
         run: |
           Write-Output "${{ env.Qt6_DIR }}/bin" | Out-File -FilePath $env:GITHUB_PATH -Encoding utf8 -Append
           Write-Output "${{ env.Qt6_DIR }}/../../Tools/${{ matrix.qt_tools_mingw_install }}/bin" | Out-File -FilePath $env:GITHUB_PATH -Encoding utf8 -Append
-      - name: where is qmake & where is mingw32-make
+      - name:  qmake & mingw32-make 位置
         shell: pwsh
         run: |
           Get-Command -Name 'qmake' | Format-List
           Get-Command -Name 'mingw32-make' | Format-List
-      - name: mingw-build
+      - name: 用 mingw 编译
         id: build
         shell: cmd
         run: |
-          rmdir /s /q build
-          del /f /q CMakeCache.txt
-          cmake -S . -B build
-          cmake --build build
-      - name: package
+          qmake
+          mingw32-make
+      - name: 打包
         id: package      
         env:
           archiveName: ${{ matrix.qt_ver }}-${{ matrix.qt_target }}-${{ matrix.qt_arch }}
@@ -74,7 +72,8 @@ jobs:
           & scripts\windows-mingw-publish.ps1 ${env:archiveName} ${env:targetName}
            $name = ${env:archiveName}
            echo "::set-output name=packageName::$name"       
-      - uses: actions/upload-artifact@v4
+      - name: 上传artifacts
+        uses: actions/upload-artifact@v2
         with:
-          name: ${{ steps.package.outputs.packageName }}
+          name: ${{ steps.package.outputs.packageName }}.zip
           path: ${{ steps.package.outputs.packageName }}

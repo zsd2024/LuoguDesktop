@@ -2,22 +2,25 @@
     "version": "0.2.0",
     "configurations": [
         {
-            "name": "QtBuild",
+            "name": "debug",
             "type": "cppdbg",
             "request": "launch",
-            "program": "${command:cmake.launchTargetPath}",
+            "program": "${workspaceRoot}/build/debug/LuoguDesktop",
             "args": [],
             "stopAtEntry": false,
             "cwd": "${workspaceRoot}",
-            "environment": [
+            "environment": [],
+            "externalConsole": false,
+            "MIMode": "gdb",
+            "miDebuggerPath": "/usr/bin/gdb",
+            "setupCommands": [
                 {
-                    "name": "PATH",
-                    "value": "/home/zyk/.tmp/Qt/5.15.2/gcc_64/bin"
+                    "description": "为 gdb 启用整齐打印",
+                    "text": "-enable-pretty-printing",
+                    "ignoreFailures": true
                 }
             ],
-            "externalConsole": false,
-            "miDebuggerPath": "/usr/bin/gdb",
-            "visualizerFile": "/home/zyk/.config/Code/User/workspaceStorage/0601b72d991efa0edeb415eb68f7d88e/tonka3000.qtvsctools/qt.natvis.xml"
+            "preLaunchTask": "debug"
         }
     ]
 }

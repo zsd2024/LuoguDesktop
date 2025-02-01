@@ -1,29 +1,110 @@
 {
+    "version": "2.0.0",
     "tasks": [
         {
-            "type": "cppbuild",
-            "label": "C/C++: g++ 生成活动文件",
-            "command": "/usr/bin/g++",
-            "args": [
-                "-fdiagnostics-color=always",
-                "-g",
-                "${file}",
-                "-o",
-                // "${fileDirname}/${fileBasenameNoExtension}"
-                "/home/zyk/C++/build/${fileBasenameNoExtension}"
-            ],
-            "options": {
-                "cwd": "${fileDirname}"
-            },
-            "problemMatcher": [
-                "$gcc"
-            ],
-            "group": {
-                "kind": "build",
-                "isDefault": true
-            },
-            "detail": "调试器生成的任务。"
+            "type": "shell",
+            "label": "mkdir build",
+            "command": "if [ ! -e ./build ]; then\nmkdir build\nfi",
+            "args": [],
+            "options": {},
+            "problemMatcher": [],
+            "group": "build"
+        },
+        {
+            "type": "shell",
+            "label": "mkdir build debug",
+            "command": "if [ ! -e ./build/debug ]; then\nmkdir ./build/debug\nfi",
+            "args": [],
+            "options": {},
+            "problemMatcher": [],
+            "group": "build",
+            "dependsOn": [
+                "mkdir build"
+            ]
+        },
+        {
+            "type": "shell",
+            "label": "mkdir build release",
+            "command": "if [ ! -e ./build/release ]; then\nmkdir ./build/release\nfi",
+            "args": [],
+            "options": {},
+            "problemMatcher": [],
+            "group": "build",
+            "dependsOn": [
+                "mkdir build"
+            ]
+        },
+        {
+            "type": "shell",
+            "label": "qmake build debug",
+            "command": "cd build/debug && /home/zyk/.tmp/Qt/5.15.2/gcc_64/bin/qmake ${workspaceFolder}/LuoguDesktop.pro \"CONFIG += debug\"",
+            "args": [],
+            "options": {},
+            "problemMatcher": [],
+            "group": "build",
+            "dependsOn": [
+                "mkdir build debug"
+            ]
+        },
+        {
+            "type": "shell",
+            "label": "qmake build release",
+            "command": "cd build/release && /home/zyk/.tmp/Qt/5.15.2/gcc_64/bin/qmake ${workspaceFolder}/LuoguDesktop.pro  \"CONFIG += release\"",
+            "args": [],
+            "options": {},
+            "problemMatcher": [],
+            "group": "build",
+            "dependsOn": [
+                "mkdir build release"
+            ]
+        },
+        {
+            "type": "shell",
+            "label": "debug",
+            "command": "cd build/debug && /usr/bin/make",
+            "args": [],
+            "options": {},
+            "problemMatcher": [],
+            "group": "build",
+            "dependsOn": [
+                "qmake build debug"
+            ]
+        },
+        {
+            "type": "shell",
+            "label": "release",
+            "command": "cd build/release && /usr/bin/make",
+            "args": [],
+            "options": {},
+            "problemMatcher": [],
+            "group": "build",
+            "dependsOn": [
+                "qmake build release"
+            ]
+        },
+        {
+            "type": "shell",
+            "label": "run debug",
+            "command": "cd build/debug/ && ./LuoguDesktop",
+            "args": [],
+            "options": {},
+            "problemMatcher": [],
+            "group": "test",
+            "dependsOn": [
+                "debug"
+            ]
+        },
+        {
+            "type": "shell",
+            "label": "run release",
+            "command": "cd build/release/ && ./LuoguDesktop",
+            "args": [],
+            "options": {},
+            "problemMatcher": [],
+            "group": "test",
+            "dependsOn": [
+                "release"
+            ]
         }
-    ],
-    "version": "2.0.0"
+    ]
 }

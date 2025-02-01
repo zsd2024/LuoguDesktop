@@ -10,7 +10,6 @@ on:
       - '*.pro'
       - 'src/**'
       - '.github/workflows/ios.yml' 
-  workflow_dispatch:
 jobs:
   build:
     name: Build
@@ -18,23 +17,26 @@ jobs:
     strategy:
       matrix:
         os: [macos-latest]
-        qt_ver: [5.15.2]
+        qt_ver: [5.12.10]
         qt_target: [ios]
     steps:
-      - name: Install Qt
+      - name: 安装 Qt
         # if: steps.cacheqt.outputs.cache-hit != 'true'
-        uses: jurplel/install-qt-action@v4
+        uses: jurplel/install-qt-action@v2
         with:
           # Version of Qt to install
           version: ${{ matrix.qt_ver }}
           # Target platform for build
           target: ${{ matrix.qt_target }}
-      - uses: actions/checkout@v2
+      - name: 拉取代码
+        uses: actions/checkout@v2
         with:
           fetch-depth: 1
-      - name: build ios
+      - name: 编译 ipa
         run: |
-          rm -rf build
-          rm -rf CMakeCache.txt
-          cmake -DCMAKE_BUILD_TYPE=Release -GX Xcode -DCMAKE_TOOLCHAIN_FILE=../ios.toolchain.cmake -DCMAKE_BUILD_TYPE=Release -DCMAKE_OSX_ARCHITECTURES=armv7 -DCMAKE_OSX_SYSROOT=iphoneos
-          cmake --build build
+          qmake -r -spec macx-ios-clang CONFIG+=release CONFIG+=iphoneos
+          make
+      - name: 上传 Artifact
+        uses: actions/upload-artifact@v2
+        with:
+          name: HelloActions-Qt.ipa
