@@ -51,4 +51,4 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: LuoguDesktop.apk
-          path: bin/release/LuoguDesktop.apk
+          path: build/release/LuoguDesktop.apk
