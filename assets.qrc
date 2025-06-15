@@ -1,0 +1,8 @@
+<RCC>
+  <qresource prefix="images">
+    <file>assets/logo.svg</file>
+    <file>assets/logo.png</file>
+    <file>assets/github.svg</file>
+    <file>assets/wechat.svg</file>
+  </qresource>
+</RCC>

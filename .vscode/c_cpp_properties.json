@@ -1,0 +1,18 @@
+{
+    "configurations": [
+        {
+            "name": "qt",
+            "includePath": [
+                "/home/zyk/.tmp/Qt/6.8.3/gcc_64/include/**",
+                "/home/zyk/.tmp/Qt/6.8.3/gcc_64/include/QtCore",
+                "${workspaceRoot}/src/**"
+            ],
+            "cStandard": "c11",
+            "cppStandard": "c++14",
+            "compileCommands": [
+                "${workspaceFolder}/build/release/.qtc_clangd/compile_commands.json"
+            ]
+        }
+    ],
+    "version": 4
+}
