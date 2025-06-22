@@ -1,13 +1,13 @@
 /********************************************************************************
-** Form generated from reading UI file 'LuoguDesktopYcYqot.ui'
+** Form generated from reading UI file 'LuoguDesktopFwqtEF.ui'
 **
 ** Created by: Qt User Interface Compiler version 6.8.3
 **
 ** WARNING! All changes made in this file will be lost when recompiling UI file!
 ********************************************************************************/
 
-#ifndef LUOGUDESKTOPYCYQOT_H
-#define LUOGUDESKTOPYCYQOT_H
+#ifndef LUOGUDESKTOPFWQTEF_H
+#define LUOGUDESKTOPFWQTEF_H
 
 #include <QtCore/QVariant>
 #include <QtGui/QAction>
@@ -115,8 +115,6 @@ public:
         menubar->addAction(Discuss->menuAction());
         menubar->addAction(Article->menuAction());
         menubar->addAction(Help->menuAction());
-        File->addAction(login);
-        File->addAction(logout);
         File->addSeparator();
         File->addAction(settings);
         File->addAction(exit);
@@ -125,7 +123,6 @@ public:
         Discuss->addAction(siteaffairs);
         Discuss->addAction(problem);
         Discuss->addAction(academics);
-        Discuss->addAction(relevantaffairs);
         Discuss->addAction(service);
         Discuss->addSeparator();
         Discuss->addAction(save_discuss);
@@ -173,4 +170,4 @@ namespace Ui {
 
 QT_END_NAMESPACE
 
-#endif // LUOGUDESKTOPYCYQOT_H
+#endif // LUOGUDESKTOPFWQTEF_H

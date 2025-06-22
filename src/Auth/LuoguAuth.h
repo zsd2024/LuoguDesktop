@@ -22,14 +22,15 @@
 #include <Poco/Net/HTTPRequest.h>
 #include <Poco/Net/HTTPResponse.h>
 #include <random>
-class LuoguLogin : public QObject
+class LuoguAuth : public QObject
 {
 	Q_OBJECT
 public:
-	LuoguLogin();
-	~LuoguLogin();
+	LuoguAuth();
+	~LuoguAuth();
 	QJsonObject operator()(QString username, QString password, QString captcha);
 	QPixmap get_captcha();
+	bool logout();
 
 private:
 	const QString User_Agent =

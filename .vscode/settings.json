@@ -108,7 +108,10 @@
         "stdfloat": "cpp",
         "text_encoding": "cpp",
         "qobject": "cpp",
-        "qwidget": "cpp"
+        "qwidget": "cpp",
+        "qnetworkrequest": "cpp",
+        "qnetworkcookie": "cpp",
+        "qsettings": "cpp"
     },
     "editor.fontLigatures": true,
     "qtConfigure.gdbPath": "/usr/bin/gdb",

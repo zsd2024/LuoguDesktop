@@ -31,8 +31,6 @@
     <property name="title">
      <string>文件</string>
     </property>
-    <addaction name="login"/>
-    <addaction name="logout"/>
     <addaction name="separator"/>
     <addaction name="settings"/>
     <addaction name="exit"/>
@@ -51,7 +49,6 @@
     <addaction name="siteaffairs"/>
     <addaction name="problem"/>
     <addaction name="academics"/>
-    <addaction name="relevantaffairs"/>
     <addaction name="service"/>
     <addaction name="separator"/>
     <addaction name="save_discuss"/>

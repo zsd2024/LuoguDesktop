@@ -1,13 +1,13 @@
 /********************************************************************************
-** Form generated from reading UI file 'LoginCWRXQY.ui'
+** Form generated from reading UI file 'LoginMjNCGf.ui'
 **
 ** Created by: Qt User Interface Compiler version 6.8.3
 **
 ** WARNING! All changes made in this file will be lost when recompiling UI file!
 ********************************************************************************/
 
-#ifndef LOGINCWRXQY_H
-#define LOGINCWRXQY_H
+#ifndef LOGINMJNCGF_H
+#define LOGINMJNCGF_H
 
 #include <QtCore/QVariant>
 #include <QtGui/QIcon>
@@ -73,19 +73,7 @@ public:
         QIcon icon;
         icon.addFile(QString::fromUtf8(":/images/assets/logo.svg"), QSize(), QIcon::Mode::Normal, QIcon::State::Off);
         LoginWindow->setWindowIcon(icon);
-        LoginWindow->setStyleSheet(QString::fromUtf8("* {\n"
-"    background-color: palette(base);\n"
-"}\n"
-"\n"
-"/* \346\267\261\350\211\262\346\250\241\345\274\217 */\n"
-"[color-scheme=\"dark\"] {\n"
-"    background-color: #2f343f; /* \346\267\261\350\211\262\350\203\214\346\231\257\351\242\234\350\211\262 */\n"
-"}\n"
-"\n"
-"/* \346\265\205\350\211\262\346\250\241\345\274\217 */\n"
-"[color-scheme=\"light\"] {\n"
-"    background-color: #f7f7f7; /* \346\265\205\350\211\262\350\203\214\346\231\257\351\242\234\350\211\262 */\n"
-"}"));
+        LoginWindow->setStyleSheet(QString::fromUtf8(""));
         horizontalLayout_2 = new QHBoxLayout(LoginWindow);
         horizontalLayout_2->setObjectName("horizontalLayout_2");
         Login = new QVBoxLayout();
@@ -188,16 +176,6 @@ public:
         username_label->setStyleSheet(QString::fromUtf8("* {\n"
 "    color: palette(text);\n"
 "    font-size: 16px;\n"
-"}\n"
-"\n"
-"/* \346\267\261\350\211\262\346\250\241\345\274\217 */\n"
-"[color-scheme=\"dark\"] {\n"
-"    color: #ffffff; /* \347\231\275\350\211\262\345\255\227\344\275\223\351\242\234\350\211\262 */\n"
-"}\n"
-"\n"
-"/* \346\265\205\350\211\262\346\250\241\345\274\217 */\n"
-"[color-scheme=\"light\"] {\n"
-"    color: #000000; /* \351\273\221\350\211\262\345\255\227\344\275\223\351\242\234\350\211\262 */\n"
 "}"));
 
         UsernameInput->addWidget(username_label);
@@ -255,16 +233,6 @@ public:
         password_label->setStyleSheet(QString::fromUtf8("* {\n"
 "    color: palette(text);\n"
 "    font-size: 16px;\n"
-"}\n"
-"\n"
-"/* \346\267\261\350\211\262\346\250\241\345\274\217 */\n"
-"[color-scheme=\"dark\"] {\n"
-"    color: #ffffff; /* \347\231\275\350\211\262\345\255\227\344\275\223\351\242\234\350\211\262 */\n"
-"}\n"
-"\n"
-"/* \346\265\205\350\211\262\346\250\241\345\274\217 */\n"
-"[color-scheme=\"light\"] {\n"
-"    color: #000000; /* \351\273\221\350\211\262\345\255\227\344\275\223\351\242\234\350\211\262 */\n"
 "}"));
 
         Password->addWidget(password_label);
@@ -323,16 +291,6 @@ public:
         captcha_label->setStyleSheet(QString::fromUtf8("* {\n"
 "    color: palette(text);\n"
 "    font-size: 16px;\n"
-"}\n"
-"\n"
-"/* \346\267\261\350\211\262\346\250\241\345\274\217 */\n"
-"[color-scheme=\"dark\"] {\n"
-"    color: #ffffff; /* \347\231\275\350\211\262\345\255\227\344\275\223\351\242\234\350\211\262 */\n"
-"}\n"
-"\n"
-"/* \346\265\205\350\211\262\346\250\241\345\274\217 */\n"
-"[color-scheme=\"light\"] {\n"
-"    color: #000000; /* \351\273\221\350\211\262\345\255\227\344\275\223\351\242\234\350\211\262 */\n"
 "}"));
 
         Captcha->addWidget(captcha_label);
@@ -594,4 +552,4 @@ namespace Ui {
 
 QT_END_NAMESPACE
 
-#endif // LOGINCWRXQY_H
+#endif // LOGINMJNCGF_H

@@ -16,6 +16,7 @@ LoginWindow::LoginWindow(QWidget *parent)
 	connect(ui->captcha_lineEdit, &QLineEdit::returnPressed, [this]()
 			{ on_LoginButton_clicked(); });
 	ui->captcha_lineEdit->installEventFilter(this);
+	auth = std::make_shared<LuoguAuth>();
 	succeed = false;
 }
 
@@ -24,17 +25,20 @@ LoginWindow::~LoginWindow()
 	delete ui;
 }
 
-void LoginWindow::closeEvent(QCloseEvent* event)
+void LoginWindow::closeEvent(QCloseEvent *event)
 {
 	if (succeed)
 	{
 		event->accept();
 		return;
 	}
-	QMessageBox::StandardButton reply = QMessageBox::warning(this, "关闭确认", "登录未完成，确定关闭？", QMessageBox::Yes | QMessageBox::No);
-	if (reply == QMessageBox::Yes) {
+	QMessageBox::StandardButton reply = QMessageBox::warning(this, "关闭确认", "登录未完成，确定关闭？", QMessageBox::Yes | QMessageBox::No, QMessageBox::No);
+	if (reply == QMessageBox::Yes)
+	{
 		event->accept();
-	} else {
+	}
+	else
+	{
 		event->ignore();
 	}
 }
@@ -50,7 +54,7 @@ void LoginWindow::on_LoginButton_clicked()
 {
 	try
 	{
-		QJsonObject res = login(ui->username_lineEdit->text(), ui->password_lineEdit->text(), ui->captcha_lineEdit->text());
+		QJsonObject res = (*auth)(ui->username_lineEdit->text(), ui->password_lineEdit->text(), ui->captcha_lineEdit->text());
 		if (res.contains("error"))
 		{
 			// 弹出错误弹窗
@@ -77,7 +81,12 @@ void LoginWindow::on_LoginButton_clicked()
 
 void LoginWindow::on_captcha_image_clicked()
 {
-	QPixmap pixmap = QPixmap(login.get_captcha());
+	QPixmap pixmap = QPixmap(auth->get_captcha());
 	ui->captcha_image->setIcon(pixmap);
 	ui->captcha_image->setIconSize(pixmap.size());
+}
+
+std::shared_ptr<LuoguAuth> LoginWindow::get_auth()
+{
+	return auth;
 }
