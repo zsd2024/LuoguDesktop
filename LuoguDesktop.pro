@@ -9,13 +9,15 @@ SOURCES += \
     $$files($$PWD/src/*.cpp) \
     $$files($$PWD/src/Auth/*.cpp) \
     $$files($$PWD/src/Config/*.cpp) \
-    $$files($$PWD/src/Login/*.cpp)
+    $$files($$PWD/src/Login/*.cpp) \
+    $$files($$PWD/src/GetBackground/*.cpp)
 
 HEADERS += \
     $$files($$PWD/src/*.h) \
     $$files($$PWD/src/Auth/*.h) \
     $$files($$PWD/src/Config/*.h) \
-    $$files($$PWD/src/Login/*.h)
+    $$files($$PWD/src/Login/*.h) \
+    $$files($$PWD/src/GetBackground/*.h)
 
 FORMS += $$PWD/src/LuoguDesktop.ui
 

@@ -111,7 +111,8 @@
         "qwidget": "cpp",
         "qnetworkrequest": "cpp",
         "qnetworkcookie": "cpp",
-        "qsettings": "cpp"
+        "qsettings": "cpp",
+        "qcoreapplication": "cpp"
     },
     "editor.fontLigatures": true,
     "qtConfigure.gdbPath": "/usr/bin/gdb",

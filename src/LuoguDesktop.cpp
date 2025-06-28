@@ -33,10 +33,17 @@ LuoguDesktop::LuoguDesktop(QWidget *parent)
     is_first_close = true;
     connect(login, &LoginWindow::LoginSucceed, [this]()
             { show();
-        qDebug() << config->getAutoPunch();});
+        qDebug() << config->getAutoPunch(); });
     setMenuAction();
     auth = login->get_auth();
     config = new Config();
+    get_background = new GetBackground();
+    background = (*get_background)();
+    // 设置背景
+    QPalette palette = this->palette();
+    palette.setBrush(QPalette::Window, QBrush(background));
+    this->setPalette(palette);
+    this->setAutoFillBackground(true);
     login->show();
 }
 
@@ -49,6 +56,7 @@ LuoguDesktop::~LuoguDesktop()
     delete show_action;
     delete quit_action;
     delete config;
+    delete get_background;
 }
 
 void LuoguDesktop::setMenuAction()
@@ -78,4 +86,15 @@ void LuoguDesktop::closeEvent(QCloseEvent *event)
     }
     else
         event->accept();
+}
+
+void LuoguDesktop::paintEvent(QPaintEvent *event)
+{
+    QPainter painter(this);
+    QPixmap scaled = background.scaled(this->size(), Qt::KeepAspectRatioByExpanding, Qt::SmoothTransformation);
+    // 计算居中显示的偏移
+    int x = (scaled.width() - width()) / 2;
+    int y = (scaled.height() - height()) / 2;
+    painter.drawPixmap(0, 0, scaled, x, y, width(), height());
+    QMainWindow::paintEvent(event);
 }

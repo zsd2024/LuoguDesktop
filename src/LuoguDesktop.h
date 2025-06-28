@@ -3,8 +3,11 @@
 #include "Login/Login.h"
 #include "Auth/LuoguAuth.h"
 #include "Config/Config.h"
+#include "GetBackground/GetBackground.h"
 #include <QMainWindow>
 #include <QSystemTrayIcon>
+#include <QPixmap>
+#include <QPainter>
 
 class LuoguDesktop : public QMainWindow
 {
@@ -21,9 +24,12 @@ private:
     QAction *show_action;
     QAction *quit_action;
     QMenu *SysTrayMenu;
+    GetBackground *get_background;
+    QPixmap background;
     bool is_first_close;
     void closeEvent(QCloseEvent *event) override;
     void setMenuAction();
     std::shared_ptr<LuoguAuth> auth;
     Config *config;
+    void paintEvent(QPaintEvent *event) override;
 };
