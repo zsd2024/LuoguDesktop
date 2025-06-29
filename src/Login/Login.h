@@ -14,9 +14,9 @@ public:
 	LoginWindow(QWidget *parent = nullptr);
 	~LoginWindow();
 	std::shared_ptr<LuoguAuth> get_auth();
+	void start();
 
 protected:
-	bool eventFilter(QObject *obj, QEvent *event) override;
 	void closeEvent(QCloseEvent *) override;
 
 private:

@@ -15,7 +15,6 @@ LoginWindow::LoginWindow(QWidget *parent)
 			{ ui->captcha_lineEdit->setFocus(); });
 	connect(ui->captcha_lineEdit, &QLineEdit::returnPressed, [this]()
 			{ on_LoginButton_clicked(); });
-	ui->captcha_lineEdit->installEventFilter(this);
 	auth = std::make_shared<LuoguAuth>();
 	succeed = false;
 }
@@ -23,6 +22,12 @@ LoginWindow::LoginWindow(QWidget *parent)
 LoginWindow::~LoginWindow()
 {
 	delete ui;
+}
+
+void LoginWindow::start()
+{
+	this->show();
+	on_captcha_image_clicked();
 }
 
 void LoginWindow::closeEvent(QCloseEvent *event)
@@ -43,13 +48,6 @@ void LoginWindow::closeEvent(QCloseEvent *event)
 	}
 }
 
-bool LoginWindow::eventFilter(QObject *obj, QEvent *event)
-{
-	if (obj == ui->captcha_lineEdit && event->type() == QEvent::FocusIn)
-		on_captcha_image_clicked();
-	return QWidget::eventFilter(obj, event);
-}
-
 void LoginWindow::on_LoginButton_clicked()
 {
 	try
@@ -60,6 +58,7 @@ void LoginWindow::on_LoginButton_clicked()
 			// 弹出错误弹窗
 			QMessageBox::critical(this, "登录失败", res["error"].toString());
 			on_captcha_image_clicked();
+			ui->captcha_lineEdit->setText("");
 			succeed = false;
 		}
 		else
@@ -68,8 +67,8 @@ void LoginWindow::on_LoginButton_clicked()
 			cookie = res["cookie"].toObject();
 			qDebug() << cookie;
 			succeed = true;
-			emit LoginSucceed();
 			close();
+			emit LoginSucceed();
 		}
 	}
 	catch (const std::exception &e)
