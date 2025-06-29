@@ -5,6 +5,21 @@ LuoguDesktop::LuoguDesktop(QWidget *parent)
 {
     ui->setupUi(this);
     this->hide();
+    is_first_close = true;
+    connect(login, &LoginWindow::LoginSucceed, [this]()
+            {
+                setupSystemTray();
+                SysTray->show();
+                setupMainUI();
+                show();
+                qDebug() << config->getAutoPunch(); });
+    setMenuAction();
+    auth = login->get_auth();
+    login->start();
+}
+
+void LuoguDesktop::setupSystemTray()
+{
     SysTray = new QSystemTrayIcon(this);
     SysTray->setIcon(QIcon(":/images/assets/logo.svg"));
     SysTray->setToolTip("LuoguDesktop");
@@ -17,34 +32,43 @@ LuoguDesktop::LuoguDesktop(QWidget *parent)
             { show(); });
     connect(SysTray, &QSystemTrayIcon::activated, [this](QSystemTrayIcon::ActivationReason reason)
             {switch (reason)
-        {
-        case QSystemTrayIcon::Trigger:
-            show();
-            break;
-        default:
-            break;
-        } });
+            {
+            case QSystemTrayIcon::Trigger:
+                show();
+                break;
+            default:
+                break;
+            } });
     SysTrayMenu = new QMenu(this);
     SysTrayMenu->addAction(show_action);
     SysTrayMenu->addSeparator();
     SysTrayMenu->addAction(quit_action);
     SysTray->setContextMenu(SysTrayMenu);
-    SysTray->show();
-    is_first_close = true;
-    connect(login, &LoginWindow::LoginSucceed, [this]()
-            { show();
-        qDebug() << config->getAutoPunch(); });
-    setMenuAction();
-    auth = login->get_auth();
+}
+
+void LuoguDesktop::setupMainUI()
+{
     config = new Config();
     get_background = new GetBackground();
     background = (*get_background)();
-    // 设置背景
     QPalette palette = this->palette();
     palette.setBrush(QPalette::Window, QBrush(background));
     this->setPalette(palette);
     this->setAutoFillBackground(true);
-    login->show();
+    main_layout = new QHBoxLayout(this->centralWidget());
+    v_layout_1 = new QVBoxLayout();
+    v_layout_2 = new QVBoxLayout();
+    main_layout->addLayout(v_layout_1);
+    main_layout->addLayout(v_layout_2);
+    QColor backgroundColor = QColor(255, 255, 255, 220);
+#if QT_VERSION >= QT_VERSION_CHECK(6, 0, 0)
+    if (QGuiApplication::styleHints()->colorScheme() == Qt::ColorScheme::Dark)
+        backgroundColor = QColor(50, 50, 50, 220); // 深色模式下使用更暗的背景色
+#endif
+    blur_widget_1 = new RoundedBlurWidget(this->centralWidget(), backgroundColor);
+    blur_widget_2 = new RoundedBlurWidget(this->centralWidget(), backgroundColor);
+    v_layout_1->addWidget(blur_widget_1);
+    v_layout_2->addWidget(blur_widget_2);
 }
 
 LuoguDesktop::~LuoguDesktop()
@@ -57,6 +81,7 @@ LuoguDesktop::~LuoguDesktop()
     delete quit_action;
     delete config;
     delete get_background;
+    delete main_layout;
 }
 
 void LuoguDesktop::setMenuAction()

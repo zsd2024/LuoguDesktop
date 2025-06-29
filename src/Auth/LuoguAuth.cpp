@@ -277,7 +277,6 @@ bool LuoguAuth::logout()
 			Poco::Net::HTTPRequest::HTTP_POST,
 			"/auth/logout",
 			Poco::Net::HTTPMessage::HTTP_1_1);
-	resend:
 		request.setCookies(cookie);
 		// request.set("Host", "www.luogu.com.cn");
 		request.set("User-Agent", getUserAgent().toStdString());
@@ -305,9 +304,7 @@ bool LuoguAuth::logout()
 		else
 		{
 			if (response.getStatus() == Poco::Net::HTTPResponse::HTTPStatus::HTTP_FOUND)
-			{
 				return true;
-			}
 			qDebug() << "请求失败! 状态码: " << response.getStatus();
 			std::string responseBody;
 			Poco::StreamCopier::copyToString(responseStream, responseBody);
