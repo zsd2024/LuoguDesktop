@@ -101,7 +101,10 @@
             "args": [],
             "options": {},
             "problemMatcher": [],
-            "group": "test",
+            "group": {
+                "kind": "build",
+                "isDefault": true
+            },
             "dependsOn": [
                 "release"
             ]
