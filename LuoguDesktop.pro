@@ -1,4 +1,4 @@
-QT += core gui widgets network
+QT += core gui widgets
 
 CONFIG += c++14
 
@@ -11,7 +11,7 @@ SOURCES += \
     $$files($$PWD/src/Config/*.cpp) \
     $$files($$PWD/src/Login/*.cpp) \
     $$files($$PWD/src/GetBackground/*.cpp) \
-    $$files($$PWD/src/RoundedBlurWidget/*.cpp)
+    $$files($$PWD/src/RoundedWidget/*.cpp)
 
 HEADERS += \
     $$files($$PWD/src/*.h) \
@@ -19,7 +19,7 @@ HEADERS += \
     $$files($$PWD/src/Config/*.h) \
     $$files($$PWD/src/Login/*.h) \
     $$files($$PWD/src/GetBackground/*.h) \
-    $$files($$PWD/src/RoundedBlurWidget/*.h)
+    $$files($$PWD/src/RoundedWidget/*.h)
 
 FORMS += $$PWD/src/LuoguDesktop.ui
 

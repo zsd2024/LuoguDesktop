@@ -120,7 +120,6 @@
     "qtConfigure.qtDir": "/home/zyk/.tmp/Qt",
     "qtConfigure.qtKitDir": "/home/zyk/.tmp/Qt/6.8.3/gcc_64",
     "editor.wordWrap": "on",
-    "qttools.creator": "/home/zyk/.tmp/Qt/Tools/QtCreator/bin/qtcreater",
     "qttools.extraSearchDirectories": [
         "/home/zyk/.tmp/Qt/6.8.3/gcc_64/bin"
     ],
