@@ -12,11 +12,11 @@
 #include <QVector>
 #include <QString>
 // #include <QNetworkAccessManager>
-#include <QNetworkCookieJar>
-#include <QNetworkCookie>
+// #include <QNetworkCookieJar>
+// #include <QNetworkCookie>
 // #include <QNetworkProxy>
 // #include <QNetworkReply>
-#include <QNetworkRequest>
+// #include <QNetworkRequest>
 #include <QDebug>
 #include <Poco/Net/HTTPSClientSession.h>
 #include <Poco/Net/HTTPRequest.h>
@@ -31,9 +31,10 @@ public:
 	QJsonObject operator()(QString username, QString password, QString captcha);
 	QPixmap get_captcha();
 	bool logout();
+	QString get_username();
 
 private:
-	const QString User_Agent =
+	QString User_Agent =
 #ifdef _WIN32
 #ifdef _WIN64
 		"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/69.0.3497.100 Safari/537.36";
@@ -42,7 +43,7 @@ private:
 #endif
 #else
 #ifdef __linux__
-		"Mozilla / 5.0(X11; Linux x86_64; rv : 139.0)Gecko / 20100101 Firefox / 139.0";
+		"Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/139.0.0.0 Safari/537.36 Edg/139.0.0.0";
 #else
 		"Mozilla/5.0 (Linux; Android 4.0.4; Galaxy Nexus Build/IMM76B) AppleWebKit/535.19 (KHTML, like Gecko) Chrome/18.0.1025.133 Mobile Safari/535.19";
 #endif
@@ -51,6 +52,7 @@ private:
 	Poco::Net::NameValueCollection cookie;
 	QString csrf_token;
 	QString C3VK;
+	QString username;
 	QPixmap captcha;
 	QString login_text;
 	QByteArray getUserAgent();

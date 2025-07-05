@@ -24,6 +24,11 @@ inline QByteArray LuoguAuth::getUserAgent()
 	return User_Agent.toUtf8();
 }
 
+QString LuoguAuth::get_username()
+{
+	return username;
+}
+
 QPixmap LuoguAuth::get_captcha()
 {
 	try
@@ -223,6 +228,7 @@ QJsonObject LuoguAuth::login(QString username, QString password, QString captcha
 			Poco::StreamCopier::copyToString(responseStream, responseBody);
 			login_text = QString::fromStdString(responseBody);
 			qDebug() << responseBody;
+			this->username = (QJsonDocument::fromJson(login_text.toUtf8()).object())["username"].toString();
 			std::vector<Poco::Net::HTTPCookie> cookies;
 			response.getCookies(cookies);
 			for (Poco::Net::HTTPCookie i : cookies)
