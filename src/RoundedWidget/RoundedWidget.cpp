@@ -1,6 +1,4 @@
 #include "RoundedWidget.h"
-#include <QPainter>
-#include <QPainterPath>
 
 RoundedWidget::RoundedWidget(QWidget *parent, QColor BackgroundColor)
     : QWidget(parent), m_color(BackgroundColor), m_radius(15) // 默认半透明黑色

@@ -1,6 +1,9 @@
 #pragma once
 #include <QWidget>
 #include <QColor>
+#include <QPainter>
+#include <QPainterPath>
+#include <QGraphicsEffect>
 
 class RoundedWidget : public QWidget
 {
