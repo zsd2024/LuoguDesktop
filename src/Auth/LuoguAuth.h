@@ -30,8 +30,10 @@ public:
 	~LuoguAuth();
 	QJsonObject operator()(QString username, QString password, QString captcha);
 	QPixmap get_captcha();
+	QJsonObject user_info(int uid, bool cache = true);
 	bool logout();
 	QString get_username();
+	int get_uid();
 
 private:
 	QString User_Agent =
@@ -55,6 +57,7 @@ private:
 	QString username;
 	QPixmap captcha;
 	QString login_text;
+	QJsonObject user_info_cache;
 	QByteArray getUserAgent();
 	QJsonObject getCsrfToken();
 	QJsonObject login(QString username, QString password, QString captcha);

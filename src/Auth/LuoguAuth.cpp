@@ -14,21 +14,37 @@ LuoguAuth::~LuoguAuth()
 	delete client;
 }
 
+/// @brief 登录
+/// @param username 用户名
+/// @param password 密码
+/// @param captcha 验证码
+/// @return 登录信息
 QJsonObject LuoguAuth::operator()(QString username, QString password, QString captcha)
 {
 	return login(username, password, captcha);
 }
 
+/// @brief 获取模拟的浏览器 UA
+/// @return 浏览器 UA
 inline QByteArray LuoguAuth::getUserAgent()
 {
 	return User_Agent.toUtf8();
 }
 
+/// @brief 获取用户名
+/// @return 用户名
 QString LuoguAuth::get_username()
 {
 	return username;
 }
 
+int LuoguAuth::get_uid()
+{
+	return std::atoi(cookie.get("_uid").c_str());
+}
+
+/// @brief 获取验证码图片
+/// @return 验证码
 QPixmap LuoguAuth::get_captcha()
 {
 	try
@@ -96,6 +112,8 @@ QPixmap LuoguAuth::get_captcha()
 	return captcha;
 }
 
+/// @brief 获取 csrf-token
+/// @return csrf-token
 QJsonObject LuoguAuth::getCsrfToken()
 {
 	if (!csrf_token.isEmpty())
@@ -177,6 +195,11 @@ QJsonObject LuoguAuth::getCsrfToken()
 	return {{"csrf-token", csrf_token}};
 }
 
+/// @brief 登录
+/// @param username 用户名
+/// @param password 密码
+/// @param captcha 验证码
+/// @return 登录信息
 QJsonObject LuoguAuth::login(QString username, QString password, QString captcha)
 {
 	QJsonObject csrf_token = getCsrfToken();
@@ -274,6 +297,86 @@ QJsonObject LuoguAuth::login(QString username, QString password, QString captcha
 	return json;
 }
 
+/// @brief 获取用户详细信息
+/// @param uid 用户的 uid
+/// @param cache 是否使用缓存，默认为 true
+/// @return 用户详细信息
+QJsonObject LuoguAuth::user_info(int uid, bool cache)
+{
+	if (!user_info_cache.empty() && cache)
+		return user_info_cache;
+	try
+	{
+		Poco::Net::HTTPRequest request(
+			Poco::Net::HTTPRequest::HTTP_GET,
+			("/user/" + std::to_string(uid)).c_str(),
+			Poco::Net::HTTPMessage::HTTP_1_1);
+	resend:
+		request.setCookies(cookie);
+		request.set("referer", "https://www.luogu.com.cn/");
+		request.set("User-Agent", getUserAgent().toStdString());
+
+		// 发送请求
+		client->sendRequest(request);
+
+		// 接收响应
+		Poco::Net::HTTPResponse response;
+		std::istream &responseStream = client->receiveResponse(response);
+
+		if (response.getStatus() == Poco::Net::HTTPResponse::HTTP_OK)
+		{
+			std::string responseBody;
+			Poco::StreamCopier::copyToString(responseStream, responseBody);
+			captcha.loadFromData(QByteArray::fromStdString(responseBody));
+			QString text = QString::fromStdString(responseBody);
+			if (text.contains("<script>window._feInjection = JSON.parse(decodeURIComponent(\""))
+			{
+				QString user_info_url = text.split("<script>window._feInjection = JSON.parse(decodeURIComponent(\"")[1].split("\"));")[0];
+				QString user_info_text = QUrl::fromPercentEncoding(user_info_url.toUtf8());
+				QJsonDocument user_info_json = QJsonDocument::fromJson(user_info_text.toUtf8());
+				std::vector<Poco::Net::HTTPCookie> cookies;
+				response.getCookies(cookies);
+				for (Poco::Net::HTTPCookie i : cookies)
+					cookie.set(i.getName(), i.getValue());
+				return user_info_cache = user_info_json.object();
+			}
+		}
+		else
+		{
+			if (response.getStatus() == Poco::Net::HTTPResponse::HTTPStatus::HTTP_FOUND)
+			{
+				std::string new_url = response.get("Location");
+				std::vector<Poco::Net::HTTPCookie> cookies;
+				response.getCookies(cookies);
+				for (Poco::Net::HTTPCookie i : cookies)
+					cookie.set(i.getName(), i.getValue());
+				qDebug() << "已找到，重定向至：" << new_url;
+				request.setURI(new_url);
+				goto resend;
+			}
+			qDebug() << "请求失败! 状态码: " << response.getStatus();
+			std::string responseBody;
+			Poco::StreamCopier::copyToString(responseStream, responseBody);
+			qDebug() << "请求失败! 内容: " << responseBody;
+		}
+	}
+	catch (const Poco::Exception &e)
+	{
+		qDebug() << "Poco异常: " << e.displayText().c_str();
+	}
+	catch (const std::exception &e)
+	{
+		qDebug() << "标准异常: " << e.what();
+	}
+	catch (...)
+	{
+		qDebug() << "未知异常";
+	}
+	return {};
+}
+
+/// @brief 登出
+/// @return 是否成功
 bool LuoguAuth::logout()
 {
 	QJsonObject csrf_token = getCsrfToken();
