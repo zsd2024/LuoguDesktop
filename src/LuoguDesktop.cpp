@@ -1,172 +1,174 @@
 #include "LuoguDesktop.h"
 
 LuoguDesktop::LuoguDesktop(QWidget *parent)
-    : QMainWindow(parent), ui(new Ui_LuoguDesktop), login(new LoginWindow)
+	: QMainWindow(parent), ui(new Ui_LuoguDesktop), login(new LoginWindow)
 {
-    ui->setupUi(this);
-    this->hide();
-    is_first_close = true;
-    connect(login, &LoginWindow::LoginSucceed, [this]()
-            {
-                setupSystemTray();
-                SysTray->show();
-                setupMainUI();
-                show();
-                qDebug() << config->getAutoPunch(); });
-    setMenuAction();
-    auth = login->get_auth();
-    login->start();
+	ui->setupUi(this);
+	this->hide();
+	is_first_close = true;
+	connect(login, &LoginWindow::LoginSucceed, [this]()
+			{
+				setupSystemTray();
+				SysTray->show();
+				setupMainUI();
+				show();
+				qDebug() << config->getAutoPunch(); });
+	setMenuAction();
+	auth = login->get_auth();
+	login->start();
 }
 
 void LuoguDesktop::setupSystemTray()
 {
-    SysTray = new QSystemTrayIcon(this);
-    SysTray->setIcon(QIcon(":/images/assets/logo.svg"));
-    SysTray->setToolTip("LuoguDesktop");
-    quit_action = new QAction("退出", this);
-    connect(quit_action, &QAction::triggered, [this]()
-            { auth->logout();
-                qApp->quit(); });
-    show_action = new QAction("显示", this);
-    connect(show_action, &QAction::triggered, [this]()
-            { show(); });
-    connect(SysTray, &QSystemTrayIcon::activated, [this](QSystemTrayIcon::ActivationReason reason)
-            {switch (reason)
-            {
-            case QSystemTrayIcon::Trigger:
-                show();
-                break;
-            default:
-                break;
-            } });
-    SysTrayMenu = new QMenu(this);
-    SysTrayMenu->addAction(show_action);
-    SysTrayMenu->addSeparator();
-    SysTrayMenu->addAction(quit_action);
-    SysTray->setContextMenu(SysTrayMenu);
+	SysTray = new QSystemTrayIcon(this);
+	SysTray->setIcon(QIcon(":/images/assets/logo.svg"));
+	SysTray->setToolTip("LuoguDesktop");
+	quit_action = new QAction("退出", this);
+	connect(quit_action, &QAction::triggered, [this]()
+			{ if(auth->logout())
+				qApp->exit();
+			else if (QMessageBox::critical(this, "登出失败", "登出失败，是否直接关闭 LuoguDesktop？", QMessageBox::Yes | QMessageBox::No, QMessageBox::No) == QMessageBox::Yes)
+					qApp->exit(); });
+	show_action = new QAction("显示", this);
+	connect(show_action, &QAction::triggered, [this]()
+			{ show(); });
+	connect(SysTray, &QSystemTrayIcon::activated, [this](QSystemTrayIcon::ActivationReason reason)
+			{switch (reason)
+			{
+			case QSystemTrayIcon::Trigger:
+				show();
+				break;
+			default:
+				break;
+			} });
+	SysTrayMenu = new QMenu(this);
+	SysTrayMenu->addAction(show_action);
+	SysTrayMenu->addSeparator();
+	SysTrayMenu->addAction(quit_action);
+	SysTray->setContextMenu(SysTrayMenu);
 }
 
 void LuoguDesktop::setupMainUI()
 {
-    config = new Config();
-    get_background = new GetBackground();
-    background = (*get_background)();
-    QPalette palette = this->palette();
-    palette.setBrush(QPalette::Window, QBrush(background));
-    this->setPalette(palette);
-    this->setAutoFillBackground(true);
-    main_layout = new QHBoxLayout(this->centralWidget());
-    main_layout->setSpacing(20);
-    main_layout->setContentsMargins(20, 20, 20, 20);
-    v_layout_1 = new QVBoxLayout();
-    v_layout_2 = new QVBoxLayout();
-    main_layout->addLayout(v_layout_1);
-    main_layout->addLayout(v_layout_2);
-    QColor backgroundColor = QColor(255, 255, 255, 200);
+	config = new Config();
+	get_background = new GetBackground();
+	background = (*get_background)();
+	QPalette palette = this->palette();
+	palette.setBrush(QPalette::Window, QBrush(background));
+	this->setPalette(palette);
+	this->setAutoFillBackground(true);
+	main_layout = new QHBoxLayout(this->centralWidget());
+	main_layout->setSpacing(20);
+	main_layout->setContentsMargins(20, 20, 20, 20);
+	v_layout_1 = new QVBoxLayout();
+	v_layout_2 = new QVBoxLayout();
+	main_layout->addLayout(v_layout_1);
+	main_layout->addLayout(v_layout_2);
+	QColor backgroundColor = QColor(255, 255, 255, 200);
 #if QT_VERSION >= QT_VERSION_CHECK(6, 0, 0)
-    if (QGuiApplication::styleHints()->colorScheme() == Qt::ColorScheme::Dark)
-        backgroundColor = QColor(50, 50, 50, 200); // 深色模式下使用更暗的背景色
+	if (QGuiApplication::styleHints()->colorScheme() == Qt::ColorScheme::Dark)
+		backgroundColor = QColor(50, 50, 50, 200); // 深色模式下使用更暗的背景色
 #endif
-    rounded_widget_1 = new RoundedWidget(this->centralWidget(), backgroundColor);
-    rounded_widget_2 = new RoundedWidget(this->centralWidget(), backgroundColor);
-    v_layout_1->addWidget(rounded_widget_1);
-    v_layout_2->addWidget(rounded_widget_2);
-    v_layout_1_1 = new QVBoxLayout(rounded_widget_1);
-    v_layout_1_2 = new QVBoxLayout(rounded_widget_2);
-    QString user_color_text = auth->user_info(auth->get_uid())["currentData"].toObject()["user"].toObject()["rating"].toObject()["user"].toObject()["color"].toString();
-    QString user_color;
-    if (user_color_text == "Gray")
-        user_color = "#BFBFBF";
-    else if (user_color_text == "Blue")
-        user_color = "#3498DB";
-    else if (user_color_text == "Green")
-        user_color = "#52C41A";
-    else if (user_color_text == "Orange")
-        user_color = "#F39C11";
-    else if (user_color_text == "Red")
-        user_color = "#FE4C61";
+	rounded_widget_1 = new RoundedWidget(this->centralWidget(), backgroundColor);
+	rounded_widget_2 = new RoundedWidget(this->centralWidget(), backgroundColor);
+	v_layout_1->addWidget(rounded_widget_1);
+	v_layout_2->addWidget(rounded_widget_2);
+	v_layout_1_1 = new QVBoxLayout(rounded_widget_1);
+	v_layout_1_2 = new QVBoxLayout(rounded_widget_2);
+	QString user_color_text = auth->user_info(auth->get_uid())["currentData"].toObject()["user"].toObject()["rating"].toObject()["user"].toObject()["color"].toString();
+	QString user_color;
+	if (user_color_text == "Gray")
+		user_color = "#BFBFBF";
+	else if (user_color_text == "Blue")
+		user_color = "#3498DB";
+	else if (user_color_text == "Green")
+		user_color = "#52C41A";
+	else if (user_color_text == "Orange")
+		user_color = "#F39C11";
+	else if (user_color_text == "Red")
+		user_color = "#FE4C61";
 #if QT_VERSION >= QT_VERSION_CHECK(6, 0, 0)
-    if (QGuiApplication::styleHints()->colorScheme() == Qt::ColorScheme::Dark) // 暗色颜色来自 Dark Reader
-        if (user_color_text == "Gray")
-            user_color = "#C0BAB2";
-        else if (user_color_text == "Blue")
-            user_color = "#46A1DE";
-        else if (user_color_text == "Green")
-            user_color = "#7DE749";
-        else if (user_color_text == "Orange")
-            user_color = "#F4A628";
-        else if (user_color_text == "Red")
-            user_color = "#FE4F64";
+	if (QGuiApplication::styleHints()->colorScheme() == Qt::ColorScheme::Dark) // 暗色颜色来自 Dark Reader
+	{
+		if (user_color_text == "Gray")
+			user_color = "#C0BAB2";
+		else if (user_color_text == "Blue")
+			user_color = "#46A1DE";
+		else if (user_color_text == "Green")
+			user_color = "#7DE749";
+		else if (user_color_text == "Orange")
+			user_color = "#F4A628";
+		else if (user_color_text == "Red")
+			user_color = "#FE4F64";
+	}
 #endif
-    greet_username = new QLabel(rounded_widget_1);
-    QString safeUsername = auth->get_username().toHtmlEscaped(); // 转义特殊字符
-    QString coloredText = "<span style='color:" + user_color + ";'>" + safeUsername + "</span>，";
-    greet_username->setText(coloredText);
-    greet_username->setTextFormat(Qt::RichText);
-    QFont font_greet_username;
-    font_greet_username.setPointSize(32);
-    greet_username->setFont(font_greet_username);
-    v_layout_1_1->addWidget(greet_username);
-    greet = new QLabel(rounded_widget_1);
-    qDebug() << auth->get_username();
-    greet->setText("欢迎使用 LuoguDesktop！");
-    QFont font_greet;
-    font_greet.setPointSize(24);
-    greet->setFont(font_greet);
-    v_layout_1_1->addWidget(greet);
-    v_layout_1_1_v_spacer = new QSpacerItem(20, 40, QSizePolicy::Policy::Minimum, QSizePolicy::Policy::Expanding);
-    v_layout_1_1->addItem(v_layout_1_1_v_spacer);
+	greet_username = new QLabel(rounded_widget_1);
+	QString safeUsername = auth->get_username().toHtmlEscaped(); // 转义特殊字符
+	QString coloredText = "<span style='color:" + user_color + ";'>" + safeUsername + "</span>，";
+	greet_username->setText(coloredText);
+	greet_username->setTextFormat(Qt::RichText);
+	QFont font_greet_username;
+	font_greet_username.setPointSize(32);
+	greet_username->setFont(font_greet_username);
+	v_layout_1_1->addWidget(greet_username);
+	greet = new QLabel(rounded_widget_1);
+	qDebug() << auth->get_username();
+	greet->setText("欢迎使用 LuoguDesktop！");
+	QFont font_greet;
+	font_greet.setPointSize(24);
+	greet->setFont(font_greet);
+	v_layout_1_1->addWidget(greet);
+	v_layout_1_1_v_spacer = new QSpacerItem(20, 40, QSizePolicy::Policy::Minimum, QSizePolicy::Policy::Expanding);
+	v_layout_1_1->addItem(v_layout_1_1_v_spacer);
 }
 
 LuoguDesktop::~LuoguDesktop()
 {
-    delete ui;
-    delete login;
-    delete SysTray;
-    delete SysTrayMenu;
-    delete show_action;
-    delete quit_action;
-    delete config;
-    delete get_background;
-    delete main_layout;
+	delete ui;
+	delete login;
+	delete SysTray;
+	delete SysTrayMenu;
+	delete show_action;
+	delete quit_action;
+	delete config;
+	delete get_background;
+	delete main_layout;
 }
 
 void LuoguDesktop::setMenuAction()
 {
-    connect(ui->exit, &QAction::triggered, [this]
-            { if(auth->logout())
-                qApp->exit();
-            else
-            {
-            if (QMessageBox::critical(this, "登出失败", "登出失败，是否直接关闭 LuoguDesktop？", QMessageBox::Yes | QMessageBox::No, QMessageBox::No) == QMessageBox::Yes)
-            {
-                qApp->exit();
-            }} });
+	connect(ui->exit, &QAction::triggered, [this]
+			{ if(auth->logout())
+				qApp->exit();
+			else if (QMessageBox::critical(this, "登出失败", "登出失败，是否直接关闭 LuoguDesktop？", QMessageBox::Yes | QMessageBox::No, QMessageBox::No) == QMessageBox::Yes)
+				qApp->exit(); });
+	connect(ui->about, &QAction::triggered, [this]
+			{ QMessageBox::about(this, tr("关于 LuoguDesktop"), tr("<b>版本：</b>0.1 Beta<br><b>开发者：</b>zsd2024<br><b>GitHub：</b><a href='https://github.com/zsd2024/LuoguDesktop'>zsd2024/LuoguDesktop</a><center><font color='#808080'>Copyright (C) 2025 zsd2024. <br>All Rights Reserved. </font></center>")); });
 }
 
 void LuoguDesktop::closeEvent(QCloseEvent *event)
 {
-    if (SysTray->isVisible())
-    {
-        hide();
-        if (is_first_close)
-        {
-            SysTray->showMessage("提示", "窗口已最小化至托盘");
-            is_first_close = false;
-        }
-        event->ignore();
-    }
-    else
-        event->accept();
+	if (SysTray->isVisible())
+	{
+		hide();
+		if (is_first_close)
+		{
+			SysTray->showMessage("提示", "窗口已最小化至托盘");
+			is_first_close = false;
+		}
+		event->ignore();
+	}
+	else
+		event->accept();
 }
 
 void LuoguDesktop::paintEvent(QPaintEvent *event)
 {
-    QPainter painter(this);
-    QPixmap scaled = background.scaled(this->size(), Qt::KeepAspectRatioByExpanding, Qt::SmoothTransformation);
-    // 计算居中显示的偏移
-    int x = (scaled.width() - width()) / 2;
-    int y = (scaled.height() - height()) / 2;
-    painter.drawPixmap(0, 0, scaled, x, y, width(), height());
-    QMainWindow::paintEvent(event);
+	QPainter painter(this);
+	QPixmap scaled = background.scaled(this->size(), Qt::KeepAspectRatioByExpanding, Qt::SmoothTransformation);
+	// 计算居中显示的偏移
+	int x = (scaled.width() - width()) / 2;
+	int y = (scaled.height() - height()) / 2;
+	painter.drawPixmap(0, 0, scaled, x, y, width(), height());
+	QMainWindow::paintEvent(event);
 }
