@@ -56,19 +56,66 @@ void LuoguDesktop::setupMainUI()
     this->setPalette(palette);
     this->setAutoFillBackground(true);
     main_layout = new QHBoxLayout(this->centralWidget());
+    main_layout->setSpacing(20);
+    main_layout->setContentsMargins(20, 20, 20, 20);
     v_layout_1 = new QVBoxLayout();
     v_layout_2 = new QVBoxLayout();
     main_layout->addLayout(v_layout_1);
     main_layout->addLayout(v_layout_2);
-    QColor backgroundColor = QColor(255, 255, 255, 220);
+    QColor backgroundColor = QColor(255, 255, 255, 200);
 #if QT_VERSION >= QT_VERSION_CHECK(6, 0, 0)
     if (QGuiApplication::styleHints()->colorScheme() == Qt::ColorScheme::Dark)
-        backgroundColor = QColor(50, 50, 50, 220); // 深色模式下使用更暗的背景色
+        backgroundColor = QColor(50, 50, 50, 200); // 深色模式下使用更暗的背景色
 #endif
-    blur_widget_1 = new RoundedBlurWidget(this->centralWidget(), backgroundColor);
-    blur_widget_2 = new RoundedBlurWidget(this->centralWidget(), backgroundColor);
-    v_layout_1->addWidget(blur_widget_1);
-    v_layout_2->addWidget(blur_widget_2);
+    rounded_widget_1 = new RoundedWidget(this->centralWidget(), backgroundColor);
+    rounded_widget_2 = new RoundedWidget(this->centralWidget(), backgroundColor);
+    v_layout_1->addWidget(rounded_widget_1);
+    v_layout_2->addWidget(rounded_widget_2);
+    v_layout_1_1 = new QVBoxLayout(rounded_widget_1);
+    v_layout_1_2 = new QVBoxLayout(rounded_widget_2);
+    QString user_color_text = auth->user_info(auth->get_uid())["currentData"].toObject()["user"].toObject()["rating"].toObject()["user"].toObject()["color"].toString();
+    QString user_color;
+    if (user_color_text == "Gray")
+        user_color = "#BFBFBF";
+    else if (user_color_text == "Blue")
+        user_color = "#3498DB";
+    else if (user_color_text == "Green")
+        user_color = "#52C41A";
+    else if (user_color_text == "Orange")
+        user_color = "#F39C11";
+    else if (user_color_text == "Red")
+        user_color = "#FE4C61";
+#if QT_VERSION >= QT_VERSION_CHECK(6, 0, 0)
+    if (QGuiApplication::styleHints()->colorScheme() == Qt::ColorScheme::Dark) // 暗色颜色来自 Dark Reader
+        if (user_color_text == "Gray")
+            user_color = "#C0BAB2";
+        else if (user_color_text == "Blue")
+            user_color = "#46A1DE";
+        else if (user_color_text == "Green")
+            user_color = "#7DE749";
+        else if (user_color_text == "Orange")
+            user_color = "#F4A628";
+        else if (user_color_text == "Red")
+            user_color = "#FE4F64";
+#endif
+    greet_username = new QLabel(rounded_widget_1);
+    QString safeUsername = auth->get_username().toHtmlEscaped(); // 转义特殊字符
+    QString coloredText = "<span style='color:" + user_color + ";'>" + safeUsername + "</span>，";
+    greet_username->setText(coloredText);
+    greet_username->setTextFormat(Qt::RichText);
+    QFont font_greet_username;
+    font_greet_username.setPointSize(32);
+    greet_username->setFont(font_greet_username);
+    v_layout_1_1->addWidget(greet_username);
+    greet = new QLabel(rounded_widget_1);
+    qDebug() << auth->get_username();
+    greet->setText("欢迎使用 LuoguDesktop！");
+    QFont font_greet;
+    font_greet.setPointSize(24);
+    greet->setFont(font_greet);
+    v_layout_1_1->addWidget(greet);
+    v_layout_1_1_v_spacer = new QSpacerItem(20, 40, QSizePolicy::Policy::Minimum, QSizePolicy::Policy::Expanding);
+    v_layout_1_1->addItem(v_layout_1_1_v_spacer);
 }
 
 LuoguDesktop::~LuoguDesktop()

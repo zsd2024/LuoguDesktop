@@ -4,7 +4,7 @@
 #include "Config/Config.h"
 #include "GetBackground/GetBackground.h"
 #include "Login/Login.h"
-#include "RoundedBlurWidget/RoundedBlurWidget.h"
+#include "RoundedWidget/RoundedWidget.h"
 #include <QMainWindow>
 #include <QSystemTrayIcon>
 #include <QPixmap>
@@ -30,7 +30,10 @@ private:
     QPixmap background;
     QHBoxLayout *main_layout;
     QVBoxLayout *v_layout_1, *v_layout_2;
-    RoundedBlurWidget *blur_widget_1, *blur_widget_2;
+    QVBoxLayout *v_layout_1_1, *v_layout_1_2;
+    QSpacerItem *v_layout_1_1_v_spacer;
+    QLabel *greet_username, *greet;
+    RoundedWidget *rounded_widget_1, *rounded_widget_2;
     bool is_first_close;
     void closeEvent(QCloseEvent *event) override;
     void setMenuAction();
