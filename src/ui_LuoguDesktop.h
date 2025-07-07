@@ -1,13 +1,13 @@
 /********************************************************************************
-** Form generated from reading UI file 'LuoguDesktopFwqtEF.ui'
+** Form generated from reading UI file 'LuoguDesktopFpwFNj.ui'
 **
 ** Created by: Qt User Interface Compiler version 6.8.3
 **
 ** WARNING! All changes made in this file will be lost when recompiling UI file!
 ********************************************************************************/
 
-#ifndef LUOGUDESKTOPFWQTEF_H
-#define LUOGUDESKTOPFWQTEF_H
+#ifndef LUOGUDESKTOPFPWFNJ_H
+#define LUOGUDESKTOPFPWFNJ_H
 
 #include <QtCore/QVariant>
 #include <QtGui/QAction>
@@ -16,7 +16,6 @@
 #include <QtWidgets/QMainWindow>
 #include <QtWidgets/QMenu>
 #include <QtWidgets/QMenuBar>
-#include <QtWidgets/QStatusBar>
 #include <QtWidgets/QWidget>
 
 QT_BEGIN_NAMESPACE
@@ -47,7 +46,6 @@ public:
     QMenu *Discuss;
     QMenu *Help;
     QMenu *Article;
-    QStatusBar *statusbar;
 
     void setupUi(QMainWindow *LuoguDesktop)
     {
@@ -106,9 +104,6 @@ public:
         Article = new QMenu(menubar);
         Article->setObjectName("Article");
         LuoguDesktop->setMenuBar(menubar);
-        statusbar = new QStatusBar(LuoguDesktop);
-        statusbar->setObjectName("statusbar");
-        LuoguDesktop->setStatusBar(statusbar);
 
         menubar->addAction(File->menuAction());
         menubar->addAction(Problem->menuAction());
@@ -170,4 +165,4 @@ namespace Ui {
 
 QT_END_NAMESPACE
 
-#endif // LUOGUDESKTOPFWQTEF_H
+#endif // LUOGUDESKTOPFPWFNJ_H

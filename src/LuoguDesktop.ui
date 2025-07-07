@@ -73,7 +73,6 @@
    <addaction name="Article"/>
    <addaction name="Help"/>
   </widget>
-  <widget class="QStatusBar" name="statusbar"/>
   <action name="login">
    <property name="text">
     <string>登录</string>
