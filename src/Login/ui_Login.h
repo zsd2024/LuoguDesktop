@@ -1,13 +1,13 @@
 /********************************************************************************
-** Form generated from reading UI file 'LoginMjNCGf.ui'
+** Form generated from reading UI file 'LoginGyqJrz.ui'
 **
 ** Created by: Qt User Interface Compiler version 6.8.3
 **
 ** WARNING! All changes made in this file will be lost when recompiling UI file!
 ********************************************************************************/
 
-#ifndef LOGINMJNCGF_H
-#define LOGINMJNCGF_H
+#ifndef LOGINGYQJRZ_H
+#define LOGINGYQJRZ_H
 
 #include <QtCore/QVariant>
 #include <QtGui/QIcon>
@@ -428,7 +428,7 @@ public:
 
         wechat = new QLabel(LoginWindow);
         wechat->setObjectName("wechat");
-        wechat->setMinimumSize(QSize(0, 0));
+        wechat->setMinimumSize(QSize(20, 18));
         wechat->setMaximumSize(QSize(20, 18));
         wechat->setStyleSheet(QString::fromUtf8("image: url(:/images/assets/wechat.svg);"));
 
@@ -436,7 +436,7 @@ public:
 
         github = new QLabel(LoginWindow);
         github->setObjectName("github");
-        github->setMinimumSize(QSize(0, 0));
+        github->setMinimumSize(QSize(20, 18));
         github->setMaximumSize(QSize(20, 18));
         github->setStyleSheet(QString::fromUtf8("image: url(:/images/assets/github.svg);"));
 
@@ -552,4 +552,4 @@ namespace Ui {
 
 QT_END_NAMESPACE
 
-#endif // LOGINMJNCGF_H
+#endif // LOGINGYQJRZ_H
