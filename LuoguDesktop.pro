@@ -26,8 +26,18 @@ FORMS += $$PWD/src/LuoguDesktop.ui
 RESOURCES += \
     $$files($$PWD/assets.qrc)
 
-INCLUDEPATH += /usr/include/Poco
-LIBS += -lPocoFoundation -lPocoNet -lPocoNetSSL -lPocoUtil
+win32 {
+    INCLUDEPATH += "../Poco/include" "C:/Program Files/OpenSSL-Win64/include"
+    LIBS += -L"../Poco/lib64"\
+            -lPocoFoundation -lPocoNet -lPocoNetSSL -lPocoUtil\
+            -L"C:/Program Files/OpenSSL-Win64/lib/VC/x64/MD"\
+            -llibssl -llibcrypto
+}
+
+unix {
+    INCLUDEPATH += /usr/include/Poco
+    LIBS += -lPocoFoundation -lPocoNet -lPocoNetSSL -lPocoUtil
+}
 
 # Default rules for deployment.
 qnx: target.path = /tmp/$${TARGET}/bin
