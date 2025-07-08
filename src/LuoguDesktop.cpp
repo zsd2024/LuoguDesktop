@@ -64,10 +64,10 @@ void LuoguDesktop::setupMainUI()
 	v_layout_2 = new QVBoxLayout();
 	main_layout->addLayout(v_layout_1);
 	main_layout->addLayout(v_layout_2);
-	QColor backgroundColor = QColor(255, 255, 255, 200);
+	QColor backgroundColor = QColor(255, 255, 255, 150);
 #if QT_VERSION >= QT_VERSION_CHECK(6, 0, 0)
 	if (QGuiApplication::styleHints()->colorScheme() == Qt::ColorScheme::Dark)
-		backgroundColor = QColor(50, 50, 50, 200); // 深色模式下使用更暗的背景色
+		backgroundColor = QColor(50, 50, 50, 150); // 深色模式下使用更暗的背景色
 #endif
 	rounded_widget_1 = new RoundedWidget(this->centralWidget(), backgroundColor);
 	rounded_widget_2 = new RoundedWidget(this->centralWidget(), backgroundColor);
@@ -111,6 +111,7 @@ void LuoguDesktop::setupMainUI()
 	font_greet_username.setPointSize(32);
 	greet_username->setFont(font_greet_username);
 	v_layout_1_1->addWidget(greet_username);
+
 	greet = new QLabel(rounded_widget_1);
 	qDebug() << auth->get_username();
 	greet->setText("欢迎使用 LuoguDesktop！");
@@ -118,6 +119,30 @@ void LuoguDesktop::setupMainUI()
 	font_greet.setPointSize(24);
 	greet->setFont(font_greet);
 	v_layout_1_1->addWidget(greet);
+
+	h_layout_1_1_1 = new QHBoxLayout(nullptr);
+	v_layout_1_1->addLayout(h_layout_1_1_1);
+	rounded_widget_1_1_1_1 = new RoundedWidget(rounded_widget_1, backgroundColor);
+	v_layout_1_1_1_1 = new QVBoxLayout(rounded_widget_1_1_1_1);
+	h_layout_1_1_1->addWidget(rounded_widget_1_1_1_1);
+
+	passed_problem_num_text = new QLabel(rounded_widget_1);
+	passed_problem_num_text->setText("累计通过题目");
+	QFont font_passed_problem_num_text;
+	font_passed_problem_num_text.setPointSize(16);
+	passed_problem_num_text->setFont(font_passed_problem_num_text);
+	v_layout_1_1_1_1->addWidget(passed_problem_num_text, 0, Qt::AlignCenter);
+
+	int passed_problem_num = auth->user_info(auth->get_uid())["currentData"].toObject()["passedProblems"].toArray().size();
+	qDebug() << auth->user_info(auth->get_uid());
+	passed_problem_num_num = new QLabel(rounded_widget_1);
+	passed_problem_num_num->setText(QString::fromStdString(std::to_string(passed_problem_num)) + "<span style='font-size:10px;'>道</span>");
+	passed_problem_num_num->setTextFormat(Qt::RichText);
+	QFont font_passed_problem_num_num;
+	font_passed_problem_num_num.setPointSize(20);
+	passed_problem_num_num->setFont(font_passed_problem_num_num);
+	v_layout_1_1_1_1->addWidget(passed_problem_num_num, 0, Qt::AlignCenter);
+
 	v_layout_1_1_v_spacer = new QSpacerItem(20, 40, QSizePolicy::Policy::Minimum, QSizePolicy::Policy::Expanding);
 	v_layout_1_1->addItem(v_layout_1_1_v_spacer);
 }
@@ -143,7 +168,7 @@ void LuoguDesktop::setMenuAction()
 			else if (QMessageBox::critical(this, "登出失败", "登出失败，是否直接关闭 LuoguDesktop？", QMessageBox::Yes | QMessageBox::No, QMessageBox::No) == QMessageBox::Yes)
 				qApp->exit(); });
 	connect(ui->about, &QAction::triggered, [this]
-			{ QMessageBox::about(this, tr("关于 LuoguDesktop"), tr("<b>版本：</b>0.1 Beta<br><b>开发者：</b>zsd2024<br><b>GitHub：</b><a href='https://github.com/zsd2024/LuoguDesktop'>zsd2024/LuoguDesktop</a><center><font color='#808080'>Copyright (C) 2025 zsd2024. <br>All Rights Reserved. </font></center>")); });
+			{ QMessageBox::about(this, tr("关于 LuoguDesktop"), tr("<b>版本：</b>0.1 测试版<br><b>开发者：</b>zsd2024<br><b>GitHub：</b><a href='https://github.com/zsd2024/LuoguDesktop'>zsd2024/LuoguDesktop</a><center><font color='#808080'>Copyright (C) 2025 zsd2024. </font></center>")); });
 }
 
 void LuoguDesktop::closeEvent(QCloseEvent *event)

@@ -31,8 +31,12 @@ private:
     QHBoxLayout *main_layout;
     QVBoxLayout *v_layout_1, *v_layout_2;
     QVBoxLayout *v_layout_1_1, *v_layout_1_2;
+    QHBoxLayout *h_layout_1_1_1;
+    RoundedWidget *rounded_widget_1_1_1_1;
+    QVBoxLayout *v_layout_1_1_1_1;
     QSpacerItem *v_layout_1_1_v_spacer;
     QLabel *greet_username, *greet;
+    QLabel *passed_problem_num_text, *passed_problem_num_num;
     RoundedWidget *rounded_widget_1, *rounded_widget_2;
     bool is_first_close;
     void closeEvent(QCloseEvent *event) override;
