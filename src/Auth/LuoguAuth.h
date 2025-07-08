@@ -61,7 +61,7 @@ private:
 	QByteArray getUserAgent();
 	QJsonObject getCsrfToken();
 	QJsonObject login(QString username, QString password, QString captcha);
-	// void login_finished(QNetworkReply *reply);
+	Poco::Net::Context *pCtx;
 };
 
 #endif // LUOGULOGIN_H

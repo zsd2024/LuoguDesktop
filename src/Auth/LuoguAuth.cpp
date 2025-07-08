@@ -4,7 +4,8 @@ LuoguAuth::LuoguAuth()
 {
 	Poco::Net::initializeNetwork();
 	Poco::Net::initializeSSL();
-	client = new Poco::Net::HTTPSClientSession("www.luogu.com.cn", 443);
+	pCtx = new Poco::Net::Context(Poco::Net::Context::CLIENT_USE, "", "", "cacert.pem", Poco::Net::Context::VERIFY_RELAXED, 9, false, "ALL:!ADH:!LOW:!EXP:!MD5:@STRENGTH");
+	client = new Poco::Net::HTTPSClientSession("www.luogu.com.cn", 443, pCtx);
 }
 
 LuoguAuth::~LuoguAuth()
@@ -12,6 +13,7 @@ LuoguAuth::~LuoguAuth()
 	Poco::Net::uninitializeNetwork();
 	Poco::Net::uninitializeSSL();
 	delete client;
+	delete pCtx;
 }
 
 /// @brief 登录

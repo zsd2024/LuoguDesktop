@@ -52,7 +52,7 @@ private:
 	QByteArray getUserAgent();
 	QPixmap get_background();
 	QString get_background_url();
-	// void login_finished(QNetworkReply *reply);
+	Poco::Net::Context *pCtx;
 };
 
 #endif // GETBACKGROUND_H
