@@ -11,8 +11,7 @@ LuoguDesktop::LuoguDesktop(QWidget *parent)
 				setupSystemTray();
 				SysTray->show();
 				setupMainUI();
-				show();
-				qDebug() << config->getAutoPunch(); });
+				show(); });
 	setMenuAction();
 	auth = login->get_auth();
 	login->start();
@@ -120,11 +119,12 @@ void LuoguDesktop::setupMainUI()
 	greet->setFont(font_greet);
 	v_layout_1_1->addWidget(greet);
 
-	h_layout_1_1_1 = new QHBoxLayout(nullptr);
-	v_layout_1_1->addLayout(h_layout_1_1_1);
+	h_layout_1_1_2 = new QHBoxLayout(nullptr);
+	v_layout_1_1->addLayout(h_layout_1_1_2);
+
 	rounded_widget_1_1_1_1 = new RoundedWidget(rounded_widget_1, backgroundColor);
 	v_layout_1_1_1_1 = new QVBoxLayout(rounded_widget_1_1_1_1);
-	h_layout_1_1_1->addWidget(rounded_widget_1_1_1_1);
+	h_layout_1_1_2->addWidget(rounded_widget_1_1_1_1);
 
 	passed_problem_num_text = new QLabel(rounded_widget_1);
 	passed_problem_num_text->setText("累计通过题目");
@@ -134,7 +134,6 @@ void LuoguDesktop::setupMainUI()
 	v_layout_1_1_1_1->addWidget(passed_problem_num_text, 0, Qt::AlignCenter);
 
 	int passed_problem_num = auth->user_info(auth->get_uid())["currentData"].toObject()["passedProblems"].toArray().size();
-	qDebug() << auth->user_info(auth->get_uid());
 	passed_problem_num_num = new QLabel(rounded_widget_1);
 	passed_problem_num_num->setText(QString::fromStdString(std::to_string(passed_problem_num)) + "<span style='font-size:10px;'>道</span>");
 	passed_problem_num_num->setTextFormat(Qt::RichText);
@@ -143,8 +142,32 @@ void LuoguDesktop::setupMainUI()
 	passed_problem_num_num->setFont(font_passed_problem_num_num);
 	v_layout_1_1_1_1->addWidget(passed_problem_num_num, 0, Qt::AlignCenter);
 
+	rounded_widget_1_1_1_2 = new RoundedWidget(rounded_widget_1, backgroundColor);
+	v_layout_1_1_1_2 = new QVBoxLayout(rounded_widget_1_1_1_2);
+	h_layout_1_1_2->addWidget(rounded_widget_1_1_1_2);
+
+	matches_num_text = new QLabel(rounded_widget_1);
+	matches_num_text->setText("累计参加 Rated 比赛");
+	QFont font_matches_num_text;
+	font_matches_num_text.setPointSize(16);
+	matches_num_text->setFont(font_matches_num_text);
+	v_layout_1_1_1_2->addWidget(matches_num_text, 0, Qt::AlignCenter);
+
+	int matches_num = auth->elo_info(auth->get_uid())["count"].toInt();
+	matches_num_num = new QLabel(rounded_widget_1);
+	matches_num_num->setText(QString::fromStdString(std::to_string(matches_num)) + "<span style='font-size:10px;'>场</span>");
+	matches_num_num->setTextFormat(Qt::RichText);
+	QFont font_matches_num_num;
+	font_matches_num_num.setPointSize(20);
+	matches_num_num->setFont(font_matches_num_num);
+	v_layout_1_1_1_2->addWidget(matches_num_num, 0, Qt::AlignCenter);
+
 	v_layout_1_1_v_spacer = new QSpacerItem(20, 40, QSizePolicy::Policy::Minimum, QSizePolicy::Policy::Expanding);
 	v_layout_1_1->addItem(v_layout_1_1_v_spacer);
+
+	if (config->getAutoPunch())
+		if (!auth->punch())
+			QMessageBox::critical(this, "打卡失败", "打卡失败！\n错误信息：" + auth->punch_info());
 }
 
 LuoguDesktop::~LuoguDesktop()

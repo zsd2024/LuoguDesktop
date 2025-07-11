@@ -1,4 +1,5 @@
 #include "LuoguAuth.h"
+#include <cstdlib>
 
 LuoguAuth::LuoguAuth()
 {
@@ -276,7 +277,7 @@ QJsonObject LuoguAuth::login(QString username, QString password, QString captcha
 			std::string responseBody;
 			Poco::StreamCopier::copyToString(responseStream, responseBody);
 			qDebug() << "请求失败! 内容: " << responseBody;
-			login_text = QJsonDocument({{"error", QJsonDocument::fromJson(QByteArray::fromStdString(responseBody))["errorMessage"]}}).toJson();
+			login_text = QJsonDocument(QJsonObject({{"error", QJsonDocument::fromJson(QByteArray::fromStdString(responseBody))["errorMessage"]}})).toJson();
 		}
 	}
 	catch (const Poco::Exception &e)
@@ -299,6 +300,73 @@ QJsonObject LuoguAuth::login(QString username, QString password, QString captcha
 	return json;
 }
 
+QJsonObject LuoguAuth::get_elo_info_page(int uid, int page, int limit)
+{
+	try
+	{
+		Poco::Net::HTTPRequest request(
+			Poco::Net::HTTPRequest::HTTP_GET,
+			("/api/rating/elo?user=" + std::to_string(uid) + "&page=" + std::to_string(page) + "&limit=" + std::to_string(limit)).c_str(),
+			Poco::Net::HTTPMessage::HTTP_1_1);
+	resend:
+		request.setCookies(cookie);
+		request.set("referer", "https://www.luogu.com.cn/user/" + std::to_string(uid));
+		request.set("User-Agent", getUserAgent().toStdString());
+
+		// 发送请求
+		client->sendRequest(request);
+
+		// 接收响应
+		Poco::Net::HTTPResponse response;
+		std::istream &responseStream = client->receiveResponse(response);
+
+		if (response.getStatus() == Poco::Net::HTTPResponse::HTTP_OK)
+		{
+			std::string responseBody;
+			Poco::StreamCopier::copyToString(responseStream, responseBody);
+			captcha.loadFromData(QByteArray::fromStdString(responseBody));
+			QString text = QString::fromStdString(responseBody);
+			QJsonDocument elo_info_json = QJsonDocument::fromJson(text.toUtf8());
+			std::vector<Poco::Net::HTTPCookie> cookies;
+			response.getCookies(cookies);
+			for (Poco::Net::HTTPCookie i : cookies)
+				cookie.set(i.getName(), i.getValue());
+			return elo_info_json.object();
+		}
+		else
+		{
+			if (response.getStatus() == Poco::Net::HTTPResponse::HTTPStatus::HTTP_FOUND)
+			{
+				std::string new_url = response.get("Location");
+				std::vector<Poco::Net::HTTPCookie> cookies;
+				response.getCookies(cookies);
+				for (Poco::Net::HTTPCookie i : cookies)
+					cookie.set(i.getName(), i.getValue());
+				qDebug() << "已找到，重定向至：" << new_url;
+				request.setURI(new_url);
+				goto resend;
+			}
+			qDebug() << "请求失败! 状态码: " << response.getStatus();
+			std::string responseBody;
+			Poco::StreamCopier::copyToString(responseStream, responseBody);
+			qDebug() << "请求失败! 内容: " << responseBody;
+		}
+	}
+	catch (const Poco::Exception &e)
+	{
+		qDebug() << "Poco异常: " << e.displayText().c_str();
+	}
+	catch (const std::exception &e)
+	{
+		qDebug() << "标准异常: " << e.what();
+	}
+	catch (...)
+	{
+		qDebug() << "未知异常";
+	}
+	return {};
+}
+
 /// @brief 获取用户详细信息
 /// @param uid 用户的 uid
 /// @param cache 是否使用缓存，默认为 true
@@ -315,7 +383,7 @@ QJsonObject LuoguAuth::user_info(int uid, bool cache)
 			Poco::Net::HTTPMessage::HTTP_1_1);
 	resend:
 		request.setCookies(cookie);
-		request.set("referer", "https://www.luogu.com.cn/");
+		request.set("referer", "https://www.luogu.com.cn/user/" + std::to_string(uid));
 		request.set("User-Agent", getUserAgent().toStdString());
 
 		// 发送请求
@@ -377,6 +445,92 @@ QJsonObject LuoguAuth::user_info(int uid, bool cache)
 	return {};
 }
 
+QJsonObject LuoguAuth::elo_info(int uid, bool cache)
+{
+	if (!elo_info_cache.empty() && cache)
+		return elo_info_cache;
+	QJsonArray results;
+	int count;
+	for (int i = 1;; ++i)
+	{
+		QJsonObject elo_info_page = get_elo_info_page(uid, i, 10);
+		if (elo_info_page["records"].toObject()["result"].toArray().size() == 0)
+		{
+			count = elo_info_page["records"].toObject()["count"].toInt();
+			break;
+		}
+		for (const QJsonValue &value : elo_info_page["records"].toObject()["result"].toArray())
+			results.append(value);
+	}
+	return elo_info_cache = {{"count", count},
+							 {"result", results}};
+}
+
+bool LuoguAuth::punch()
+{
+	try
+	{
+		Poco::Net::HTTPRequest request(
+			Poco::Net::HTTPRequest::HTTP_GET,
+			"/index/ajax_punch",
+			Poco::Net::HTTPMessage::HTTP_1_1);
+	resend:
+		request.setCookies(cookie);
+		request.set("referer", "https://www.luogu.com.cn/");
+		request.set("User-Agent", getUserAgent().toStdString());
+
+		// 发送请求
+		client->sendRequest(request);
+
+		// 接收响应
+		Poco::Net::HTTPResponse response;
+		std::istream &responseStream = client->receiveResponse(response);
+
+		if (response.getStatus() == Poco::Net::HTTPResponse::HTTP_OK)
+			return true;
+		else
+		{
+			if (response.getStatus() == Poco::Net::HTTPResponse::HTTPStatus::HTTP_FOUND)
+			{
+				std::string new_url = response.get("Location");
+				std::vector<Poco::Net::HTTPCookie> cookies;
+				response.getCookies(cookies);
+				for (Poco::Net::HTTPCookie i : cookies)
+					cookie.set(i.getName(), i.getValue());
+				qDebug() << "已找到，重定向至：" << new_url;
+				request.setURI(new_url);
+				goto resend;
+			}
+			else if (response.getStatus() == Poco::Net::HTTPResponse::HTTPStatus::HTTP_CREATED)
+				return true;
+			qDebug() << "请求失败! 状态码: " << response.getStatus();
+			std::string responseBody;
+			Poco::StreamCopier::copyToString(responseStream, responseBody);
+			qDebug() << "请求失败! 内容: " << responseBody;
+			punch_info_cache = QString::fromStdString(responseBody);
+			return false;
+		}
+	}
+	catch (const Poco::Exception &e)
+	{
+		qDebug() << "Poco异常: " << e.displayText().c_str();
+	}
+	catch (const std::exception &e)
+	{
+		qDebug() << "标准异常: " << e.what();
+	}
+	catch (...)
+	{
+		qDebug() << "未知异常";
+	}
+	return false;
+}
+
+QString LuoguAuth::punch_info()
+{
+	return punch_info_cache;
+}
+
 /// @brief 登出
 /// @return 是否成功
 bool LuoguAuth::logout()
@@ -420,7 +574,7 @@ bool LuoguAuth::logout()
 			std::string responseBody;
 			Poco::StreamCopier::copyToString(responseStream, responseBody);
 			qDebug() << "请求失败! 内容: " << responseBody;
-			login_text = QJsonDocument({{"error", QJsonDocument::fromJson(QByteArray::fromStdString(responseBody))["errorMessage"]}}).toJson();
+			login_text = QJsonDocument(QJsonObject({{"error", QJsonDocument::fromJson(QByteArray::fromStdString(responseBody))["errorMessage"]}})).toJson();
 			return false;
 		}
 	}
