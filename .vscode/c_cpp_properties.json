@@ -19,7 +19,8 @@
                 "/home/ubuntu/Qt/6.8.3/gcc_64/include/QtCore",
                 "/home/ubuntu/Qt/6.8.3/gcc_64/include/QtCore5Compat",
                 "${workspaceRoot}/src/**",
-                "/home/ubuntu/Qt/6.8.3/gcc_64/include"
+                "/home/ubuntu/Qt/6.8.3/gcc_64/include",
+                "/usr/include/**"
             ],
             "cStandard": "c11",
             "cppStandard": "c++14"
