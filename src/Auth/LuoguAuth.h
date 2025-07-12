@@ -1,5 +1,5 @@
-#ifndef LUOGULOGIN_H
-#define LUOGULOGIN_H
+#ifndef LUOGUAUTH_H
+#define LUOGUAUTH_H
 
 #include <QByteArray>
 #include <QCoreApplication>
@@ -18,6 +18,7 @@
 #include <Poco/Net/HTTPResponse.h>
 #include <cstdlib>
 #include <random>
+#include "../Common/Common.h"
 class LuoguAuth : public QObject
 {
 	Q_OBJECT
@@ -35,35 +36,15 @@ public:
 	int get_uid();
 
 private:
-	QString User_Agent =
-#ifdef _WIN32
-#ifdef _WIN64
-		"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/69.0.3497.100 Safari/537.36";
-#else
-		"Mozilla/5.0 (Windows NT 6.2; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/27.0.1453.94 Safari/537.36";
-#endif
-#else
-#ifdef __linux__
-		"Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/139.0.0.0 Safari/537.36 Edg/139.0.0.0";
-#else
-		"Mozilla/5.0 (Linux; Android 4.0.4; Galaxy Nexus Build/IMM76B) AppleWebKit/535.19 (KHTML, like Gecko) Chrome/18.0.1025.133 Mobile Safari/535.19";
-#endif
-#endif
-	Poco::Net::HTTPSClientSession *client;
-	Poco::Net::NameValueCollection cookie;
-	QString csrf_token;
-	QString C3VK;
 	QString username;
 	QPixmap captcha;
 	QString login_text;
 	QJsonObject user_info_cache;
 	QJsonObject elo_info_cache;
-	QByteArray getUserAgent();
-	QJsonObject getCsrfToken();
 	QJsonObject login(QString username, QString password, QString captcha);
 	QJsonObject get_elo_info_page(int uid, int page, int limit);
 	Poco::Net::Context *pCtx;
 	QString punch_info_cache;
 };
 
-#endif // LUOGULOGIN_H
+#endif // LUOGUAUTH_H

@@ -6,14 +6,14 @@ LuoguAuth::LuoguAuth()
 	Poco::Net::initializeNetwork();
 	Poco::Net::initializeSSL();
 	pCtx = new Poco::Net::Context(Poco::Net::Context::CLIENT_USE, "", "", "cacert.pem", Poco::Net::Context::VERIFY_RELAXED, 9, false, "ALL:!ADH:!LOW:!EXP:!MD5:@STRENGTH");
-	client = new Poco::Net::HTTPSClientSession("www.luogu.com.cn", 443, pCtx);
+	Common::client = new Poco::Net::HTTPSClientSession("www.luogu.com.cn", 443, pCtx);
 }
 
 LuoguAuth::~LuoguAuth()
 {
 	Poco::Net::uninitializeNetwork();
 	Poco::Net::uninitializeSSL();
-	delete client;
+	delete Common::client;
 	delete pCtx;
 }
 
@@ -27,13 +27,6 @@ QJsonObject LuoguAuth::operator()(QString username, QString password, QString ca
 	return login(username, password, captcha);
 }
 
-/// @brief 获取模拟的浏览器 UA
-/// @return 浏览器 UA
-inline QByteArray LuoguAuth::getUserAgent()
-{
-	return User_Agent.toUtf8();
-}
-
 /// @brief 获取用户名
 /// @return 用户名
 QString LuoguAuth::get_username()
@@ -43,7 +36,7 @@ QString LuoguAuth::get_username()
 
 int LuoguAuth::get_uid()
 {
-	return std::atoi(cookie.get("_uid").c_str());
+	return std::atoi(Common::Common::cookie.get("_uid").c_str());
 }
 
 /// @brief 获取验证码图片
@@ -58,18 +51,18 @@ QPixmap LuoguAuth::get_captcha()
 			std::string("/lg4/captcha?_t=") + std::to_string(timestamp),
 			Poco::Net::HTTPMessage::HTTP_1_1);
 	resend:
-		request.setCookies(cookie);
+		request.setCookies(Common::cookie);
+		request.set("Accept", "image/avif,image/webp,image/png,image/svg+xml,image/*;q=0.8,*/*;q=0.5");
 		request.set("referer", "https://www.luogu.com.cn/");
 		request.set("x-luogu-type", "content-only");
-		request.set("content-type", "image/avif,image/webp,image/png,image/svg+xml,image/*;q=0.8,*/*;q=0.5");
-		request.set("User-Agent", /*getUserAgent().toStdString()*/ "");
+		request.set("User-Agent", /*Common::getUserAgent()*/ "");
 
 		// 发送请求
-		client->sendRequest(request);
+		Common::client->sendRequest(request);
 
 		// 接收响应
 		Poco::Net::HTTPResponse response;
-		std::istream &responseStream = client->receiveResponse(response);
+		std::istream &responseStream = Common::client->receiveResponse(response);
 
 		if (response.getStatus() == Poco::Net::HTTPResponse::HTTP_OK)
 		{
@@ -79,7 +72,7 @@ QPixmap LuoguAuth::get_captcha()
 			std::vector<Poco::Net::HTTPCookie> cookies;
 			response.getCookies(cookies);
 			for (Poco::Net::HTTPCookie i : cookies)
-				cookie.set(i.getName(), i.getValue());
+				Common::cookie.set(i.getName(), i.getValue());
 		}
 		else
 		{
@@ -89,7 +82,7 @@ QPixmap LuoguAuth::get_captcha()
 				std::vector<Poco::Net::HTTPCookie> cookies;
 				response.getCookies(cookies);
 				for (Poco::Net::HTTPCookie i : cookies)
-					cookie.set(i.getName(), i.getValue());
+					Common::cookie.set(i.getName(), i.getValue());
 				qDebug() << "已找到，重定向至：" << new_url;
 				request.setURI(new_url);
 				goto resend;
@@ -115,89 +108,6 @@ QPixmap LuoguAuth::get_captcha()
 	return captcha;
 }
 
-/// @brief 获取 csrf-token
-/// @return csrf-token
-QJsonObject LuoguAuth::getCsrfToken()
-{
-	if (!csrf_token.isEmpty())
-		return {{"csrf-token", csrf_token}};
-	try
-	{
-		Poco::Net::HTTPRequest request(
-			Poco::Net::HTTPRequest::HTTP_GET,
-			"/",
-			Poco::Net::HTTPMessage::HTTP_1_1);
-	resend:
-		request.setCookies(cookie);
-		request.set("referer", "https://www.luogu.com.cn/");
-		request.set("User-Agent", getUserAgent().toStdString());
-
-		// 发送请求
-		client->sendRequest(request);
-
-		// 接收响应
-		Poco::Net::HTTPResponse response;
-		std::istream &responseStream = client->receiveResponse(response);
-
-		if (response.getStatus() == Poco::Net::HTTPResponse::HTTP_OK)
-		{
-			std::string responseBody;
-			Poco::StreamCopier::copyToString(responseStream, responseBody);
-			captcha.loadFromData(QByteArray::fromStdString(responseBody));
-			QString text = QString::fromStdString(responseBody);
-			if (text.contains("<script>var _$daewqwskl=[\"\\x64\\x6f\\x63\\x75\\x6d\\x65\\x6e\\x74\"];var _$oopopdwskl=[\"\\x6f\\x6e\\x4d\\x6f\\x75\\x73\\x65\\x4d\\x6f\\x76\\x65\",\"\\x62\\x6f\\x64\\x79\",\"\\x64\\x6f\\x63\\x75\\x6d\\x65\\x6e\\x74\",\"\\x72\\x65\\x6d\\x6f\\x76\\x65\\x41\\x74\\x74\\x72\\x69\\x62\\x75\\x74\\x65\"];window.open(\"/\", \"_self\");window[_$daewqwskl[0]].cookie=\"C3VK="))
-			{
-				C3VK = text.split("window[_$daewqwskl[0]].cookie=\"C3VK=")[1].split(";")[0];
-				qDebug() << "C3VK: " << C3VK;
-				{
-					cookie.set("C3VK", C3VK.toStdString());
-				}
-				getCsrfToken();
-			}
-			else if (text.contains("<meta name=\"csrf-token\" content=\""))
-			{
-				csrf_token = text.split("<meta name=\"csrf-token\" content=\"")[1].split("\">")[0];
-				qDebug() << "csrf-token: " << csrf_token;
-				std::vector<Poco::Net::HTTPCookie> cookies;
-				response.getCookies(cookies);
-				for (Poco::Net::HTTPCookie i : cookies)
-					cookie.set(i.getName(), i.getValue());
-			}
-		}
-		else
-		{
-			if (response.getStatus() == Poco::Net::HTTPResponse::HTTPStatus::HTTP_FOUND)
-			{
-				std::string new_url = response.get("Location");
-				std::vector<Poco::Net::HTTPCookie> cookies;
-				response.getCookies(cookies);
-				for (Poco::Net::HTTPCookie i : cookies)
-					cookie.set(i.getName(), i.getValue());
-				qDebug() << "已找到，重定向至：" << new_url;
-				request.setURI(new_url);
-				goto resend;
-			}
-			qDebug() << "请求失败! 状态码: " << response.getStatus();
-			std::string responseBody;
-			Poco::StreamCopier::copyToString(responseStream, responseBody);
-			qDebug() << "请求失败! 内容: " << responseBody;
-		}
-	}
-	catch (const Poco::Exception &e)
-	{
-		qDebug() << "Poco异常: " << e.displayText().c_str();
-	}
-	catch (const std::exception &e)
-	{
-		qDebug() << "标准异常: " << e.what();
-	}
-	catch (...)
-	{
-		qDebug() << "未知异常";
-	}
-	return {{"csrf-token", csrf_token}};
-}
-
 /// @brief 登录
 /// @param username 用户名
 /// @param password 密码
@@ -205,7 +115,7 @@ QJsonObject LuoguAuth::getCsrfToken()
 /// @return 登录信息
 QJsonObject LuoguAuth::login(QString username, QString password, QString captcha)
 {
-	QJsonObject csrf_token = getCsrfToken();
+	QJsonObject csrf_token = Common::getCsrfToken();
 	try
 	{
 		Poco::Net::HTTPRequest request(
@@ -213,9 +123,9 @@ QJsonObject LuoguAuth::login(QString username, QString password, QString captcha
 			"/do-auth/password",
 			Poco::Net::HTTPMessage::HTTP_1_1);
 	resend:
-		request.setCookies(cookie);
+		request.setCookies(Common::cookie);
 		// request.set("Host", "www.luogu.com.cn");
-		request.set("User-Agent", getUserAgent().toStdString());
+		request.set("User-Agent", Common::getUserAgent());
 		// request.set("Accept", "application/json, text/plain, */*");
 		// request.set("Accept-Language", "zh-CN,en,*");
 		// request.set("Accept-Encoding", "zstd, gzip, deflate");
@@ -240,13 +150,13 @@ QJsonObject LuoguAuth::login(QString username, QString password, QString captcha
 							   .toJson(QJsonDocument::Compact)
 							   .toStdString();
 		request.setContentLength(body.length());
-		std::ostream &requestStream = client->sendRequest(request);
+		std::ostream &requestStream = Common::client->sendRequest(request);
 		requestStream << body;
 		requestStream.flush();
 
 		// 接收响应
 		Poco::Net::HTTPResponse response;
-		std::istream &responseStream = client->receiveResponse(response);
+		std::istream &responseStream = Common::client->receiveResponse(response);
 
 		if (response.getStatus() == Poco::Net::HTTPResponse::HTTP_OK)
 		{
@@ -258,7 +168,7 @@ QJsonObject LuoguAuth::login(QString username, QString password, QString captcha
 			std::vector<Poco::Net::HTTPCookie> cookies;
 			response.getCookies(cookies);
 			for (Poco::Net::HTTPCookie i : cookies)
-				cookie.set(i.getName(), i.getValue());
+				Common::cookie.set(i.getName(), i.getValue());
 		}
 		else
 		{
@@ -268,7 +178,7 @@ QJsonObject LuoguAuth::login(QString username, QString password, QString captcha
 				std::vector<Poco::Net::HTTPCookie> cookies;
 				response.getCookies(cookies);
 				for (Poco::Net::HTTPCookie i : cookies)
-					cookie.set(i.getName(), i.getValue());
+					Common::cookie.set(i.getName(), i.getValue());
 				qDebug() << "已找到，重定向至：" << new_url;
 				request.setURI(new_url);
 				goto resend;
@@ -294,9 +204,9 @@ QJsonObject LuoguAuth::login(QString username, QString password, QString captcha
 	}
 	QJsonObject json = QJsonDocument::fromJson(login_text.toUtf8()).object();
 	QJsonObject cookies;
-	for (std::pair<std::string, std::string> i : cookie)
+	for (std::pair<std::string, std::string> i : Common::cookie)
 		cookies.insert(i.first.c_str(), i.second.c_str());
-	json.insert("cookie", cookies);
+	json.insert("Common::cookie", cookies);
 	return json;
 }
 
@@ -309,16 +219,16 @@ QJsonObject LuoguAuth::get_elo_info_page(int uid, int page, int limit)
 			("/api/rating/elo?user=" + std::to_string(uid) + "&page=" + std::to_string(page) + "&limit=" + std::to_string(limit)).c_str(),
 			Poco::Net::HTTPMessage::HTTP_1_1);
 	resend:
-		request.setCookies(cookie);
+		request.setCookies(Common::cookie);
 		request.set("referer", "https://www.luogu.com.cn/user/" + std::to_string(uid));
-		request.set("User-Agent", getUserAgent().toStdString());
+		request.set("User-Agent", Common::getUserAgent());
 
 		// 发送请求
-		client->sendRequest(request);
+		Common::client->sendRequest(request);
 
 		// 接收响应
 		Poco::Net::HTTPResponse response;
-		std::istream &responseStream = client->receiveResponse(response);
+		std::istream &responseStream = Common::client->receiveResponse(response);
 
 		if (response.getStatus() == Poco::Net::HTTPResponse::HTTP_OK)
 		{
@@ -330,7 +240,7 @@ QJsonObject LuoguAuth::get_elo_info_page(int uid, int page, int limit)
 			std::vector<Poco::Net::HTTPCookie> cookies;
 			response.getCookies(cookies);
 			for (Poco::Net::HTTPCookie i : cookies)
-				cookie.set(i.getName(), i.getValue());
+				Common::cookie.set(i.getName(), i.getValue());
 			return elo_info_json.object();
 		}
 		else
@@ -341,7 +251,7 @@ QJsonObject LuoguAuth::get_elo_info_page(int uid, int page, int limit)
 				std::vector<Poco::Net::HTTPCookie> cookies;
 				response.getCookies(cookies);
 				for (Poco::Net::HTTPCookie i : cookies)
-					cookie.set(i.getName(), i.getValue());
+					Common::cookie.set(i.getName(), i.getValue());
 				qDebug() << "已找到，重定向至：" << new_url;
 				request.setURI(new_url);
 				goto resend;
@@ -382,16 +292,16 @@ QJsonObject LuoguAuth::user_info(int uid, bool cache)
 			("/user/" + std::to_string(uid)).c_str(),
 			Poco::Net::HTTPMessage::HTTP_1_1);
 	resend:
-		request.setCookies(cookie);
+		request.setCookies(Common::cookie);
 		request.set("referer", "https://www.luogu.com.cn/user/" + std::to_string(uid));
-		request.set("User-Agent", getUserAgent().toStdString());
+		request.set("User-Agent", Common::getUserAgent());
 
 		// 发送请求
-		client->sendRequest(request);
+		Common::client->sendRequest(request);
 
 		// 接收响应
 		Poco::Net::HTTPResponse response;
-		std::istream &responseStream = client->receiveResponse(response);
+		std::istream &responseStream = Common::client->receiveResponse(response);
 
 		if (response.getStatus() == Poco::Net::HTTPResponse::HTTP_OK)
 		{
@@ -407,7 +317,7 @@ QJsonObject LuoguAuth::user_info(int uid, bool cache)
 				std::vector<Poco::Net::HTTPCookie> cookies;
 				response.getCookies(cookies);
 				for (Poco::Net::HTTPCookie i : cookies)
-					cookie.set(i.getName(), i.getValue());
+					Common::cookie.set(i.getName(), i.getValue());
 				return user_info_cache = user_info_json.object();
 			}
 		}
@@ -419,7 +329,7 @@ QJsonObject LuoguAuth::user_info(int uid, bool cache)
 				std::vector<Poco::Net::HTTPCookie> cookies;
 				response.getCookies(cookies);
 				for (Poco::Net::HTTPCookie i : cookies)
-					cookie.set(i.getName(), i.getValue());
+					Common::cookie.set(i.getName(), i.getValue());
 				qDebug() << "已找到，重定向至：" << new_url;
 				request.setURI(new_url);
 				goto resend;
@@ -475,16 +385,16 @@ bool LuoguAuth::punch()
 			"/index/ajax_punch",
 			Poco::Net::HTTPMessage::HTTP_1_1);
 	resend:
-		request.setCookies(cookie);
+		request.setCookies(Common::cookie);
 		request.set("referer", "https://www.luogu.com.cn/");
-		request.set("User-Agent", getUserAgent().toStdString());
+		request.set("User-Agent", Common::getUserAgent());
 
 		// 发送请求
-		client->sendRequest(request);
+		Common::client->sendRequest(request);
 
 		// 接收响应
 		Poco::Net::HTTPResponse response;
-		std::istream &responseStream = client->receiveResponse(response);
+		std::istream &responseStream = Common::client->receiveResponse(response);
 
 		if (response.getStatus() == Poco::Net::HTTPResponse::HTTP_OK)
 			return true;
@@ -496,7 +406,7 @@ bool LuoguAuth::punch()
 				std::vector<Poco::Net::HTTPCookie> cookies;
 				response.getCookies(cookies);
 				for (Poco::Net::HTTPCookie i : cookies)
-					cookie.set(i.getName(), i.getValue());
+					Common::cookie.set(i.getName(), i.getValue());
 				qDebug() << "已找到，重定向至：" << new_url;
 				request.setURI(new_url);
 				goto resend;
@@ -535,25 +445,25 @@ QString LuoguAuth::punch_info()
 /// @return 是否成功
 bool LuoguAuth::logout()
 {
-	QJsonObject csrf_token = getCsrfToken();
+	QJsonObject csrf_token = Common::getCsrfToken();
 	try
 	{
 		Poco::Net::HTTPRequest request(
 			Poco::Net::HTTPRequest::HTTP_POST,
 			"/auth/logout",
 			Poco::Net::HTTPMessage::HTTP_1_1);
-		request.setCookies(cookie);
+		request.setCookies(Common::cookie);
 		// request.set("Host", "www.luogu.com.cn");
-		request.set("User-Agent", getUserAgent().toStdString());
+		request.set("User-Agent", Common::getUserAgent());
 		request.set("Referer", "https://www.luogu.com.cn/");
 		request.set("X-Csrf-Token", csrf_token["csrf-token"].toString().toStdString());
 
 		request.setContentLength(0);
-		client->sendRequest(request);
+		Common::client->sendRequest(request);
 
 		// 接收响应
 		Poco::Net::HTTPResponse response;
-		std::istream &responseStream = client->receiveResponse(response);
+		std::istream &responseStream = Common::client->receiveResponse(response);
 
 		if (response.getStatus() == Poco::Net::HTTPResponse::HTTP_OK)
 		{
@@ -564,7 +474,7 @@ bool LuoguAuth::logout()
 			std::vector<Poco::Net::HTTPCookie> cookies;
 			response.getCookies(cookies);
 			for (Poco::Net::HTTPCookie i : cookies)
-				cookie.set(i.getName(), i.getValue());
+				Common::cookie.set(i.getName(), i.getValue());
 		}
 		else
 		{

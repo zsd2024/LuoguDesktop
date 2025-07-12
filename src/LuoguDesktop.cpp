@@ -3,6 +3,7 @@
 LuoguDesktop::LuoguDesktop(QWidget *parent)
 	: QMainWindow(parent), ui(new Ui_LuoguDesktop), login(new LoginWindow)
 {
+	Common::init();
 	ui->setupUi(this);
 	this->hide();
 	is_first_close = true;
@@ -15,6 +16,54 @@ LuoguDesktop::LuoguDesktop(QWidget *parent)
 	setMenuAction();
 	auth = login->get_auth();
 	login->start();
+	config = new Config();
+	get_background = new GetBackground();
+	discuss = new Discuss();
+}
+
+LuoguDesktop::~LuoguDesktop()
+{
+	delete ui;
+	delete login;
+	delete SysTray;
+	delete SysTrayMenu;
+	delete show_action;
+	delete quit_action;
+	delete config;
+	delete get_background;
+	delete main_layout;
+
+	delete v_layout_1;
+	delete v_layout_2;
+	delete v_layout_1_1;
+	delete v_layout_2_1;
+	delete h_layout_1_1_2;
+
+	delete rounded_widget_1_1_1_1;
+	delete v_layout_1_1_1_1;
+	delete rounded_widget_1_1_1_2;
+	delete v_layout_1_1_1_2;
+
+	delete v_layout_1_1_v_spacer;
+
+	delete greet_username;
+	delete greet;
+
+	delete passed_problem_num_text;
+	delete passed_problem_num_num;
+	delete matches_num_text;
+	delete matches_num_num;
+
+	delete rounded_widget_1_1;
+	delete rounded_widget_2_1;
+
+	delete discuss_list;
+
+	for (QListWidgetItem *discuss_list_widget_item : discuss_list_widget_items)
+		delete discuss_list_widget_item;
+
+	for (RoundedWidget *discuss_rounded_widget : discuss_rounded_widgets)
+		delete discuss_rounded_widget;
 }
 
 void LuoguDesktop::setupSystemTray()
@@ -49,8 +98,6 @@ void LuoguDesktop::setupSystemTray()
 
 void LuoguDesktop::setupMainUI()
 {
-	config = new Config();
-	get_background = new GetBackground();
 	background = (*get_background)();
 	QPalette palette = this->palette();
 	palette.setBrush(QPalette::Window, QBrush(background));
@@ -68,12 +115,18 @@ void LuoguDesktop::setupMainUI()
 	if (QGuiApplication::styleHints()->colorScheme() == Qt::ColorScheme::Dark)
 		backgroundColor = QColor(50, 50, 50, 150); // 深色模式下使用更暗的背景色
 #endif
-	rounded_widget_1 = new RoundedWidget(this->centralWidget(), backgroundColor);
-	rounded_widget_2 = new RoundedWidget(this->centralWidget(), backgroundColor);
-	v_layout_1->addWidget(rounded_widget_1);
-	v_layout_2->addWidget(rounded_widget_2);
-	v_layout_1_1 = new QVBoxLayout(rounded_widget_1);
-	v_layout_1_2 = new QVBoxLayout(rounded_widget_2);
+	rounded_widget_1_1 = new RoundedWidget(this->centralWidget(), backgroundColor);
+	rounded_widget_1_2 = new RoundedWidget(this->centralWidget(), backgroundColor);
+	rounded_widget_2_1 = new RoundedWidget(this->centralWidget(), backgroundColor);
+	rounded_widget_2_2 = new RoundedWidget(this->centralWidget(), backgroundColor);
+	v_layout_1->addWidget(rounded_widget_1_1);
+	v_layout_1->addWidget(rounded_widget_1_2);
+	v_layout_2->addWidget(rounded_widget_2_1);
+	v_layout_2->addWidget(rounded_widget_2_2);
+	v_layout_1_1 = new QVBoxLayout(rounded_widget_1_1);
+	v_layout_1_2 = new QVBoxLayout(rounded_widget_1_2);
+	v_layout_2_1 = new QVBoxLayout(rounded_widget_2_1);
+	v_layout_2_2 = new QVBoxLayout(rounded_widget_2_2);
 	QString user_color_text = auth->user_info(auth->get_uid())["currentData"].toObject()["user"].toObject()["rating"].toObject()["user"].toObject()["color"].toString();
 	QString user_color;
 	if (user_color_text == "Gray")
@@ -101,7 +154,7 @@ void LuoguDesktop::setupMainUI()
 			user_color = "#FE4F64";
 	}
 #endif
-	greet_username = new QLabel(rounded_widget_1);
+	greet_username = new QLabel(rounded_widget_1_1);
 	QString safeUsername = auth->get_username().toHtmlEscaped(); // 转义特殊字符
 	QString coloredText = "<span style='color:" + user_color + ";'>" + safeUsername + "</span>，";
 	greet_username->setText(coloredText);
@@ -111,7 +164,7 @@ void LuoguDesktop::setupMainUI()
 	greet_username->setFont(font_greet_username);
 	v_layout_1_1->addWidget(greet_username);
 
-	greet = new QLabel(rounded_widget_1);
+	greet = new QLabel(rounded_widget_1_1);
 	qDebug() << auth->get_username();
 	greet->setText("欢迎使用 LuoguDesktop！");
 	QFont font_greet;
@@ -122,11 +175,11 @@ void LuoguDesktop::setupMainUI()
 	h_layout_1_1_2 = new QHBoxLayout(nullptr);
 	v_layout_1_1->addLayout(h_layout_1_1_2);
 
-	rounded_widget_1_1_1_1 = new RoundedWidget(rounded_widget_1, backgroundColor);
+	rounded_widget_1_1_1_1 = new RoundedWidget(rounded_widget_1_1, backgroundColor);
 	v_layout_1_1_1_1 = new QVBoxLayout(rounded_widget_1_1_1_1);
 	h_layout_1_1_2->addWidget(rounded_widget_1_1_1_1);
 
-	passed_problem_num_text = new QLabel(rounded_widget_1);
+	passed_problem_num_text = new QLabel(rounded_widget_1_1);
 	passed_problem_num_text->setText("累计通过题目");
 	QFont font_passed_problem_num_text;
 	font_passed_problem_num_text.setPointSize(16);
@@ -134,7 +187,7 @@ void LuoguDesktop::setupMainUI()
 	v_layout_1_1_1_1->addWidget(passed_problem_num_text, 0, Qt::AlignCenter);
 
 	int passed_problem_num = auth->user_info(auth->get_uid())["currentData"].toObject()["passedProblems"].toArray().size();
-	passed_problem_num_num = new QLabel(rounded_widget_1);
+	passed_problem_num_num = new QLabel(rounded_widget_1_1);
 	passed_problem_num_num->setText(QString::fromStdString(std::to_string(passed_problem_num)) + "<span style='font-size:10px;'>道</span>");
 	passed_problem_num_num->setTextFormat(Qt::RichText);
 	QFont font_passed_problem_num_num;
@@ -142,11 +195,11 @@ void LuoguDesktop::setupMainUI()
 	passed_problem_num_num->setFont(font_passed_problem_num_num);
 	v_layout_1_1_1_1->addWidget(passed_problem_num_num, 0, Qt::AlignCenter);
 
-	rounded_widget_1_1_1_2 = new RoundedWidget(rounded_widget_1, backgroundColor);
+	rounded_widget_1_1_1_2 = new RoundedWidget(rounded_widget_1_1, backgroundColor);
 	v_layout_1_1_1_2 = new QVBoxLayout(rounded_widget_1_1_1_2);
 	h_layout_1_1_2->addWidget(rounded_widget_1_1_1_2);
 
-	matches_num_text = new QLabel(rounded_widget_1);
+	matches_num_text = new QLabel(rounded_widget_1_1);
 	matches_num_text->setText("累计参加 Rated 比赛");
 	QFont font_matches_num_text;
 	font_matches_num_text.setPointSize(16);
@@ -154,7 +207,7 @@ void LuoguDesktop::setupMainUI()
 	v_layout_1_1_1_2->addWidget(matches_num_text, 0, Qt::AlignCenter);
 
 	int matches_num = auth->elo_info(auth->get_uid())["count"].toInt();
-	matches_num_num = new QLabel(rounded_widget_1);
+	matches_num_num = new QLabel(rounded_widget_1_1);
 	matches_num_num->setText(QString::fromStdString(std::to_string(matches_num)) + "<span style='font-size:10px;'>场</span>");
 	matches_num_num->setTextFormat(Qt::RichText);
 	QFont font_matches_num_num;
@@ -162,25 +215,41 @@ void LuoguDesktop::setupMainUI()
 	matches_num_num->setFont(font_matches_num_num);
 	v_layout_1_1_1_2->addWidget(matches_num_num, 0, Qt::AlignCenter);
 
-	v_layout_1_1_v_spacer = new QSpacerItem(20, 40, QSizePolicy::Policy::Minimum, QSizePolicy::Policy::Expanding);
-	v_layout_1_1->addItem(v_layout_1_1_v_spacer);
+	discuss_list = new QListWidget(centralWidget());
+	discuss_list->setSelectionMode(QAbstractItemView::NoSelection);
+	discuss_list->setFocusPolicy(Qt::FocusPolicy::NoFocus);
+	discuss_list->setStyleSheet("background-color: transparent;");
+	discuss_list->setAttribute(Qt::WA_StyledBackground);
+	QJsonArray discusses = discuss->getDiscusses();
+	for (const QJsonValueConstRef item : discusses)
+	{
+		QJsonObject discuss_item = item.toObject();
+		QListWidgetItem *discuss_item_item = new QListWidgetItem(discuss_list);
+		discuss_list->addItem(discuss_item_item);
+		RoundedWidget *discuss_item_widget = new RoundedWidget(discuss_list, backgroundColor);
+		discuss_list->setItemWidget(discuss_item_item, discuss_item_widget);
+		QLabel *discuss_item_label = new QLabel(discuss_item_widget);
+		discuss_item_label->setText(discuss_item["title"].toString());
+		QFont font_discuss_item_label;
+		font_discuss_item_label.setPointSize(10);
+		discuss_item_label->setFont(font_discuss_item_label);
+		QVBoxLayout *discuss_item_layout = new QVBoxLayout(discuss_item_widget);
+		discuss_item_layout->addWidget(discuss_item_label);
+		discuss_item_widget->resize(discuss_item_label->width(), discuss_item_label->height() + 15);
+		discuss_item_item->setSizeHint(discuss_item_widget->size());
+		discuss_list_widget_items.push_back(discuss_item_item);
+		discuss_rounded_widgets.push_back(discuss_item_widget);
+		discuss_layouts.push_back(discuss_item_layout);
+		discuss_labels.push_back(discuss_item_label);
+	}
+	v_layout_1_2->addWidget(discuss_list);
+
+	// v_layout_1_1_v_spacer = new QSpacerItem(20, 40, QSizePolicy::Policy::Minimum, QSizePolicy::Policy::Expanding);
+	// v_layout_1_1->addItem(v_layout_1_1_v_spacer);
 
 	if (config->getAutoPunch())
 		if (!auth->punch())
 			QMessageBox::critical(this, "打卡失败", "打卡失败！\n错误信息：" + auth->punch_info());
-}
-
-LuoguDesktop::~LuoguDesktop()
-{
-	delete ui;
-	delete login;
-	delete SysTray;
-	delete SysTrayMenu;
-	delete show_action;
-	delete quit_action;
-	delete config;
-	delete get_background;
-	delete main_layout;
 }
 
 void LuoguDesktop::setMenuAction()
