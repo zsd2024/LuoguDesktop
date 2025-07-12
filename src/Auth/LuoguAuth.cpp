@@ -478,7 +478,7 @@ bool LuoguAuth::logout()
 		}
 		else
 		{
-			if (response.getStatus() == Poco::Net::HTTPResponse::HTTPStatus::HTTP_FOUND)
+			if (response.getStatus() == Poco::Net::HTTPResponse::HTTPStatus::HTTP_FOUND || response.getStatus() == Poco::Net::HTTPResponse::HTTPStatus::HTTP_TEMPORARY_REDIRECT)
 				return true;
 			qDebug() << "请求失败! 状态码: " << response.getStatus();
 			std::string responseBody;
