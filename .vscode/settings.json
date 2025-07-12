@@ -116,7 +116,9 @@
         "qpainterpath": "cpp",
         "qxmlstreamreader": "cpp",
         "unordered_set": "cpp",
-        "cfenv": "cpp"
+        "cfenv": "cpp",
+        "qvector": "cpp",
+        "qlistwidget": "cpp"
     },
     "editor.fontLigatures": true,
     "qtConfigure.gdbPath": "/usr/bin/gdb",
@@ -127,6 +129,6 @@
     "qttools.extraSearchDirectories": [
         "/home/zyk/.tmp/Qt/6.8.3/gcc_64/bin"
     ],
-    "C_Cpp.default.compilerPath": "",
+    "C_Cpp.default.compilerPath": "/usr/bin/g++",
     "gitdoc.enabled": true
 }

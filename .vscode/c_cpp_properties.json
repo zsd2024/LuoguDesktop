@@ -3,11 +3,11 @@
         {
             "name": "qt",
             "includePath": [
-                "/home/ubuntu/Qt/6.8.3/gcc_64/include/**",
-                "/home/ubuntu/Qt/6.8.3/gcc_64/include/QtCore",
-                "/home/ubuntu/Qt/6.8.3/gcc_64/include/QtCore5Compat",
+                "/home/zyk/.tmp/Qt/6.8.3/gcc_64/include/**",
+                "/home/zyk/.tmp/Qt/6.8.3/gcc_64/include/QtCore",
+                "/home/zyk/.tmp/Qt/6.8.3/gcc_64/include/QtCore5Compat",
                 "${workspaceRoot}/src/**",
-                "/home/ubuntu/Qt/6.8.3/gcc_64/include"
+                "/home/zyk/.tmp/Qt/6.8.3/gcc_64/include"
             ],
             "cStandard": "c11",
             "cppStandard": "c++14"
