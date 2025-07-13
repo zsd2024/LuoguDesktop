@@ -7,6 +7,7 @@
 #include "RoundedWidget/RoundedWidget.h"
 #include "Common/Common.h"
 #include "Discuss/Discuss.h"
+#include "Contest/Contest.h"
 #include <QMainWindow>
 #include <QSystemTrayIcon>
 #include <QPixmap>
@@ -46,10 +47,20 @@ private:
     RoundedWidget *rounded_widget_1_1, *rounded_widget_1_2;
     RoundedWidget *rounded_widget_2_1, *rounded_widget_2_2;
     QListWidget *discuss_list;
-    QVector<QListWidgetItem *> discuss_list_widget_items;
-    QVector<RoundedWidget *> discuss_rounded_widgets;
-    QVector<QVBoxLayout *> discuss_layouts;
-    QVector<QLabel *> discuss_labels;
+    QVector<std::shared_ptr<QListWidgetItem>> discuss_list_widget_items;
+    QVector<std::shared_ptr<RoundedWidget>> discuss_rounded_widgets;
+    QVector<std::shared_ptr<QVBoxLayout>> discuss_layouts;
+    QVector<std::shared_ptr<QLabel>> discuss_labels;
+    QListWidget *submitted_problem_list;
+    QVector<std::shared_ptr<QListWidgetItem>> submitted_problem_list_widget_items;
+    QVector<std::shared_ptr<RoundedWidget>> submitted_problem_rounded_widgets;
+    QVector<std::shared_ptr<QVBoxLayout>> submitted_problem_layouts;
+    QVector<std::shared_ptr<QLabel>> submitted_problem_labels;
+    QListWidget *contests_list;
+    QVector<std::shared_ptr<QListWidgetItem>> contests_list_widget_items;
+    QVector<std::shared_ptr<RoundedWidget>> contests_rounded_widgets;
+    QVector<std::shared_ptr<QVBoxLayout>> contests_layouts;
+    QVector<std::shared_ptr<QLabel>> contests_labels;
     bool is_first_close;
     void closeEvent(QCloseEvent *event) override;
     void setMenuAction();
@@ -58,5 +69,6 @@ private:
     std::shared_ptr<LuoguAuth> auth;
     Config *config;
     Discuss *discuss;
+    Contest *contest;
     void paintEvent(QPaintEvent *event) override;
 };

@@ -19,6 +19,7 @@ LuoguDesktop::LuoguDesktop(QWidget *parent)
 	config = new Config();
 	get_background = new GetBackground();
 	discuss = new Discuss();
+	contest = new Contest();
 }
 
 LuoguDesktop::~LuoguDesktop()
@@ -58,12 +59,6 @@ LuoguDesktop::~LuoguDesktop()
 	delete rounded_widget_2_1;
 
 	delete discuss_list;
-
-	for (QListWidgetItem *discuss_list_widget_item : discuss_list_widget_items)
-		delete discuss_list_widget_item;
-
-	for (RoundedWidget *discuss_rounded_widget : discuss_rounded_widgets)
-		delete discuss_rounded_widget;
 }
 
 void LuoguDesktop::setupSystemTray()
@@ -186,6 +181,8 @@ void LuoguDesktop::setupMainUI()
 	passed_problem_num_text->setFont(font_passed_problem_num_text);
 	v_layout_1_1_1_1->addWidget(passed_problem_num_text, 0, Qt::AlignCenter);
 
+	qDebug() << auth->user_info(auth->get_uid())["currentData"].toObject();
+
 	int passed_problem_num = auth->user_info(auth->get_uid())["currentData"].toObject()["passedProblems"].toArray().size();
 	passed_problem_num_num = new QLabel(rounded_widget_1_1);
 	passed_problem_num_num->setText(QString::fromStdString(std::to_string(passed_problem_num)) + "<span style='font-size:10px;'>道</span>");
@@ -220,21 +217,22 @@ void LuoguDesktop::setupMainUI()
 	discuss_list->setFocusPolicy(Qt::FocusPolicy::NoFocus);
 	discuss_list->setStyleSheet("background-color: transparent;");
 	discuss_list->setAttribute(Qt::WA_StyledBackground);
+	discuss_list->setVerticalScrollMode(QAbstractItemView::ScrollMode::ScrollPerPixel);
 	QJsonArray discusses = discuss->getDiscusses();
 	for (const QJsonValueConstRef item : discusses)
 	{
 		QJsonObject discuss_item = item.toObject();
-		QListWidgetItem *discuss_item_item = new QListWidgetItem(discuss_list);
-		discuss_list->addItem(discuss_item_item);
-		RoundedWidget *discuss_item_widget = new RoundedWidget(discuss_list, backgroundColor);
-		discuss_list->setItemWidget(discuss_item_item, discuss_item_widget);
-		QLabel *discuss_item_label = new QLabel(discuss_item_widget);
+		std::shared_ptr<QListWidgetItem> discuss_item_item = std::make_shared<QListWidgetItem>(discuss_list);
+		discuss_list->addItem(discuss_item_item.get());
+		std::shared_ptr<RoundedWidget> discuss_item_widget = std::make_shared<RoundedWidget>(discuss_list, backgroundColor);
+		discuss_list->setItemWidget(discuss_item_item.get(), discuss_item_widget.get());
+		std::shared_ptr<QLabel> discuss_item_label = std::make_shared<QLabel>(discuss_item_widget.get());
 		discuss_item_label->setText(discuss_item["title"].toString());
 		QFont font_discuss_item_label;
 		font_discuss_item_label.setPointSize(10);
 		discuss_item_label->setFont(font_discuss_item_label);
-		QVBoxLayout *discuss_item_layout = new QVBoxLayout(discuss_item_widget);
-		discuss_item_layout->addWidget(discuss_item_label);
+		std::shared_ptr<QVBoxLayout> discuss_item_layout = std::make_shared<QVBoxLayout>(discuss_item_widget.get());
+		discuss_item_layout->addWidget(discuss_item_label.get());
 		discuss_item_widget->resize(discuss_item_label->width(), discuss_item_label->height() + 15);
 		discuss_item_item->setSizeHint(discuss_item_widget->size());
 		discuss_list_widget_items.push_back(discuss_item_item);
@@ -243,6 +241,67 @@ void LuoguDesktop::setupMainUI()
 		discuss_labels.push_back(discuss_item_label);
 	}
 	v_layout_1_2->addWidget(discuss_list);
+
+	submitted_problem_list = new QListWidget(centralWidget());
+	submitted_problem_list->setSelectionMode(QAbstractItemView::NoSelection);
+	submitted_problem_list->setFocusPolicy(Qt::FocusPolicy::NoFocus);
+	submitted_problem_list->setStyleSheet("background-color: transparent;");
+	submitted_problem_list->setAttribute(Qt::WA_StyledBackground);
+	submitted_problem_list->setVerticalScrollMode(QAbstractItemView::ScrollMode::ScrollPerPixel);
+	QJsonArray submitted_problemes = auth->user_info(auth->get_uid())["currentData"].toObject()["submittedProblems"].toArray();
+	for (const QJsonValueConstRef item : submitted_problemes)
+	{
+		QJsonObject submitted_problem_item = item.toObject();
+		std::shared_ptr<QListWidgetItem> submitted_problem_item_item = std::make_shared<QListWidgetItem>(submitted_problem_list);
+		submitted_problem_list->addItem(submitted_problem_item_item.get());
+		std::shared_ptr<RoundedWidget> submitted_problem_item_widget = std::make_shared<RoundedWidget>(submitted_problem_list, backgroundColor);
+		submitted_problem_list->setItemWidget(submitted_problem_item_item.get(), submitted_problem_item_widget.get());
+		std::shared_ptr<QLabel> submitted_problem_item_label = std::make_shared<QLabel>(submitted_problem_item_widget.get());
+		submitted_problem_item_label->setText(submitted_problem_item["pid"].toString() + " <b>" + submitted_problem_item["title"].toString().toHtmlEscaped() + "</b>");
+		QFont font_submitted_problem_item_label;
+		font_submitted_problem_item_label.setPointSize(10);
+		submitted_problem_item_label->setFont(font_submitted_problem_item_label);
+		std::shared_ptr<QVBoxLayout> submitted_problem_item_layout = std::make_shared<QVBoxLayout>(submitted_problem_item_widget.get());
+		submitted_problem_item_layout->addWidget(submitted_problem_item_label.get());
+		submitted_problem_item_widget->resize(submitted_problem_item_label->width(), submitted_problem_item_label->height() + 15);
+		submitted_problem_item_item->setSizeHint(submitted_problem_item_widget->size());
+		submitted_problem_list_widget_items.push_back(submitted_problem_item_item);
+		submitted_problem_rounded_widgets.push_back(submitted_problem_item_widget);
+		submitted_problem_layouts.push_back(submitted_problem_item_layout);
+		submitted_problem_labels.push_back(submitted_problem_item_label);
+	}
+	v_layout_2_1->addWidget(submitted_problem_list);
+
+	contests_list = new QListWidget(centralWidget());
+	contests_list->setSelectionMode(QAbstractItemView::NoSelection);
+	contests_list->setFocusPolicy(Qt::FocusPolicy::NoFocus);
+	contests_list->setStyleSheet("background-color: transparent;");
+	contests_list->setAttribute(Qt::WA_StyledBackground);
+	contests_list->setVerticalScrollMode(QAbstractItemView::ScrollMode::ScrollPerPixel);
+	QJsonArray contests = contest->getContests();
+	qDebug() << contests;
+	for (const QJsonValueConstRef item : contests)
+	{
+		QJsonObject contests_item = item.toObject();
+		std::shared_ptr<QListWidgetItem> contests_item_item = std::make_shared<QListWidgetItem>(contests_list);
+		contests_list->addItem(contests_item_item.get());
+		std::shared_ptr<RoundedWidget> contests_item_widget = std::make_shared<RoundedWidget>(contests_list, backgroundColor);
+		contests_list->setItemWidget(contests_item_item.get(), contests_item_widget.get());
+		std::shared_ptr<QLabel> contests_item_label = std::make_shared<QLabel>(contests_item_widget.get());
+		contests_item_label->setText(contests_item["name"].toString());
+		QFont font_contests_item_label;
+		font_contests_item_label.setPointSize(10);
+		contests_item_label->setFont(font_contests_item_label);
+		std::shared_ptr<QVBoxLayout> contests_item_layout = std::make_shared<QVBoxLayout>(contests_item_widget.get());
+		contests_item_layout->addWidget(contests_item_label.get());
+		contests_item_widget->resize(contests_item_label->width(), contests_item_label->height() + 15);
+		contests_item_item->setSizeHint(contests_item_widget->size());
+		contests_list_widget_items.push_back(contests_item_item);
+		contests_rounded_widgets.push_back(contests_item_widget);
+		contests_layouts.push_back(contests_item_layout);
+		contests_labels.push_back(contests_item_label);
+	}
+	v_layout_2_2->addWidget(contests_list);
 
 	// v_layout_1_1_v_spacer = new QSpacerItem(20, 40, QSizePolicy::Policy::Minimum, QSizePolicy::Policy::Expanding);
 	// v_layout_1_1->addItem(v_layout_1_1_v_spacer);
