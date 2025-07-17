@@ -12,8 +12,11 @@ public:
 	Latex();
 	~Latex();
 	QString LatexToURICode(const QString &latexCode, const bool &is_big);
+
 private:
 	QWebEngineView *webView;
+public slots:
+	void sendURICode(const QString &msg);
 };
 
 #endif // LATEX_TO_SVG_H
