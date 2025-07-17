@@ -58,7 +58,7 @@ Latex::~Latex()
 
 QString Latex::LatexToURICode(const QString &latexCode, const bool &is_big)
 {
-	QString jsCode = QString("latexToDataURI(String.raw`%1`, %2);").arg(latexCode).arg(is_big ? "true" : "false");
+	QString jsCode = QString("latexToDataURI(String.raw`%1`, %2).then(uri=>uri);").arg(latexCode).arg(is_big ? "true" : "false");
 	QEventLoop loop;
 	QString result;
 
