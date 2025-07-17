@@ -118,7 +118,8 @@
         "unordered_set": "cpp",
         "cfenv": "cpp",
         "qvector": "cpp",
-        "qlistwidget": "cpp"
+        "qlistwidget": "cpp",
+        "qcache": "cpp"
     },
     "editor.fontLigatures": true,
     "qtConfigure.gdbPath": "/usr/bin/gdb",
