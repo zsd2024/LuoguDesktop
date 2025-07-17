@@ -72,8 +72,8 @@ QString Latex::LatexToURICode(const QString &latexCode, const bool &is_big)
 				if (v.isNull()) {
 					qDebug() << "JavaScript 返回空结果！";
 				} else {
-					result = v.toString();
-					qDebug() << "生成的 Data URI:" << result;
+					// result = ;
+					qDebug() << v.type(); //"生成的 Data URI:" << result;
 				}
 				loop.quit(); });
 		} });
