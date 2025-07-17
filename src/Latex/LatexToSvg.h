@@ -15,8 +15,6 @@ public:
 
 private:
 	QWebEngineView *webView;
-public slots:
-	void sendURICode(const QString &msg);
 };
 
 #endif // LATEX_TO_SVG_H
