@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="zh">
+
+<head>
+	<meta charset="utf-8" />
+	<title>LaTeX→DataURI</title>
+
+	<!-- 注入 QWebChannel 脚本 -->
+	<script src="qrc:///html/assets/qwebchannel.js"></script>
+	<script>
+		// MathJax 配置
+		window.MathJax = {
+			loader: { load: ['input/tex', 'output/svg'] },
+			tex: { packages: ['base', 'ams'] },
+			svg: { fontCache: 'none' },
+			startup: { typeset: false }
+		};
+	</script>
+	<!-- 注入 MathJax -->
+	<script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg.js"></script>
+
+
+	<script>
+		// 核心：把 LaTeX 转为 Data URI
+		async function latexToDataURI(latex, is_big) {
+			const node = await MathJax.tex2svgPromise(latex, { display: is_big });
+			const svg = node.querySelector('svg').outerHTML;
+			const encoded = encodeURIComponent(svg)
+				.replace(/'/g, '%27')
+				.replace(/"/g, '%22');
+			return 'data:image/svg+xml;charset=utf-8,' + encoded;
+		}
+
+		// 等 QWebChannel 初始化完毕后，挂载 backend
+		new QWebChannel(qt.webChannelTransport, function (ch) {
+			window.backend = ch.objects.backend;
+
+			// MathJax 已完全加载
+			// JS 接口：C++ 调用 generate 后，Promise 完成就回调 C++
+			window.generate = function (latex, is_big) {
+				latexToDataURI(latex, is_big)
+					.then(uri => { backend.onDataUriReady(uri); })
+					.catch(err => { backend.onDataUriError(err.message); });
+			};
+		});
+
+
+	</script>
+</head>
+
+<body>
+</body>
+
+</html>

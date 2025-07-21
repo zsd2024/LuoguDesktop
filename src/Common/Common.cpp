@@ -10,7 +10,7 @@ Common::Common()
 {
 	Poco::Net::initializeNetwork();
 	Poco::Net::initializeSSL();
-	pCtx = new Poco::Net::Context(Poco::Net::Context::CLIENT_USE, "", "", "cacert.pem", Poco::Net::Context::VERIFY_RELAXED, 9, false, "ALL:!ADH:!LOW:!EXP:!MD5:@STRENGTH");
+	pCtx = new Poco::Net::Context(Poco::Net::Context::CLIENT_USE, "", "", QDir(QCoreApplication::applicationDirPath()).filePath("cacert.pem").toStdString(), Poco::Net::Context::VERIFY_RELAXED, 9, false, "ALL:!ADH:!LOW:!EXP:!MD5:@STRENGTH");
 	client = new Poco::Net::HTTPSClientSession("www.luogu.com.cn", 443, pCtx);
 }
 
@@ -26,7 +26,7 @@ void Common::init()
 {
 	Poco::Net::initializeNetwork();
 	Poco::Net::initializeSSL();
-	pCtx = new Poco::Net::Context(Poco::Net::Context::CLIENT_USE, "", "", "cacert.pem", Poco::Net::Context::VERIFY_RELAXED, 9, false, "ALL:!ADH:!LOW:!EXP:!MD5:@STRENGTH");
+	pCtx = new Poco::Net::Context(Poco::Net::Context::CLIENT_USE, "", "", QDir(QCoreApplication::applicationDirPath()).filePath("cacert.pem").toStdString(), Poco::Net::Context::VERIFY_RELAXED, 9, false, "ALL:!ADH:!LOW:!EXP:!MD5:@STRENGTH");
 	client = new Poco::Net::HTTPSClientSession("www.luogu.com.cn", 443, pCtx);
 }
 

@@ -134,6 +134,10 @@ void LuoguDesktop::setupMainUI()
 		user_color = "#F39C11";
 	else if (user_color_text == "Red")
 		user_color = "#FE4C61";
+	else if (user_color_text == "Cheater")
+		user_color = "#996600";
+	else if (user_color_text == "Red")
+		user_color = "#8E44AD";
 #if QT_VERSION >= QT_VERSION_CHECK(6, 0, 0)
 	if (QGuiApplication::styleHints()->colorScheme() == Qt::ColorScheme::Dark) // 暗色颜色来自 Dark Reader
 	{
@@ -147,6 +151,10 @@ void LuoguDesktop::setupMainUI()
 			user_color = "#F4A628";
 		else if (user_color_text == "Red")
 			user_color = "#FE4F64";
+		else if (user_color_text == "Cheater")
+			user_color = "#AC7507"; // Dark Reader 颜色过于离谱，采用自定义颜色
+		else if (user_color_text == "Red")
+			user_color = "#A561C1";
 	}
 #endif
 	greet_username = new QLabel(rounded_widget_1_1);
@@ -181,7 +189,7 @@ void LuoguDesktop::setupMainUI()
 	passed_problem_num_text->setFont(font_passed_problem_num_text);
 	v_layout_1_1_1_1->addWidget(passed_problem_num_text, 0, Qt::AlignCenter);
 
-	qDebug() << auth->user_info(auth->get_uid())["currentData"].toObject();
+	// qDebug() << auth->user_info(auth->get_uid())["currentData"].toObject();
 
 	int passed_problem_num = auth->user_info(auth->get_uid())["currentData"].toObject()["passedProblems"].toArray().size();
 	passed_problem_num_num = new QLabel(rounded_widget_1_1);
@@ -279,7 +287,7 @@ void LuoguDesktop::setupMainUI()
 	contests_list->setAttribute(Qt::WA_StyledBackground);
 	contests_list->setVerticalScrollMode(QAbstractItemView::ScrollMode::ScrollPerPixel);
 	QJsonArray contests = contest->getContests();
-	qDebug() << contests;
+	// qDebug() << contests;
 	for (const QJsonValueConstRef item : contests)
 	{
 		QJsonObject contests_item = item.toObject();

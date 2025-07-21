@@ -2,6 +2,8 @@
 #define COMMON_H
 #include <QObject>
 #include <QJsonObject>
+#include <QDir>
+#include <QCoreApplication>
 #include <Poco/Net/HTTPSClientSession.h>
 #include <Poco/Net/HTTPRequest.h>
 #include <Poco/Net/HTTPResponse.h>

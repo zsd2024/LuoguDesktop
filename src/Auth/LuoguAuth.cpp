@@ -5,8 +5,6 @@ LuoguAuth::LuoguAuth()
 {
 	Poco::Net::initializeNetwork();
 	Poco::Net::initializeSSL();
-	pCtx = new Poco::Net::Context(Poco::Net::Context::CLIENT_USE, "", "", "cacert.pem", Poco::Net::Context::VERIFY_RELAXED, 9, false, "ALL:!ADH:!LOW:!EXP:!MD5:@STRENGTH");
-	Common::client = new Poco::Net::HTTPSClientSession("www.luogu.com.cn", 443, pCtx);
 }
 
 LuoguAuth::~LuoguAuth()

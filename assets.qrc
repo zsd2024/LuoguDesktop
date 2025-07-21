@@ -5,4 +5,8 @@
     <file>assets/github.svg</file>
     <file>assets/wechat.svg</file>
   </qresource>
+  <qresource prefix="html">
+    <file>assets/LatexToSvg.html</file>
+    <file>assets/qwebchannel.js</file>
+  </qresource>
 </RCC>

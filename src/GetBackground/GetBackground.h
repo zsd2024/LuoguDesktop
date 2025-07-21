@@ -4,6 +4,7 @@
 #include <QByteArray>
 #include <QCoreApplication>
 #include <QDateTime>
+#include <QDir>
 #include <QThread>
 #include <QJsonDocument>
 #include <QJsonObject>
