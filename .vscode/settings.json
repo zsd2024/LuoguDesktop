@@ -120,7 +120,8 @@
         "qvector": "cpp",
         "qlistwidget": "cpp",
         "qcache": "cpp",
-        "qwebengineview": "cpp"
+        "qwebengineview": "cpp",
+        "qtextbrowser": "cpp"
     },
     "editor.fontLigatures": true,
     "qtConfigure.gdbPath": "/usr/bin/gdb",
@@ -132,5 +133,5 @@
         "/home/zyk/.tmp/Qt/6.8.3/gcc_64/bin"
     ],
     "C_Cpp.default.compilerPath": "/usr/bin/g++",
-    "gitdoc.enabled": false
+    "gitdoc.enabled": true
 }

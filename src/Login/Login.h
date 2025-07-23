@@ -11,7 +11,7 @@ class LoginWindow : public QWidget
 	Q_OBJECT
 
 public:
-	LoginWindow(QWidget *parent = nullptr);
+	explicit LoginWindow(QWidget *parent = nullptr);
 	~LoginWindow();
 	std::shared_ptr<LuoguAuth> get_auth();
 	void start();

@@ -1,4 +1,4 @@
-QT += core gui widgets webenginewidgets
+QT += core gui widgets webenginewidgets svg
 
 CONFIG += c++14
 
@@ -14,6 +14,7 @@ SOURCES += \
     $$files($$PWD/src/Discuss/*.cpp) \
     $$files($$PWD/src/Latex/*.cpp) \
     $$files($$PWD/src/Login/*.cpp) \
+    $$files($$PWD/src/MarkdownViewer/*.cpp) \
     $$files($$PWD/src/GetBackground/*.cpp) \
     $$files($$PWD/src/RoundedWidget/*.cpp)
 
@@ -26,6 +27,7 @@ HEADERS += \
     $$files($$PWD/src/Discuss/*.h) \
     $$files($$PWD/src/Latex/*.h) \
     $$files($$PWD/src/Login/*.h) \
+    $$files($$PWD/src/MarkdownViewer/*.h) \
     $$files($$PWD/src/GetBackground/*.h) \
     $$files($$PWD/src/RoundedWidget/*.h)
 

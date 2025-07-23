@@ -11,7 +11,7 @@ class LatexToSvg : public QObject
 {
 	Q_OBJECT
 public:
-	LatexToSvg(QObject *parent = nullptr);
+	explicit LatexToSvg(QObject *parent = nullptr);
 	~LatexToSvg();
 	QString LatexToURICode(const QString &latexCode, const bool &is_big);
 
