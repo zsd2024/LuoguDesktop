@@ -3,6 +3,7 @@
 
 #include <QObject>
 #include <QWebEngineView>
+#include <QProgressDialog>
 #include <QWebChannel>
 #include <QEventLoop>
 #include <QTimer>
@@ -11,7 +12,7 @@ class LatexToSvg : public QObject
 {
 	Q_OBJECT
 public:
-	explicit LatexToSvg(QObject *parent = nullptr);
+	explicit LatexToSvg(QString color, QObject *parent = nullptr);
 	~LatexToSvg();
 	QString LatexToURICode(const QString &latexCode, const bool &is_big);
 
@@ -25,6 +26,7 @@ private:
 	QWebChannel *channel;
 	QString result;
 	QEventLoop loop;
+	QString color;
 };
 
 #endif // LATEX_TO_SVG_H

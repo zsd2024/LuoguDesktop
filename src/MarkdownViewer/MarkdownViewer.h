@@ -3,6 +3,7 @@
 #include <QTextBrowser>
 #include <QSvgRenderer>
 #include <QWheelEvent>
+#include <QStyleHints>
 #include "../Latex/LatexToSvg.h"
 class MarkdownViewer : public QTextBrowser
 {

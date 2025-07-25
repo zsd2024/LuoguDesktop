@@ -22,10 +22,11 @@
 
 	<script>
 		// 核心：把 LaTeX 转为 Data URI
-		async function latexToDataURI(latex, is_big) {
+		async function latexToDataURI(latex, is_big, color) {
 			const node = await MathJax.tex2svgPromise(latex, { display: is_big });
 			const svg = node.querySelector('svg').outerHTML;
-			const encoded = encodeURIComponent(svg)
+			svg_replaced = svg.replace(/"currentColor"/g, '"' + color + '"');
+			const encoded = encodeURIComponent(svg_replaced)
 				.replace(/'/g, '%27')
 				.replace(/"/g, '%22');
 			return 'data:image/svg+xml;charset=utf-8,' + encoded;
@@ -37,8 +38,8 @@
 
 			// MathJax 已完全加载
 			// JS 接口：C++ 调用 generate 后，Promise 完成就回调 C++
-			window.generate = function (latex, is_big) {
-				latexToDataURI(latex, is_big)
+			window.generate = function (latex, is_big, color) {
+				latexToDataURI(latex, is_big, color)
 					.then(uri => { backend.onDataUriReady(uri); })
 					.catch(err => { backend.onDataUriError(err.message); });
 			};

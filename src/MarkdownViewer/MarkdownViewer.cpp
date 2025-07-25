@@ -2,7 +2,11 @@
 
 MarkdownViewer::MarkdownViewer(QWidget *parent) : QTextBrowser(parent)
 {
-	latex_to_svg = new LatexToSvg(this);
+	latex_to_svg = new LatexToSvg("#000000", this);
+#if QT_VERSION >= QT_VERSION_CHECK(6, 0, 0)
+	if (QGuiApplication::styleHints()->colorScheme() == Qt::ColorScheme::Dark)
+		latex_to_svg = new LatexToSvg("#ffffff", this);
+#endif
 }
 
 MarkdownViewer::~MarkdownViewer()
@@ -19,9 +23,6 @@ void MarkdownViewer::setMarkdownWithLatex(const QString &markdown_with_latex)
 
 void MarkdownViewer::updateCache()
 {
-	QFont font = this->font();
-	int fontSize = font.pointSize(); // 或 font.pixelSize()
-
 	QString input = markdown_with_latex;
 	int len = input.size();
 	int i = 0;
@@ -85,21 +86,7 @@ void MarkdownViewer::updateCache()
 				// 行间公式：delimLen == 2，行内公式：delimLen == 1
 				bool isDisplay = (delimLen == 2);
 				QString svg = latex_to_svg->LatexToURICode(content, isDisplay);
-				QByteArray svgData = QByteArray::fromPercentEncoding(svg.mid(33).toUtf8());
-				QRegularExpression heightRegex(R"raw(height="((\d+\.?\d*)ex)")raw");
-				QRegularExpressionMatch heightMatch = heightRegex.match(svgData);
-				// output += "<img src=\"";
-				// output += svg; // 用SVG替换公式
-				// output += "\" alt=\"Latex 公式\" ";
 				cache.push_back(svg);
-				// if (heightMatch.hasMatch())
-				// {
-				// 	qDebug() << heightMatch.captured(2).toDouble() * fontSize;
-				// 	output += "height=\"";
-				// 	output += QString::fromStdString(std::to_string(heightMatch.captured(2).toDouble() * fontSize));
-				// 	output += "\" ";
-				// }
-				// output += "/>";
 			}
 			else
 			{
@@ -191,17 +178,20 @@ void MarkdownViewer::updateContent()
 				QByteArray svgData = QByteArray::fromPercentEncoding(svg.mid(33).toUtf8());
 				QRegularExpression heightRegex(R"raw(height="((\d+\.?\d*)ex)")raw");
 				QRegularExpressionMatch heightMatch = heightRegex.match(svgData);
+				if (isDisplay)
+					output += "<br/><p align='center'>";
 				output += "<img src=\"";
 				output += svg; // 用SVG替换公式
 				output += "\" alt=\"Latex 公式\" ";
 				if (heightMatch.hasMatch())
 				{
-					qDebug() << heightMatch.captured(2).toDouble() * fontSize;
 					output += "height=\"";
-					output += QString::fromStdString(std::to_string(heightMatch.captured(2).toDouble() * fontSize));
+					output += QString::fromStdString(std::to_string(heightMatch.captured(2).toDouble() * (isDisplay ? 1.5 : 1.0) * fontSize));
 					output += "\" ";
 				}
 				output += "/>";
+				if (isDisplay)
+					output += "</p><br/>";
 			}
 			else
 			{
