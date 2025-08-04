@@ -1,25 +1,12 @@
 #ifndef MARKDOWN_VIEWER_H
 #define MARKDOWN_VIEWER_H
-#include <QTextBrowser>
-#include <QSvgRenderer>
-#include <QWheelEvent>
-#include <QStyleHints>
-#include "../Latex/LatexToSvg.h"
-class MarkdownViewer : public QTextBrowser
+#include <QWebEngineView>
+class MarkdownViewer : public QWebEngineView
 {
 public:
-	explicit MarkdownViewer(QWidget *parent = nullptr);
+	explicit MarkdownViewer();
+	explicit MarkdownViewer(const QString &markdown_with_latex);
 	~MarkdownViewer();
 	void setMarkdownWithLatex(const QString &markdown_with_latex);
-
-private:
-	LatexToSvg *latex_to_svg;
-	QString markdown_with_latex;
-	void updateCache();
-	void updateContent();
-	QVector<QString> cache;
-
-protected:
-	void wheelEvent(QWheelEvent *event) override;
 };
 #endif

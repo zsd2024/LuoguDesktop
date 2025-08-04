@@ -121,7 +121,8 @@
         "qlistwidget": "cpp",
         "qcache": "cpp",
         "qwebengineview": "cpp",
-        "qtextbrowser": "cpp"
+        "qtextbrowser": "cpp",
+        "*.old": "cpp"
     },
     "editor.fontLigatures": true,
     "qtConfigure.gdbPath": "/usr/bin/gdb",
