@@ -59,6 +59,8 @@ LuoguDesktop::~LuoguDesktop()
 	delete rounded_widget_2_1;
 
 	delete discuss_list;
+
+	Common::destroy();
 }
 
 void LuoguDesktop::setupSystemTray()

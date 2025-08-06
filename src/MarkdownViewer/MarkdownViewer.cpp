@@ -2,6 +2,10 @@
 
 MarkdownViewer::MarkdownViewer() : QWebEngineView()
 {
+    QFile base_html_file(":/html/assets/MarkdownWithLatexBaseHTML.html", this);
+    base_html_file.open(QIODevice::ReadOnly);
+    base_html = base_html_file.readAll();
+    base_html_file.close();
 }
 
 MarkdownViewer::MarkdownViewer(const QString &markdown_with_latex = "") : QWebEngineView()
@@ -13,21 +17,12 @@ MarkdownViewer::~MarkdownViewer() {}
 
 void MarkdownViewer::setMarkdownWithLatex(const QString &markdown_with_latex)
 {
-    setHtml(QString(R"(
-<div id="content"></div>
-<script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/mathjax@2.7.9/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
-<script>
-    var div = document.getElementById('content');
-    var div2 = document.createElement('div');
-    div2.innerHTML = String.raw`%1`;
-    MathJax.Hub.Queue(
-        ['Typeset', MathJax.Hub, div2],
-        function() {
-            div.innerHTML = marked.parse(div2.innerHTML);
-        }
-    );
-</script>
-)")
-                .arg(markdown_with_latex));
+    QString modified_markdown = markdown_with_latex;
+    modified_markdown.replace("\\", R"(\\)");
+    modified_markdown.replace("\"", R"(\")");
+    modified_markdown.replace("\'", R"(\')");
+    modified_markdown.replace("\n", R"(\n)");
+    modified_markdown.replace("\r", R"(\r)");
+    modified_markdown.replace("\t", R"(\t)");
+    setHtml(base_html.arg(modified_markdown));
 }

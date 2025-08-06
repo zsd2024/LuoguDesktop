@@ -6,7 +6,11 @@
     <file>assets/wechat.svg</file>
   </qresource>
   <qresource prefix="html">
+    <file>assets/MarkdownWithLatexBaseHTML.html</file>
     <file>assets/LatexToSvg.html</file>
     <file>assets/qwebchannel.js</file>
+  </qresource>
+  <qresource prefix="cacert">
+    <file>assets/cacert.pem</file>
   </qresource>
 </RCC>

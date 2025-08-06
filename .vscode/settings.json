@@ -122,7 +122,10 @@
         "qcache": "cpp",
         "qwebengineview": "cpp",
         "qtextbrowser": "cpp",
-        "*.old": "cpp"
+        "*.old": "cpp",
+        "qfile": "cpp",
+        "qdir": "cpp",
+        "qdatetime": "cpp"
     },
     "editor.fontLigatures": true,
     "qtConfigure.gdbPath": "/usr/bin/gdb",

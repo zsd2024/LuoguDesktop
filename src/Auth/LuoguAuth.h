@@ -43,7 +43,6 @@ private:
 	QJsonObject elo_info_cache;
 	QJsonObject login(QString username, QString password, QString captcha);
 	QJsonObject get_elo_info_page(int uid, int page, int limit);
-	Poco::Net::Context *pCtx;
 	QString punch_info_cache;
 };
 

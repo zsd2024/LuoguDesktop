@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+	<meta charset="UTF-8" />
+	<meta name="viewport" content="width=device-width,initial-scale=1.0" />
+	<title>Markdown</title>
+
+	<style>
+		html,
+		body {
+			margin: 0;
+			padding: 0;
+			width: 100%;
+			font-family: sans-serif;
+			line-height: 1.6;
+		}
+
+		body {
+			padding: 2rem;
+			box-sizing: border-box;
+		}
+
+		code {
+			background: #f4f4f4;
+			padding: 2px 4px;
+			border-radius: 3px;
+		}
+
+		/* 容器自适应宽度 */
+		#content {
+			width: 100%;
+			max-width: 800px;
+			margin: 0 auto;
+			box-sizing: border-box;
+			padding: 0 1rem;
+		}
+
+		/* 溢出滚动 */
+		pre,
+		table,
+		mjx-container[jax="CHTML"][display="block"] {
+			overflow-x: auto;
+		}
+
+		/* 图片响应式 */
+		#content img {
+			max-width: 100%;
+			height: auto;
+			display: block;
+			margin: 1rem auto;
+		}
+
+		/* 窄屏设备微调 */
+		@media (max-width: 600px) {
+			body {
+				padding: 1rem;
+			}
+
+			code {
+				font-size: 0.875rem;
+			}
+		}
+	</style>
+
+	<!-- MathJax 配置 -->
+	<script>
+		window.MathJax = {
+			tex: {
+				inlineMath: [['$', '$']],
+				displayMath: [['$$', '$$']]
+			},
+			options: {
+				skipHtmlTags: ['script', 'noscript', 'style', 'textarea', 'pre']
+			}
+		};
+	</script>
+	<script src="https://cdn.bootcdn.net/ajax/libs/mathjax/3.2.2/es5/tex-mml-chtml.min.js"></script>
+	<script src="https://cdn.bootcdn.net/ajax/libs/marked/16.1.1/lib/marked.umd.min.js"></script>
+</head>
+
+<body>
+	<div id="content"></div>
+
+	<script>
+		(function () {
+			const content = document.getElementById('content');
+			const mdText = "%0".trim();
+
+			// 先纯文本插入，供 MathJax 渲染
+			content.textContent = mdText;
+
+			MathJax.typesetPromise([content]).then(() => {
+				// MathJax 渲染后再执行 Markdown 解析
+				content.innerHTML = marked.parse(content.innerHTML);
+			}).catch(err => {
+				console.error('MathJax 渲染失败：', err);
+			});
+		})();
+	</script>
+</body>
+
+</html>

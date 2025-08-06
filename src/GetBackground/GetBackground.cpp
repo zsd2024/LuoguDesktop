@@ -4,6 +4,8 @@ GetBackground::GetBackground()
 {
 	Poco::Net::initializeNetwork();
 	Poco::Net::initializeSSL();
+	QFile::remove(QDir(QCoreApplication::applicationDirPath()).filePath("cacert.pem"));
+	QFile::copy(":/cacert/assets/cacert.pem", QDir(QCoreApplication::applicationDirPath()).filePath("cacert.pem"));
 	pCtx = new Poco::Net::Context(Poco::Net::Context::CLIENT_USE, "", "", QDir(QCoreApplication::applicationDirPath()).filePath("cacert.pem").toStdString(), Poco::Net::Context::VERIFY_RELAXED, 9, false, "ALL:!ADH:!LOW:!EXP:!MD5:@STRENGTH");
 	client = new Poco::Net::HTTPSClientSession("www.bing.com", 443, pCtx);
 }

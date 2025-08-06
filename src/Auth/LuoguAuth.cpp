@@ -11,8 +11,6 @@ LuoguAuth::~LuoguAuth()
 {
 	Poco::Net::uninitializeNetwork();
 	Poco::Net::uninitializeSSL();
-	delete Common::client;
-	delete pCtx;
 }
 
 /// @brief 登录

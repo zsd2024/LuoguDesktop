@@ -5,6 +5,7 @@
 #include <QCoreApplication>
 #include <QDateTime>
 #include <QDir>
+#include <QFile>
 #include <QThread>
 #include <QJsonDocument>
 #include <QJsonObject>
