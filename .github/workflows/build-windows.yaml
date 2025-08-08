@@ -1,0 +1,84 @@
+name: 构建 Windows 版本
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: windows-2022
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: 安装 Qt
+        uses: jurplel/install-qt-action@v4
+        with:
+          version: "6.8.3"
+          arch: "win64_msvc2022_64"
+          cache: true
+          modules: "qtwebengine qtwebchannel qtpositioning"
+
+      - name: 安装 OpenSSL
+        run: |
+          # 下载 OpenSSL 3.5.2 安装程序（64位）
+          $installerUrl = "https://slproweb.com/download/Win64OpenSSL-3_5_2.exe"
+          $installerPath = "$env:TEMP\Win64OpenSSL-3_5_2.exe"
+          
+          Invoke-WebRequest -Uri $installerUrl -OutFile $installerPath
+          
+          # 静默安装 OpenSSL
+          Start-Process -FilePath $installerPath -ArgumentList "/silent /verysilent /sp- /norestart /log=OpenSSL_Log.txt" -Wait
+        
+          # 添加 OpenSSL 到系统路径
+          echo "C:\Program Files\OpenSSL-Win64\bin" | Out-File -FilePath $env:GITHUB_PATH -Encoding utf8
+
+          # 输出安装日志
+          Get-Content OpenSSL_Log.txt
+
+      - name: 准备 Poco 库
+        run: |
+          # 确保 Poco 库目录存在
+          if (-not (Test-Path "Poco/bin64")) {
+            throw "Poco 库未找到，请确保项目根目录中有 Poco/bin64 文件夹"
+          }
+          # 将 Poco 库目录添加到系统路径
+          echo "${{ github.workspace }}\Poco\bin64" | Out-File -FilePath $env:GITHUB_PATH -Encoding utf8
+
+      - uses: ilammy/msvc-dev-cmd@v1.13.0
+
+      - name: 配置项目
+        run: |
+          mkdir build
+          cd build
+          qmake ../LuoguDesktop.pro -spec win32-msvc "CONFIG+=release"
+
+      - name: 编译项目
+        run: |
+          cd build
+          nmake
+
+      - name: 收集依赖文件
+        run: |
+          # 创建输出目录
+          New-Item -ItemType Directory -Path ./build/release/dist
+          # 复制可执行文件
+          Copy-Item ./build/release/LuoguDesktop.exe ./build/release/dist/
+          # 复制 Poco 库
+          Copy-Item ./Poco/bin64/*.dll ./build/release/dist/
+          # 复制 OpenSSL 库
+          Copy-Item "C:\Program Files\OpenSSL-Win64\bin\libcrypto-3-x64.dll" ./build/release/dist/
+          Copy-Item "C:\Program Files\OpenSSL-Win64\bin\libssl-3-x64.dll" ./build/release/dist/
+          # 复制 Qt 依赖
+          windeployqt --release --no-translations --no-angle --no-opengl-sw ./build/release/dist/LuoguDesktop.exe
+
+      - name: 压缩成品
+        run: |
+          7z a -tzip -mx9 LuoguDesktop-Windows.zip ./build/release/dist/*
+
+      - name: 上传成品
+        uses: actions/upload-artifact@v4
+        with:
+          name: LuoguDesktop-Windows
+          path: LuoguDesktop-Windows.zip

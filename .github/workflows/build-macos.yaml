@@ -1,0 +1,57 @@
+name: 构建 macOS 版本
+
+on:
+  push:
+    branches: [ main ]
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: macos-13
+    
+    steps:
+    - uses: actions/checkout@v4
+    
+    - name: 安装系统依赖
+      run: |
+        brew install openssl poco
+        
+    - name: 安装 Qt
+      uses: jurplel/install-qt-action@v4
+      with:
+        version: '6.8.3'
+        arch: 'clang_64'
+        cache: true
+        modules: "qtwebengine qtwebchannel qtpositioning"
+        
+    - name: 配置项目
+      run: |
+        mkdir -p ./release
+        cd release
+        qmake ../LuoguDesktop.pro "CONFIG+=release"
+        
+    - name: 编译项目
+      run: |
+        cd release
+        make -j$(sysctl -n hw.ncpu)
+        
+    - name: 创建应用程序包
+      run: |
+        ls -R
+        
+    - name: 处理依赖
+      run: |
+        cd release
+        # 使用 macdeployqt 处理 Qt 依赖
+        macdeployqt LuoguDesktop.app -dmg -verbose=2 -libpath=/usr/local/opt/openssl/lib -libpath=/usr/local/opt/poco/lib
+        
+    - name: 压缩成品
+      run: |
+        # 将 DMG 压缩为 zip
+        zip -9 -r LuoguDesktop-macOS.zip ./release/LuoguDesktop.dmg
+        
+    - name: 上传成品
+      uses: actions/upload-artifact@v4
+      with:
+        name: LuoguDesktop-macOS
+        path: LuoguDesktop-macOS.zip

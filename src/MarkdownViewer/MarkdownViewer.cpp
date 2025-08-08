@@ -8,7 +8,7 @@ MarkdownViewer::MarkdownViewer() : QWebEngineView()
     base_html_file.close();
 }
 
-MarkdownViewer::MarkdownViewer(const QString &markdown_with_latex = "") : QWebEngineView()
+MarkdownViewer::MarkdownViewer(const QString &markdown_with_latex) : QWebEngineView()
 {
     setMarkdownWithLatex(markdown_with_latex);
 }
