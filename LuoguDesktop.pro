@@ -49,6 +49,12 @@ unix {
     LIBS += -lPocoFoundation -lPocoNet -lPocoNetSSL -lPocoUtil
 }
 
+macx {
+    INCLUDEPATH += /usr/local/opt/poco/include\
+                   /usr/local/opt/openssl/include
+    LIBS += -L/usr/local/opt/poco/lib -L/usr/local/opt/openssl/lib -lPocoFoundation -lPocoNet -lPocoNetSSL -lPocoUtil -lcrypto -lssl
+}
+
 # Default rules for deployment.
 qnx: target.path = /tmp/$${TARGET}/bin
 else: unix:!android: target.path = /opt/$${TARGET}/bin

@@ -1,0 +1,63 @@
+name: 构建 Linux 版本
+
+on:
+  push:
+    branches: [ main ]
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-22.04
+    
+    steps:
+    - uses: actions/checkout@v4
+    
+    - name: 安装系统依赖
+      run: |
+        sudo apt-get update
+        sudo apt-get install -y libssl-dev libpoco-dev libfuse2
+        
+    - name: 安装 Qt
+      uses: jurplel/install-qt-action@v4
+      with:
+        version: '6.8.3'
+        arch: 'linux_gcc_64'
+        cache: true,
+        modules: "qtwebengine qtwebchannel qtpositioning"
+        
+    - name: 配置项目
+      run: |
+        mkdir -p release
+        cd release
+        qmake ../LuoguDesktop.pro "CONFIG+=release"
+        
+    - name: 编译项目
+      run: |
+        cd release
+        make -j$(nproc)
+        
+    - name: 下载 linuxdeployqt
+      run: |
+        curl -L https://github.com/probonopd/linuxdeployqt/releases/download/continuous/linuxdeployqt-continuous-x86_64.AppImage -o linuxdeployqt
+        chmod a+x linuxdeployqt
+
+    - name: 部署
+      run: |
+        # 创建输出目录
+        mkdir -p ./release/dist
+        # 复制可执行文件
+        cp ./release/LuoguDesktop ./release/dist/
+        # 部罣
+        cd ./release/dist
+        ../../linuxdeployqt ./LuoguDesktop -appimage
+      continue-on-error: true  # 忽略非 0 退出码，继续执行
+        
+    - name: 压缩成品
+      run: |
+        tar -zcvf LuoguDesktop-Linux.tar.gz -C ./release/dist .
+        
+    - name: 上传成品
+      uses: actions/upload-artifact@v4
+      with:
+        name: LuoguDesktop-Linux
+        path: LuoguDesktop-Linux.tar.gz
