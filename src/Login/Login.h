@@ -1,10 +1,14 @@
 #pragma once
-#include "ui_Login.h"
 #include "../Auth/LuoguAuth.h"
-#include <QWidget>
-#include <QJsonObject>
-#include <QMessageBox>
+#include "../Error/Error.h"
+#include "ui_Login.h"
+#include <KMessageDialog>
+#include <QApplication>
 #include <QCloseEvent>
+#include <QDialogButtonBox>
+#include <QJsonObject>
+#include <QStyle>
+#include <QWidget>
 
 class LoginWindow : public QWidget
 {

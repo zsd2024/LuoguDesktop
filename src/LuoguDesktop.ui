@@ -24,12 +24,12 @@
      <x>0</x>
      <y>0</y>
      <width>800</width>
-     <height>23</height>
+     <height>24</height>
     </rect>
    </property>
    <widget class="QMenu" name="File">
     <property name="title">
-     <string>文件</string>
+     <string>文件（&amp;F）</string>
     </property>
     <addaction name="separator"/>
     <addaction name="settings"/>
@@ -37,32 +37,31 @@
    </widget>
    <widget class="QMenu" name="Problem">
     <property name="title">
-     <string>题目</string>
+     <string>题目（&amp;P）</string>
     </property>
     <addaction name="show_problem"/>
    </widget>
    <widget class="QMenu" name="Discuss">
     <property name="title">
-     <string>讨论</string>
+     <string>讨论（&amp;D）</string>
     </property>
     <addaction name="all"/>
     <addaction name="siteaffairs"/>
     <addaction name="problem"/>
     <addaction name="academics"/>
-    <addaction name="service"/>
     <addaction name="separator"/>
     <addaction name="save_discuss"/>
    </widget>
    <widget class="QMenu" name="Help">
     <property name="title">
-     <string>帮助</string>
+     <string>帮助（&amp;H）</string>
     </property>
     <addaction name="help"/>
     <addaction name="about"/>
    </widget>
    <widget class="QMenu" name="Article">
     <property name="title">
-     <string>专栏</string>
+     <string>专栏（&amp;A）</string>
     </property>
     <addaction name="article_mine"/>
     <addaction name="article_ground"/>
@@ -136,16 +135,6 @@
   <action name="academics">
    <property name="text">
     <string>学术版</string>
-   </property>
-  </action>
-  <action name="relevantaffairs">
-   <property name="text">
-    <string>灌水区</string>
-   </property>
-  </action>
-  <action name="service">
-   <property name="text">
-    <string>工单反馈版</string>
    </property>
   </action>
   <action name="save_discuss">

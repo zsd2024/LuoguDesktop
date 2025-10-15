@@ -168,7 +168,7 @@ QJsonObject LuoguAuth::login(QString username, QString password, QString captcha
 		}
 		else
 		{
-			if (response.getStatus() == Poco::Net::HTTPResponse::HTTPStatus::HTTP_FOUND)
+			if (response.getStatus() == Poco::Net::HTTPResponse::HTTPStatus::HTTP_FOUND || response.getStatus() == Poco::Net::HTTPResponse::HTTPStatus::HTTP_TEMPORARY_REDIRECT)
 			{
 				std::string new_url = response.get("Location");
 				std::vector<Poco::Net::HTTPCookie> cookies;

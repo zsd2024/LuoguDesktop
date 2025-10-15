@@ -1,13 +1,13 @@
 /********************************************************************************
-** Form generated from reading UI file 'LuoguDesktopFpwFNj.ui'
+** Form generated from reading UI file 'LuoguDesktopyMEDXL.ui'
 **
 ** Created by: Qt User Interface Compiler version 6.8.3
 **
 ** WARNING! All changes made in this file will be lost when recompiling UI file!
 ********************************************************************************/
 
-#ifndef LUOGUDESKTOPFPWFNJ_H
-#define LUOGUDESKTOPFPWFNJ_H
+#ifndef LUOGUDESKTOPYMEDXL_H
+#define LUOGUDESKTOPYMEDXL_H
 
 #include <QtCore/QVariant>
 #include <QtGui/QAction>
@@ -36,8 +36,6 @@ public:
     QAction *siteaffairs;
     QAction *problem;
     QAction *academics;
-    QAction *relevantaffairs;
-    QAction *service;
     QAction *save_discuss;
     QWidget *centralwidget;
     QMenuBar *menubar;
@@ -81,10 +79,6 @@ public:
         problem->setObjectName("problem");
         academics = new QAction(LuoguDesktop);
         academics->setObjectName("academics");
-        relevantaffairs = new QAction(LuoguDesktop);
-        relevantaffairs->setObjectName("relevantaffairs");
-        service = new QAction(LuoguDesktop);
-        service->setObjectName("service");
         save_discuss = new QAction(LuoguDesktop);
         save_discuss->setObjectName("save_discuss");
         centralwidget = new QWidget(LuoguDesktop);
@@ -92,7 +86,7 @@ public:
         LuoguDesktop->setCentralWidget(centralwidget);
         menubar = new QMenuBar(LuoguDesktop);
         menubar->setObjectName("menubar");
-        menubar->setGeometry(QRect(0, 0, 800, 23));
+        menubar->setGeometry(QRect(0, 0, 800, 24));
         File = new QMenu(menubar);
         File->setObjectName("File");
         Problem = new QMenu(menubar);
@@ -118,7 +112,6 @@ public:
         Discuss->addAction(siteaffairs);
         Discuss->addAction(problem);
         Discuss->addAction(academics);
-        Discuss->addAction(service);
         Discuss->addSeparator();
         Discuss->addAction(save_discuss);
         Help->addAction(help);
@@ -147,14 +140,12 @@ public:
         siteaffairs->setText(QCoreApplication::translate("LuoguDesktop", "\347\253\231\345\212\241\347\211\210", nullptr));
         problem->setText(QCoreApplication::translate("LuoguDesktop", "\351\242\230\347\233\256\346\200\273\347\211\210", nullptr));
         academics->setText(QCoreApplication::translate("LuoguDesktop", "\345\255\246\346\234\257\347\211\210", nullptr));
-        relevantaffairs->setText(QCoreApplication::translate("LuoguDesktop", "\347\201\214\346\260\264\345\214\272", nullptr));
-        service->setText(QCoreApplication::translate("LuoguDesktop", "\345\267\245\345\215\225\345\217\215\351\246\210\347\211\210", nullptr));
         save_discuss->setText(QCoreApplication::translate("LuoguDesktop", "\344\277\235\345\255\230\345\270\226\345\255\220", nullptr));
-        File->setTitle(QCoreApplication::translate("LuoguDesktop", "\346\226\207\344\273\266", nullptr));
-        Problem->setTitle(QCoreApplication::translate("LuoguDesktop", "\351\242\230\347\233\256", nullptr));
-        Discuss->setTitle(QCoreApplication::translate("LuoguDesktop", "\350\256\250\350\256\272", nullptr));
-        Help->setTitle(QCoreApplication::translate("LuoguDesktop", "\345\270\256\345\212\251", nullptr));
-        Article->setTitle(QCoreApplication::translate("LuoguDesktop", "\344\270\223\346\240\217", nullptr));
+        File->setTitle(QCoreApplication::translate("LuoguDesktop", "\346\226\207\344\273\266\357\274\210&F\357\274\211", nullptr));
+        Problem->setTitle(QCoreApplication::translate("LuoguDesktop", "\351\242\230\347\233\256\357\274\210&P\357\274\211", nullptr));
+        Discuss->setTitle(QCoreApplication::translate("LuoguDesktop", "\350\256\250\350\256\272\357\274\210&D\357\274\211", nullptr));
+        Help->setTitle(QCoreApplication::translate("LuoguDesktop", "\345\270\256\345\212\251\357\274\210&H\357\274\211", nullptr));
+        Article->setTitle(QCoreApplication::translate("LuoguDesktop", "\344\270\223\346\240\217\357\274\210&A\357\274\211", nullptr));
     } // retranslateUi
 
 };
@@ -165,4 +156,4 @@ namespace Ui {
 
 QT_END_NAMESPACE
 
-#endif // LUOGUDESKTOPFPWFNJ_H
+#endif // LUOGUDESKTOPYMEDXL_H

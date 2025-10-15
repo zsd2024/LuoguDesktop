@@ -37,15 +37,18 @@ void LoginWindow::closeEvent(QCloseEvent *event)
 		event->accept();
 		return;
 	}
-	QMessageBox::StandardButton reply = QMessageBox::warning(this, "关闭确认", "登录未完成，确定关闭？", QMessageBox::Yes | QMessageBox::No, QMessageBox::No);
-	if (reply == QMessageBox::Yes)
-	{
+	KMessageDialog *msgBox = new KMessageDialog(KMessageDialog::Type::WarningTwoActions, tr("登录未完成，确定关闭？"), this);
+	msgBox->setCaption(tr("关闭确认"));
+	msgBox->setButtons(KStandardGuiItem::ok(), KStandardGuiItem::cancel());
+	msgBox->setAttribute(Qt::WA_DeleteOnClose);
+	msgBox->setWindowFlags(Qt::Dialog | Qt::CustomizeWindowHint | Qt::WindowTitleHint);
+	msgBox->setWindowIcon(QIcon(":/images/assets/logo.svg"));
+	msgBox->setIcon(QApplication::style()->standardIcon(QStyle::StandardPixmap::SP_MessageBoxWarning));
+	int reply = msgBox->exec();
+	if (reply == KMessageDialog::ButtonType::PrimaryAction)
 		event->accept();
-	}
 	else
-	{
 		event->ignore();
-	}
 }
 
 void LoginWindow::on_LoginButton_clicked()
@@ -56,14 +59,27 @@ void LoginWindow::on_LoginButton_clicked()
 		if (res.contains("error"))
 		{
 			// 弹出错误弹窗
-			QMessageBox::critical(this, "登录失败", res["error"].toString());
+			KMessageDialog *msgBox = new KMessageDialog(KMessageDialog::Type::Error, res["error"].toString(), this);
+			msgBox->setCaption(tr("登录失败"));
+			msgBox->setButtons(KStandardGuiItem::ok());
+			msgBox->setAttribute(Qt::WA_DeleteOnClose);
+			msgBox->setWindowIcon(QIcon(":/images/assets/logo.svg"));
+			msgBox->setIcon(QApplication::style()->standardIcon(QStyle::StandardPixmap::SP_MessageBoxCritical));
+			msgBox->setDetails("你好");
+			msgBox->exec();
 			on_captcha_image_clicked();
 			ui->captcha_lineEdit->setText("");
 			succeed = false;
 		}
 		else
 		{
-			QMessageBox::information(this, "登录成功", "欢迎回来，" + res["username"].toString() + "!");
+			KMessageDialog *msgBox = new KMessageDialog(KMessageDialog::Type::Information, tr("欢迎回来，%0！").arg(res["username"].toString()), this);
+			msgBox->setCaption(tr("登录成功"));
+			msgBox->setButtons(KStandardGuiItem::ok());
+			msgBox->setAttribute(Qt::WA_DeleteOnClose);
+			msgBox->setWindowIcon(QIcon(":/images/assets/logo.svg"));
+			msgBox->setIcon(QApplication::style()->standardIcon(QStyle::StandardPixmap::SP_MessageBoxInformation));
+			msgBox->exec();
 			cookie = res["cookie"].toObject();
 			qDebug() << cookie;
 			succeed = true;
@@ -73,8 +89,7 @@ void LoginWindow::on_LoginButton_clicked()
 	}
 	catch (const std::exception &e)
 	{
-		// 弹出错误弹窗
-		QMessageBox::critical(this, "登录失败", e.what());
+		NewInternalError(e.what());
 	}
 }
 

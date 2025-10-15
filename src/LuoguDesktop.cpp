@@ -11,7 +11,7 @@ LuoguDesktop::LuoguDesktop(QWidget *parent)
 			{
 				setupSystemTray();
 				SysTray->show();
-				setupMainUI();
+				setupMainUI(); 
 				show(); });
 	setMenuAction();
 	auth = login->get_auth();
@@ -68,13 +68,10 @@ void LuoguDesktop::setupSystemTray()
 	SysTray = new QSystemTrayIcon(this);
 	SysTray->setIcon(QIcon(":/images/assets/logo.svg"));
 	SysTray->setToolTip("LuoguDesktop");
-	quit_action = new QAction("退出", this);
+	quit_action = new QAction(tr("退出"), this);
 	connect(quit_action, &QAction::triggered, [this]()
-			{ if(auth->logout())
-				qApp->exit();
-			else if (QMessageBox::critical(this, "登出失败", "登出失败，是否直接关闭 LuoguDesktop？", QMessageBox::Yes | QMessageBox::No, QMessageBox::No) == QMessageBox::Yes)
-					qApp->exit(); });
-	show_action = new QAction("显示", this);
+			{ quitAuchAndExit(); });
+	show_action = new QAction(tr("显示"), this);
 	connect(show_action, &QAction::triggered, [this]()
 			{ show(); });
 	connect(SysTray, &QSystemTrayIcon::activated, [this](QSystemTrayIcon::ActivationReason reason)
@@ -171,7 +168,7 @@ void LuoguDesktop::setupMainUI()
 
 	greet = new QLabel(rounded_widget_1_1);
 	qDebug() << auth->get_username();
-	greet->setText("欢迎使用 LuoguDesktop！");
+	greet->setText(tr("欢迎使用 LuoguDesktop！"));
 	QFont font_greet;
 	font_greet.setPointSize(24);
 	greet->setFont(font_greet);
@@ -185,7 +182,7 @@ void LuoguDesktop::setupMainUI()
 	h_layout_1_1_2->addWidget(rounded_widget_1_1_1_1);
 
 	passed_problem_num_text = new QLabel(rounded_widget_1_1);
-	passed_problem_num_text->setText("累计通过题目");
+	passed_problem_num_text->setText(tr("累计通过题目"));
 	QFont font_passed_problem_num_text;
 	font_passed_problem_num_text.setPointSize(16);
 	passed_problem_num_text->setFont(font_passed_problem_num_text);
@@ -195,7 +192,7 @@ void LuoguDesktop::setupMainUI()
 
 	int passed_problem_num = auth->user_info(auth->get_uid())["currentData"].toObject()["passedProblems"].toArray().size();
 	passed_problem_num_num = new QLabel(rounded_widget_1_1);
-	passed_problem_num_num->setText(QString::fromStdString(std::to_string(passed_problem_num)) + "<span style='font-size:10px;'>道</span>");
+	passed_problem_num_num->setText(tr("%n<span style='font-size:10px;'>道</span>", "", passed_problem_num));
 	passed_problem_num_num->setTextFormat(Qt::RichText);
 	QFont font_passed_problem_num_num;
 	font_passed_problem_num_num.setPointSize(20);
@@ -207,7 +204,7 @@ void LuoguDesktop::setupMainUI()
 	h_layout_1_1_2->addWidget(rounded_widget_1_1_1_2);
 
 	matches_num_text = new QLabel(rounded_widget_1_1);
-	matches_num_text->setText("累计参加 Rated 比赛");
+	matches_num_text->setText(tr("累计参加 Rated 比赛"));
 	QFont font_matches_num_text;
 	font_matches_num_text.setPointSize(16);
 	matches_num_text->setFont(font_matches_num_text);
@@ -215,7 +212,7 @@ void LuoguDesktop::setupMainUI()
 
 	int matches_num = auth->elo_info(auth->get_uid())["count"].toInt();
 	matches_num_num = new QLabel(rounded_widget_1_1);
-	matches_num_num->setText(QString::fromStdString(std::to_string(matches_num)) + "<span style='font-size:10px;'>场</span>");
+	matches_num_num->setText(tr("%n<span style='font-size:10px;'>场</span>", "", matches_num));
 	matches_num_num->setTextFormat(Qt::RichText);
 	QFont font_matches_num_num;
 	font_matches_num_num.setPointSize(20);
@@ -318,16 +315,22 @@ void LuoguDesktop::setupMainUI()
 
 	if (config->getAutoPunch())
 		if (!auth->punch())
-			QMessageBox::critical(this, "打卡失败", "打卡失败！\n错误信息：" + auth->punch_info());
+		{
+			KMessageDialog *msgBox = new KMessageDialog(KMessageDialog::Type::Error, tr("打卡失败！\n错误信息：") + auth->punch_info(), this);
+			msgBox->setCaption(tr("打卡失败"));
+			msgBox->setButtons(KStandardGuiItem::ok());
+			msgBox->setAttribute(Qt::WA_DeleteOnClose);
+			msgBox->setWindowFlags(Qt::Dialog | Qt::CustomizeWindowHint | Qt::WindowTitleHint);
+			msgBox->setWindowIcon(QIcon(":/images/assets/logo.svg"));
+			msgBox->setIcon(QApplication::style()->standardIcon(QStyle::StandardPixmap::SP_MessageBoxCritical));
+			msgBox->exec();
+		}
 }
 
 void LuoguDesktop::setMenuAction()
 {
 	connect(ui->exit, &QAction::triggered, [this]
-			{ if(auth->logout())
-				qApp->exit();
-			else if (QMessageBox::critical(this, "登出失败", "登出失败，是否直接关闭 LuoguDesktop？", QMessageBox::Yes | QMessageBox::No, QMessageBox::No) == QMessageBox::Yes)
-				qApp->exit(); });
+			{ quitAuchAndExit(); });
 	connect(ui->about, &QAction::triggered, [this]
 			{ QMessageBox::about(this, tr("关于 LuoguDesktop"), tr("<b>版本：</b>0.1 测试版<br><b>开发者：</b>zsd2024<br><b>GitHub：</b><a href='https://github.com/zsd2024/LuoguDesktop'>zsd2024/LuoguDesktop</a><center><font color='#808080'>Copyright (C) 2025 zsd2024. </font></center>")); });
 }
@@ -357,4 +360,25 @@ void LuoguDesktop::paintEvent(QPaintEvent *event)
 	int y = (scaled.height() - height()) / 2;
 	painter.drawPixmap(0, 0, scaled, x, y, width(), height());
 	QMainWindow::paintEvent(event);
+}
+
+void LuoguDesktop::quitAuchAndExit()
+{
+	if (auth->logout())
+		qApp->exit();
+	else
+	{
+		KMessageDialog *msgBox = new KMessageDialog(KMessageDialog::Type::WarningTwoActions, tr("登出失败，是否直接关闭 LuoguDesktop？"), this);
+		msgBox->setCaption(tr("登出失败"));
+		KGuiItem yes(tr("是（&Y）"), QApplication::style()->standardIcon(QStyle::StandardPixmap::SP_DialogYesButton));
+		KGuiItem no(tr("否（&N）"), QApplication::style()->standardIcon(QStyle::StandardPixmap::SP_DialogNoButton));
+		msgBox->setButtons(yes, no);
+		msgBox->setAttribute(Qt::WA_DeleteOnClose);
+		msgBox->setWindowFlags(Qt::Dialog | Qt::CustomizeWindowHint | Qt::WindowTitleHint);
+		msgBox->setWindowIcon(QIcon(":/images/assets/logo.svg"));
+		msgBox->setIcon(QApplication::style()->standardIcon(QStyle::StandardPixmap::SP_MessageBoxCritical));
+		int reply = msgBox->exec();
+		if (reply == KMessageDialog::ButtonType::PrimaryAction)
+			qApp->exit();
+	}
 }

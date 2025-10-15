@@ -38,7 +38,7 @@ QJsonArray Contest::getContests()
 			for (Poco::Net::HTTPCookie i : cookies)
 				Common::cookie.set(i.getName(), i.getValue());
 			QString text = QString::fromStdString(responseBody), json_text;
-			qDebug() << text;
+			// qDebug() << text;
 			if (text.contains("<script>window._feInjection = JSON.parse(decodeURIComponent(\""))
 			{
 				QString url_text = text.split("<script>window._feInjection = JSON.parse(decodeURIComponent(\"")[1].split("\"));")[0];
