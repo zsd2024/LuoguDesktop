@@ -9,6 +9,8 @@
                 "/home/zyk/.tmp/Qt/6.8.3/gcc_64/include/QtCore5Compat",
                 "/home/zyk/.tmp/Qt/6.8.3/gcc_64/include/QtSvg",
                 "/home/zyk/.tmp/Qt/6.8.3/gcc_64/include",
+                "/media/zyk/Datas/Greens/msys2/usr/Craft/include/KF6/KWidgetsAddons/**",
+                "/media/zyk/Datas/Greens/msys2/usr/Craft/include/KF6/KWidgetsAddons"
             ],
             "cStandard": "c11",
             "cppStandard": "c++14",
@@ -17,7 +19,10 @@
             "compilerPath": "/usr/bin/g++",
             "browse": {
                 "limitSymbolsToIncludedHeaders": true
-            }
+            },
+            "compileCommands": [
+                "${workspaceRoot}/build/compile_commands.json"
+            ]
         },
         {
             "name": "qt_remote",
