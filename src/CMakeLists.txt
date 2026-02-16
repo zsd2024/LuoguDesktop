@@ -32,6 +32,7 @@ target_link_libraries(LuoguDesktop
     KF6::I18n
     KF6::CoreAddons
     KF6::IconThemes
+    hv
 )
 
 # 完成 Qt 可执行目标的最终设置

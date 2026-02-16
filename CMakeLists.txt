@@ -47,6 +47,12 @@ find_package(KF6 REQUIRED COMPONENTS
 # 查找 KDE Frameworks 6 并要求以下组件可用：Kirigami、I18n、CoreAddons、QQC2DesktopStyle、IconThemes。
 # 查找失败则终止配置。
 
+find_package(OpenSSL REQUIRED)
+# 添加 OpenSSL 库依赖
+
+find_package(libhv REQUIRED)
+# 添加 hv 库依赖
+
 ecm_find_qmlmodule(org.kde.kirigami REQUIRED)
 # 使用 ECM 的辅助宏查找 QML 模块 org.kde.kirigami，查找失败则终止配置。
 
