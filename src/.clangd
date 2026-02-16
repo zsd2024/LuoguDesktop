@@ -1,0 +1,16 @@
+CompileFlags:
+  Add: [-Wall, -Wextra, -Wpedantic]
+  Remove:
+    - -mno-direct-extern-access
+
+Diagnostics:
+  UnusedIncludes: Strict
+
+Index:
+  Background: Build
+
+Completion:
+  AllScopes: true
+
+Hover:
+  ShowAKA: true

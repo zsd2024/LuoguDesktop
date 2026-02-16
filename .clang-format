@@ -1,0 +1,23 @@
+BasedOnStyle: LLVM
+
+# 缩进与空格
+UseTab: Never
+IndentWidth: 4
+TabWidth: 4
+IndentCaseLabels: false
+
+# 大括号风格（Allman）
+BreakBeforeBraces: Allman
+
+# 单行 if 禁止写成一行
+AllowShortIfStatementsOnASingleLine: false
+
+# 访问修饰符缩进（public/private/protected）
+AccessModifierOffset: -4
+
+# 命名空间缩进
+NamespaceIndentation: All
+FixNamespaceComments: false
+
+# 行宽（0 = 不限制）
+ColumnLimit: 0
