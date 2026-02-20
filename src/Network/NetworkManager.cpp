@@ -91,6 +91,7 @@ NetworkResponse NetworkManager::sendRequest(const NetworkRequest &req)
     for (auto it = req.headers.constBegin(); it != req.headers.constEnd(); ++it)
         tmp.headers[it.key().toStdString()] = it.value().toStdString();
     tmp.body = req.payload;
+    m_cookieJar.applyToRequest(tmp);
     HttpResponse resp;
     int res = http_client_send(&tmp, &resp);
     NetworkResponse net;
@@ -112,6 +113,8 @@ NetworkResponse NetworkManager::sendRequest(const NetworkRequest &req)
             QString::fromStdString(kv.first),
             QString::fromStdString(kv.second));
     }
+    // cookie
+    m_cookieJar.updateFromResponse(resp);
     // 时间戳
     net.timestamp = QDateTime::currentDateTime();
     return net;
