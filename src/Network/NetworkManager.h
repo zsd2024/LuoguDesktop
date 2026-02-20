@@ -1,4 +1,5 @@
 #pragma once
+#include "CookieJar.h"
 #include "NetworkRequest.h"
 #include "NetworkResponse.h"
 #include <QDateTime>
@@ -91,4 +92,7 @@ private:
 
     // 默认限流时长
     int m_defaultMinIntervalMs;
+
+    // CookieJar
+    CookieJar m_cookieJar;
 };
