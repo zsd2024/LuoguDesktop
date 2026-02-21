@@ -3,4 +3,6 @@ target_sources(LuoguDesktop
     PRIVATE
     UserRepository.cpp
     UserRepository.h
+    AuthRepository.cpp
+    AuthRepository.h
 )
