@@ -3,44 +3,16 @@
 // ============================
 // 构造函数：传入完整 URL
 // ============================
-NetworkRequest::NetworkRequest(QString fullUrl)
+NetworkRequest::NetworkRequest(const QString &fullUrl)
 {
-    fullUrl = fullUrl.trimmed();
-
-    // 解析协议
-    if (fullUrl.startsWith(u"http://"_s))
-    {
-        scheme = Scheme::Http;
-        fullUrl = fullUrl.mid(7);
-    }
-    else if (fullUrl.startsWith(u"https://"_s))
-    {
-        scheme = Scheme::Https;
-        fullUrl = fullUrl.mid(8);
-    }
-
-    // 分离 host 与 path
-    int slash = fullUrl.indexOf(u"/"_s);
-
-    if (slash < 0)
-    {
-        host = fullUrl;
-        path = u"/"_s;
-    }
-    else
-    {
-        host = fullUrl.left(slash);
-        path = fullUrl.mid(slash);
-    }
-
-    normalize();
+    setUrl(fullUrl);
 }
 
 // ============================
 // 构造函数：host + path
 // ============================
-NetworkRequest::NetworkRequest(QString host,
-                               QString path,
+NetworkRequest::NetworkRequest(const QString &host,
+                               const QString &path,
                                RequestMethod method,
                                int priority)
     : priority(priority),
@@ -91,4 +63,40 @@ void NetworkRequest::normalize()
 QString NetworkRequest::finalUrl() const
 {
     return (scheme == Scheme::Https ? u"https://"_s : u"http://"_s) + host + path;
+}
+
+// ============================
+// 设置 URL
+// ============================
+void NetworkRequest::setUrl(QString fullUrl)
+{
+    fullUrl = fullUrl.trimmed();
+
+    // 解析协议
+    if (fullUrl.startsWith(u"http://"_s))
+    {
+        scheme = Scheme::Http;
+        fullUrl = fullUrl.mid(7);
+    }
+    else if (fullUrl.startsWith(u"https://"_s))
+    {
+        scheme = Scheme::Https;
+        fullUrl = fullUrl.mid(8);
+    }
+
+    // 分离 host 与 path
+    int slash = fullUrl.indexOf(u"/"_s);
+
+    if (slash < 0)
+    {
+        host = fullUrl;
+        path = u"/"_s;
+    }
+    else
+    {
+        host = fullUrl.left(slash);
+        path = fullUrl.mid(slash);
+    }
+
+    normalize();
 }
