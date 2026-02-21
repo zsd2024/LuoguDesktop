@@ -21,10 +21,14 @@ User UserRepository::fetchUser(int uid)
         for (int i = 0; i < RETRY_LIMIT; ++i)
         {
             qDebug() << u"[INFO] User Repository: [User Fetch] Redirect to %1"_s.arg(res.headers[u"Location"_s]).toStdString().c_str();
-            req.finalUrl() = res.headers[u"Location"_s];
+            req.setUrl(res.headers[u"Location"_s]);
             res = m_network->blockingRequest(req);
             if (res.statusCode == 200)
                 return analyzeUserResponse(res.body);
+            else if (res.statusCode == 302)
+                continue;
+            else
+                return User();
         }
     }
     else if (res.statusCode == 404)

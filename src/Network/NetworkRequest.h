@@ -17,11 +17,11 @@ public:
 
 public:
     // 构造函数：传入完整 URL
-    explicit NetworkRequest(QString fullUrl);
+    explicit NetworkRequest(const QString &fullUrl);
 
     // 构造函数：传入 host + path
-    NetworkRequest(QString host,
-                   QString path,
+    NetworkRequest(const QString &host,
+                   const QString &path,
                    RequestMethod method = RequestMethod::Get,
                    int priority = 0);
 
@@ -33,6 +33,9 @@ public:
 
     // 构造最终 URL
     QString finalUrl() const;
+
+    // 设置 URL
+    void setUrl(QString fullUrl);
 
 public:
     int priority = 0;                              // 优先级（越大越优先）

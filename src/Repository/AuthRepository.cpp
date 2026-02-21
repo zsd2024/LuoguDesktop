@@ -35,7 +35,7 @@ AuthResult AuthRepository::login(const QString &username, const QString &passwor
     {
         for (int i = 0; i < RETRY_LIMIT; ++i)
         {
-            req.finalUrl() = res.headers[u"Location"_s];
+            req.setUrl(res.headers[u"Location"_s]);
             res = m_network->blockingRequest(req);
             if (res.statusCode == 200)
             {
