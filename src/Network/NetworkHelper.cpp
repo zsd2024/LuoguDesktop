@@ -38,7 +38,7 @@ QMap<QString, QString> NetworkHelper::browserJsonHeaders(bool includeContentType
 NetworkResponse NetworkHelper::followRedirects(NetworkRequest req, const int retryLimit)
 {
     NetworkResponse res = m_network->blockingRequest(req);
-    if (res.statusCode == 302 || res.statusCode == 307)
+    if (res.statusCode >= 300 && res.statusCode <= 399)
     {
         for (int i = 0; i < retryLimit; ++i)
         {
@@ -49,7 +49,7 @@ NetworkResponse NetworkHelper::followRedirects(NetworkRequest req, const int ret
             res = m_network->blockingRequest(req);
             if (res.statusCode == 200)
                 break;
-            else if (res.statusCode == 302 || res.statusCode == 307)
+            else if (res.statusCode >= 300 && res.statusCode <= 399)
                 continue;
             else
                 return res;
