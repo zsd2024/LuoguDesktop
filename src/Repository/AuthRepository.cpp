@@ -94,3 +94,46 @@ AuthResult AuthRepository::logout()
     else
         return {false, u"未知错误"_s, -1, {}};
 }
+
+QByteArray AuthRepository::fetchCaptcha()
+{
+    // 先访问一次主站获取 Cookie
+    NetworkRequest req(u"https://www.luogu.com.cn/"_s);
+    req.method = RequestMethod::Get;
+    QMap<QString, QString> Headers;
+    Headers[u"User-Agent"_s] = u"Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/145.0.0.0 Safari/537.36"_s;
+    Headers[u"Accept"_s] = u"text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.7"_s;
+    req.headers = Headers;
+    NetworkResponse res = m_network->blockingRequest(req);
+    if (res.statusCode != 200)
+        return {};
+
+    NetworkRequest captchaReq(u"https://www.luogu.com.cn/lg4/captcha"_s);
+    captchaReq.method = RequestMethod::Get;
+    QMap<QString, QString> captchaHeaders;
+    captchaHeaders[u"User-Agent"_s] = u"Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/145.0.0.0 Safari/537.36"_s;
+    captchaHeaders[u"Accept"_s] = u"image/avif,image/webp,image/apng,image/svg+xml,image/*,*/*;q=0.8"_s;
+    captchaReq.headers = captchaHeaders;
+    NetworkResponse captchaRes = m_network->blockingRequest(captchaReq);
+    if (captchaRes.statusCode == 302)
+    {
+        for (int i = 0; i < RETRY_LIMIT; ++i)
+        {
+            captchaReq.setUrl(captchaRes.headers[u"Location"_s]);
+            captchaRes = m_network->blockingRequest(captchaReq);
+            if (captchaRes.statusCode == 200)
+                break;
+            else if (captchaRes.statusCode == 302)
+                continue;
+            else
+                return {};
+        }
+        if (captchaRes.statusCode != 200)
+            return {};
+        return captchaRes.body;
+    }
+    else if (captchaRes.statusCode == 200)
+        return captchaRes.body;
+    else
+        return {};
+}

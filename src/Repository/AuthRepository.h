@@ -19,6 +19,7 @@ public:
     AuthRepository(NetworkManager *network);
     AuthResult login(const QString &username, const QString &password, const QString &captcha);
     AuthResult logout();
+    QByteArray fetchCaptcha();
 
 private:
     QString extractCsrfToken(const QByteArray &res);
