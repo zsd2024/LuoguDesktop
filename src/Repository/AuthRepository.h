@@ -1,4 +1,5 @@
 #pragma once
+#include "Network/NetworkHelper.h"
 #include "Network/NetworkManager.h"
 #include <QDir>
 #include <QJsonObject>
@@ -16,7 +17,7 @@ struct AuthResult
 class AuthRepository
 {
 public:
-    AuthRepository(NetworkManager *network);
+    explicit AuthRepository(NetworkManager *network);
     AuthResult login(const QString &username, const QString &password, const QString &captcha);
     AuthResult logout();
     QByteArray fetchCaptcha();
@@ -24,5 +25,6 @@ public:
 private:
     QString extractCsrfToken(const QByteArray &res);
     NetworkManager *m_network;
+    NetworkHelper m_helper;
     const int RETRY_LIMIT = 3;
 };

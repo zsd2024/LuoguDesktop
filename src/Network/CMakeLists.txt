@@ -9,4 +9,6 @@ target_sources(LuoguDesktop
     RequestMethod.h
     CookieJar.cpp
     CookieJar.h
+    NetworkHelper.cpp
+    NetworkHelper.h
 )

@@ -1,13 +1,12 @@
 #include "AuthRepository.h"
 
 AuthRepository::AuthRepository(NetworkManager *network)
-    : m_network(network)
+    : m_network(network), m_helper(network)
 {
 }
 
 QString AuthRepository::extractCsrfToken(const QByteArray &res)
 {
-    // <meta name="csrf-token" content="1771682486:fr/34+sxFPey/2ZWKY9thvixAAUm6ZAnfMEe11je8RQ=">
     QRegularExpression re(uR"raw(<meta\s+name="csrf-token"\s+content="([^"]+)">)raw"_s);
     auto match = re.match(QString::fromUtf8(res));
     if (match.hasMatch())
@@ -17,13 +16,7 @@ QString AuthRepository::extractCsrfToken(const QByteArray &res)
 
 AuthResult AuthRepository::login(const QString &username, const QString &password, const QString &captcha)
 {
-    NetworkRequest req(u"https://www.luogu.com.cn/auth/login"_s);
-    req.method = RequestMethod::Get;
-    QMap<QString, QString> Headers;
-    Headers[u"User-Agent"_s] = u"Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/145.0.0.0 Safari/537.36"_s;
-    Headers[u"Accept"_s] = u"text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.7"_s;
-    req.headers = Headers;
-    NetworkResponse res = m_network->blockingRequest(req);
+    NetworkResponse res = m_helper.followRedirects(m_helper.get(u"https://www.luogu.com.cn/auth/login"_s, m_helper.browserHeaders()), RETRY_LIMIT);
     QString csrfToken;
     if (res.statusCode == 200)
     {
@@ -31,42 +24,17 @@ AuthResult AuthRepository::login(const QString &username, const QString &passwor
         if (csrfToken.isEmpty())
             return {false, u"无法获取 CSRF 令牌"_s, -1, u"LuoguDesktop\\Auth\\Exception\\CsrfTokenCannotBeExtractedException"_s};
     }
-    else if (res.statusCode == 302)
-    {
-        for (int i = 0; i < RETRY_LIMIT; ++i)
-        {
-            req.setUrl(res.headers[u"Location"_s]);
-            res = m_network->blockingRequest(req);
-            if (res.statusCode == 200)
-            {
-                csrfToken = extractCsrfToken(res.body);
-                if (!csrfToken.isEmpty())
-                    break;
-                return {false, u"无法获取 CSRF 令牌"_s, -1, u"LuoguDesktop\\Auth\\Exception\\CsrfTokenCannotBeExtractedException"_s};
-            }
-            else if (res.statusCode == 302)
-                continue;
-            else
-                return {false, u"网络请求失败"_s, res.statusCode, u"LuoguDesktop\\Network\\Exception\\HttpException"_s};
-        }
-        if (csrfToken.isEmpty())
-            return {false, u"网络请求失败"_s, res.statusCode, u"LuoguDesktop\\Network\\Exception\\HttpException"_s};
-    }
     else
         return {false, u"网络请求失败"_s, res.statusCode, u"LuoguDesktop\\Network\\Exception\\HttpException"_s};
     qDebug() << csrfToken;
-    NetworkRequest loginReq(u"https://www.luogu.com.cn/do-auth/password"_s);
-    loginReq.method = RequestMethod::Post;
-    loginReq.headers[u"User-Agent"_s] = u"Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/145.0.0.0 Safari/537.36"_s;
-    loginReq.headers[u"Accept"_s] = u"application/json, text/plain, */*"_s;
-    loginReq.headers[u"Content-Type"_s] = u"application/json"_s;
-    loginReq.headers[u"X-CSRF-Token"_s] = csrfToken;
     QJsonObject payload{
         {u"username"_s, username},
         {u"password"_s, password},
         {u"captcha"_s, captcha}};
-    loginReq.payload = QJsonDocument(payload).toJson(QJsonDocument::Compact);
-    NetworkResponse loginRes = m_network->blockingRequest(loginReq);
+    QByteArray payloadStr = QJsonDocument(payload).toJson(QJsonDocument::Compact);
+    QMap<QString, QString> loginHeaders = m_helper.browserJsonHeaders();
+    loginHeaders[u"X-CSRF-Token"_s] = csrfToken;
+    NetworkResponse loginRes = m_network->blockingRequest(m_helper.post(u"https://www.luogu.com.cn/do-auth/password"_s, payloadStr, loginHeaders));
     qDebug() << loginRes.body;
     if (loginRes.statusCode == 200)
         return {true, {}, 200, {}};
@@ -82,13 +50,7 @@ AuthResult AuthRepository::login(const QString &username, const QString &passwor
 
 AuthResult AuthRepository::logout()
 {
-    NetworkRequest req(u"https://www.luogu.com.cn/auth/logout"_s);
-    req.method = RequestMethod::Get;
-    QMap<QString, QString> Headers;
-    Headers[u"User-Agent"_s] = u"Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/145.0.0.0 Safari/537.36"_s;
-    Headers[u"Accept"_s] = u"text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.7"_s;
-    req.headers = Headers;
-    NetworkResponse res = m_network->blockingRequest(req);
+    NetworkResponse res = m_network->blockingRequest(m_helper.get(u"https://www.luogu.com.cn/auth/logout"_s, m_helper.browserHeaders()));
     if (res.statusCode == 302)
         return {true, {}, 200, {}};
     else
@@ -98,42 +60,13 @@ AuthResult AuthRepository::logout()
 QByteArray AuthRepository::fetchCaptcha()
 {
     // 先访问一次主站获取 Cookie
-    NetworkRequest req(u"https://www.luogu.com.cn/"_s);
-    req.method = RequestMethod::Get;
-    QMap<QString, QString> Headers;
-    Headers[u"User-Agent"_s] = u"Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/145.0.0.0 Safari/537.36"_s;
-    Headers[u"Accept"_s] = u"text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.7"_s;
-    req.headers = Headers;
-    NetworkResponse res = m_network->blockingRequest(req);
+    NetworkResponse res = m_helper.followRedirects(m_helper.get(u"https://www.luogu.com.cn/"_s, m_helper.browserHeaders()), RETRY_LIMIT);
     if (res.statusCode != 200)
         return {};
 
-    NetworkRequest captchaReq(u"https://www.luogu.com.cn/lg4/captcha"_s);
-    captchaReq.method = RequestMethod::Get;
-    QMap<QString, QString> captchaHeaders;
-    captchaHeaders[u"User-Agent"_s] = u"Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/145.0.0.0 Safari/537.36"_s;
-    captchaHeaders[u"Accept"_s] = u"image/avif,image/webp,image/apng,image/svg+xml,image/*,*/*;q=0.8"_s;
-    captchaReq.headers = captchaHeaders;
-    NetworkResponse captchaRes = m_network->blockingRequest(captchaReq);
-    if (captchaRes.statusCode == 302)
-    {
-        for (int i = 0; i < RETRY_LIMIT; ++i)
-        {
-            captchaReq.setUrl(captchaRes.headers[u"Location"_s]);
-            captchaRes = m_network->blockingRequest(captchaReq);
-            if (captchaRes.statusCode == 200)
-                break;
-            else if (captchaRes.statusCode == 302)
-                continue;
-            else
-                return {};
-        }
-        if (captchaRes.statusCode != 200)
-            return {};
-        return captchaRes.body;
-    }
-    else if (captchaRes.statusCode == 200)
+    NetworkResponse captchaRes = m_helper.followRedirects(m_helper.get(u"https://www.luogu.com.cn/lg4/captcha"_s, m_helper.browserImageHeaders()), RETRY_LIMIT);
+    if (captchaRes.statusCode == 200)
         return captchaRes.body;
     else
-        return {};
+        return QByteArray();
 }
