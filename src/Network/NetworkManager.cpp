@@ -1,5 +1,7 @@
 #include "NetworkManager.h"
 
+using namespace Qt::StringLiterals;
+
 NetworkManager::NetworkManager(QObject *parent)
     : QObject(parent)
 {

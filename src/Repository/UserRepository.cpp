@@ -1,5 +1,7 @@
 #include "UserRepository.h"
 
+using namespace Qt::StringLiterals;
+
 UserRepository::UserRepository(NetworkManager *network)
     : m_network(network), m_helper(network)
 {

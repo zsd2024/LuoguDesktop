@@ -2,8 +2,6 @@
 #include "Network/NetworkManager.h"
 #include <QString>
 
-using namespace Qt::StringLiterals;
-
 class NetworkHelper
 {
 public:

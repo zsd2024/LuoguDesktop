@@ -4,8 +4,6 @@
 #include <QMap>
 #include <QString>
 
-using namespace Qt::StringLiterals;
-
 class NetworkResponse
 {
 public:

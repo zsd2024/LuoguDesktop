@@ -1,5 +1,7 @@
 #include "AuthRepository.h"
 
+using namespace Qt::StringLiterals;
+
 AuthRepository::AuthRepository(NetworkManager *network)
     : m_network(network), m_helper(network)
 {

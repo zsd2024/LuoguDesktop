@@ -11,8 +11,6 @@
 #include <hv/HttpClient.h>
 #include <queue>
 
-using namespace Qt::StringLiterals;
-
 // 每个 host 的限流状态
 struct HostRateLimit
 {

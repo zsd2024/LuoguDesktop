@@ -1,5 +1,7 @@
 #include "NetworkRequest.h"
 
+using namespace Qt::StringLiterals;
+
 // ============================
 // 构造函数：传入完整 URL
 // ============================

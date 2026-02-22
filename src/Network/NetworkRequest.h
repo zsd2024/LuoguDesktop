@@ -4,8 +4,6 @@
 #include <QDateTime>
 #include <QMap>
 
-using namespace Qt::StringLiterals;
-
 class NetworkRequest
 {
 public:

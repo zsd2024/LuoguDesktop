@@ -1,5 +1,7 @@
 #include "NetworkHelper.h"
 
+using namespace Qt::StringLiterals;
+
 NetworkHelper::NetworkHelper(NetworkManager *network)
     : m_network(network)
 {
