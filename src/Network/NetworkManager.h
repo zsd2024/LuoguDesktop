@@ -49,6 +49,9 @@ public:
     // 同步阻塞接口：在调用者线程中阻塞直到请求完成（慎用于 UI 线程）
     Q_INVOKABLE NetworkResponse blockingRequest(const NetworkRequest &req);
 
+    // 获取 CookieJar
+    CookieJar *cookieJar();
+
 Q_SIGNALS:
 
     // 注意：如果这是信号，应写为: signals: void requestFinished(const NetworkResponse &result);

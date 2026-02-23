@@ -186,3 +186,8 @@ void NetworkManager::processNext()
     // ================================
     Q_EMIT requestFinished(response, req.requestId);
 }
+
+CookieJar *NetworkManager::cookieJar()
+{
+    return &m_cookieJar;
+}
