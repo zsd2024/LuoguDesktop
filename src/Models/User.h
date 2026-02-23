@@ -19,6 +19,8 @@ struct UserPrize
     int rank;                     // 奖项排名
     // ===== 解析函数 =====
     static UserPrize fromJson(const QJsonObject &json);
+    // ===== 比较 =====
+    bool operator==(const UserPrize &prize) const;
 };
 
 struct Gu
@@ -32,6 +34,8 @@ struct Gu
     int prize;      // 获得成就
     // ===== 解析函数 =====
     static Gu fromJson(const QJsonObject &json);
+    // ===== 比较 =====
+    bool operator==(const Gu &gu) const;
 };
 
 struct EloRecord
@@ -46,6 +50,8 @@ struct EloRecord
     std::optional<int> prevDiff; // Elo 变化（可能为空）
     // ===== 解析函数 =====
     static EloRecord fromJson(const QJsonObject &json);
+    // ===== 比较 =====
+    bool operator==(const EloRecord &record) const;
 };
 
 struct DailyCount
@@ -54,6 +60,8 @@ struct DailyCount
     int maxDifficulty; // 最高难度
     // ===== 解析函数 =====
     static DailyCount fromJson(const QJsonArray &json);
+    // ===== 比较 =====
+    bool operator==(const DailyCount &count) const;
 };
 
 enum class UserColor
@@ -111,6 +119,9 @@ struct UserProfile
 
     // ===== 颜色转换 =====
     static UserColor parseUserColor(const QString &str);
+
+    // ===== 比较 =====
+    bool operator==(const UserProfile &profile) const;
 };
 
 class User
@@ -135,4 +146,8 @@ public:
     //
     // 本函数输入 json 对象应为用户主页源代码中 json 数据中的 `data` 字段
     static User fromJson(const QJsonObject &json);
+
+    // ===== 比较 =====
+    bool operator==(const User &user) const;
+    bool operator!=(const User &user) const;
 };

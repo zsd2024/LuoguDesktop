@@ -131,3 +131,38 @@ UserColor UserProfile::parseUserColor(const QString &str)
     else
         return UserColor::Unknown;
 }
+
+bool UserPrize::operator==(const UserPrize &other) const
+{
+    return std::tie(year, contest, event, prize, score, rank) == std::tie(other.year, other.contest, other.event, other.prize, other.score, other.rank);
+}
+
+bool Gu::operator==(const Gu &other) const
+{
+    return std::tie(rating, time, social, basic, contest, practice, prize) == std::tie(other.rating, other.time, other.social, other.basic, other.contest, other.practice, other.prize);
+}
+
+bool EloRecord::operator==(const EloRecord &other) const
+{
+    return std::tie(rating, time, contestId, contestStart, contestEnd, contestName, userCount, prevDiff) == std::tie(other.rating, other.time, other.contestId, other.contestStart, other.contestEnd, other.contestName, other.userCount, other.prevDiff);
+}
+
+bool DailyCount::operator==(const DailyCount &other) const
+{
+    return std::tie(count, maxDifficulty) == std::tie(other.count, other.maxDifficulty);
+}
+
+bool UserProfile::operator==(const UserProfile &other) const
+{
+    return std::tie(uid, name, avatar, slogan, introduction, badge, registerTime, isAdmin, isBanned, color, rawColor, ccfLevel, xcpcLevel, background, eloValue, followingCount, followerCount, ranking, passedProblemCount, submittedProblemCount) == std::tie(other.uid, other.name, other.avatar, other.slogan, other.introduction, other.badge, other.registerTime, other.isAdmin, other.isBanned, other.color, other.rawColor, other.ccfLevel, other.xcpcLevel, other.background, other.eloValue, other.followingCount, other.followerCount, other.ranking, other.passedProblemCount, other.submittedProblemCount);
+}
+
+bool User::operator==(const User &other) const
+{
+    return std::tie(profile, prizes, gu, eloHistory, dailyCounts) == std::tie(other.profile, other.prizes, other.gu, other.eloHistory, other.dailyCounts);
+}
+
+bool User::operator!=(const User &other) const
+{
+    return !(*this == other);
+}
