@@ -12,6 +12,7 @@ struct AuthResult
     QString errorMessage; // 错误信息（UI 使用）
     int errorCode;        // 错误码（判断使用）
     QString errorType;    // 错误类型（判断使用）
+    int uid = 0;          // 用户 ID（仅在登录成功时有效）
 };
 
 class AuthRepository

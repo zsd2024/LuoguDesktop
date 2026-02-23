@@ -39,7 +39,11 @@ AuthResult AuthRepository::login(const QString &username, const QString &passwor
     NetworkResponse loginRes = m_network->blockingRequest(m_helper.post(u"https://www.luogu.com.cn/do-auth/password"_s, payloadStr, loginHeaders));
     qDebug() << loginRes.body;
     if (loginRes.statusCode == 200)
-        return {true, {}, 200, {}};
+    {
+        std::optional<QString> uidOpt = m_network->cookieJar()->getCookie(u"__uid"_s);
+        int uid = uidOpt ? uidOpt->toInt() : 0;
+        return {true, {}, 200, {}, uid};
+    }
     else
     {
         QJsonObject json = QJsonDocument::fromJson(loginRes.body).object();
