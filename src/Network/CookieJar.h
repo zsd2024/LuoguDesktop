@@ -16,6 +16,8 @@ public:
     // 清空所有 cookie
     void clear();
 
+    std::optional<QString> getCookie(const QString &name) const;
+
 private:
     http_cookies m_cookies;
     mutable QMutex m_mutex;

@@ -25,3 +25,14 @@ void CookieJar::clear()
     QMutexLocker locker(&m_mutex);
     m_cookies.clear();
 }
+
+std::optional<QString> CookieJar::getCookie(const QString &name) const
+{
+    QMutexLocker locker(&m_mutex);
+    for (const auto &cookie : m_cookies)
+    {
+        if (cookie.name == name)
+            return QString::fromStdString(cookie.value);
+    }
+    return {};
+}
