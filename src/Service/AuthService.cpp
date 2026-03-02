@@ -109,10 +109,7 @@ void AuthService::refreshCaptcha()
             if (data.isEmpty())
                 return;
 
-            QImage image;
-            image.loadFromData(data);
-            if (image.isNull())
-                Q_EMIT captchaRefreshed(image);
+            Q_EMIT captchaRefreshed(u"data:image/jpeg;base64,"_s + QString::fromLatin1(data.toBase64()));
             m_buzyCaptcha = false;
             Q_EMIT buzyCaptchaChanged();
         },

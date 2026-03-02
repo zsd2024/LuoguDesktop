@@ -3,7 +3,6 @@
 #include "ModelViews/UserWrapper.h"
 #include "Repository/AuthRepository.h"
 #include "Repository/UserRepository.h"
-#include <QImage>
 
 class AuthService : public QObject
 {
