@@ -2,6 +2,14 @@
 ecm_add_qml_module(LuoguDesktop
     URI
     com.github.zsd2024.LuoguDesktop
+    VERSION
+    1.0
+    SOURCES
+    main.cpp
+    QML_FILES
+    UI/qml/Main.qml
+    UI/qml/LoginPage.qml
+    UI/qml/MainPage.qml
 )
 
 # 将 QML 源文件注册到目标，便于安装到正确的 QML 模块目录

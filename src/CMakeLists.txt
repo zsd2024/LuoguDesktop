@@ -11,6 +11,7 @@ add_subdirectory(Network)
 add_subdirectory(Repository)
 add_subdirectory(Service)
 add_subdirectory(Models)
+add_subdirectory(ModelViews)
 add_subdirectory(Utils)
 include(UI/CMakeLists.txt)
 
@@ -33,6 +34,7 @@ target_link_libraries(LuoguDesktop
     KF6::CoreAddons
     KF6::IconThemes
     hv
+    ModelViews
 )
 
 # 完成 Qt 可执行目标的最终设置
