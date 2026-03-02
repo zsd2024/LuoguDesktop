@@ -40,8 +40,12 @@ AuthResult AuthRepository::login(const QString &username, const QString &passwor
     qDebug() << loginRes.body;
     if (loginRes.statusCode == 200)
     {
-        std::optional<QString> uidOpt = m_network->cookieJar()->getCookie(u"__uid"_s);
+        std::optional<QString> uidOpt = m_network->cookieJar()->getCookie(u"_uid"_s);
         int uid = uidOpt ? uidOpt->toInt() : 0;
+        if (uid == 0)
+            qDebug() << u"[ERROR] Auth Repository: [Login] Cannot get uid from cookie, which \"_uid\" is %0. "_s.arg(uidOpt.value_or(u"null"_s)).toStdString().c_str();
+        else
+            qDebug() << u"[INFO] Auth Repository: [Login] Successfully logged in as user with uid %0. "_s.arg(uid).toStdString().c_str();
         return {true, {}, 200, {}, uid};
     }
     else
