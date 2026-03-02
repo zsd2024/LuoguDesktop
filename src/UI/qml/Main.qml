@@ -25,14 +25,37 @@ Kirigami.ApplicationWindow {
             }
         ]
     }
-    Component { // <==== Component that instantiates the Kirigami.AboutPage
+    Component { // <==== 实例化 Kirigami.AboutPage 的组件
         id: aboutPage
 
         Kirigami.AboutPage {
             aboutData: About
         }
     }
-    pageStack.initialPage: Kirigami.ScrollablePage {
-        title: i18nc("@title", "Luogu Desktop")
+
+    // ===== 实例化页面组件 =====
+    Component {
+        id: loginPage
+        LoginPage {}
+    }
+    Component {
+        id: mainPage
+        MainPage {}
+    }
+
+    // ===== 根据登录状态切换页面 =====
+    pageStack.initialPage: AuthService.isLoggedIn ? mainPage : loginPage
+
+    Connections {
+        target: AuthService
+
+        function onLoggedInChanged() {
+            root.pageStack.clear();
+            if (AuthService.isLoggedIn) {
+                root.pageStack.push(mainPage.createObject(root));
+            } else {
+                root.pageStack.push(loginPage.createObject(root));
+            }
+        }
     }
 }

@@ -1,3 +1,10 @@
+#include "ModelViews/DailyCountWrapper.h"
+#include "ModelViews/EloRecordWrapper.h"
+#include "ModelViews/GuWrapper.h"
+#include "ModelViews/UserPrizeWrapper.h"
+#include "ModelViews/UserProfileWrapper.h"
+#include "ModelViews/UserWrapper.h"
+#include "Service/AuthService.h"
 #include <KAboutData>
 #include <KIconTheme>
 #include <KLocalizedContext>
@@ -108,6 +115,33 @@ int main(int argc, char *argv[])
             // 将 KAboutData::applicationData() 转换为 QML 可用的脚本值并返回
             return engine->toScriptValue(KAboutData::applicationData());
         });
+
+    // 创建网络管理器、仓储和服务示例
+    static NetworkManager networkManager;
+    static AuthRepository authRepo(&networkManager);
+    static UserRepository userRepo(&networkManager);
+    static AuthService authService(&authRepo, &userRepo);
+
+    // -------------------------
+    // 在 QML 中注册单例 AuthService 对象
+    // -------------------------
+    qmlRegisterSingletonInstance(
+        "com.github.zsd2024.LuoguDesktop", // QML 导入名（必须与
+                                           // ecm_add_qml_module 注册的 URI 一致）
+        1, 0,                              // 版本号（主版本、次版本）
+        "AuthService",                     // QML 中的对象名
+        &authService                       // 将 AuthService 对象暴露给 QML
+    );
+
+    // -------------------------
+    // 在 QML 中注册包装器类
+    // -------------------------
+    qmlRegisterType<UserWrapper>("com.github.zsd2024.LuoguDesktop", 1, 0, "User");
+    qmlRegisterType<UserProfileWrapper>("com.github.zsd2024.LuoguDesktop", 1, 0, "UserProfile");
+    qmlRegisterType<GuWrapper>("com.github.zsd2024.LuoguDesktop", 1, 0, "Gu");
+    qmlRegisterType<UserPrizeWrapper>("com.github.zsd2024.LuoguDesktop", 1, 0, "UserPrize");
+    qmlRegisterType<EloRecordWrapper>("com.github.zsd2024.LuoguDesktop", 1, 0, "EloRecord");
+    qmlRegisterType<DailyCountWrapper>("com.github.zsd2024.LuoguDesktop", 1, 0, "DailyCount");
 
     // -------------------------
     // 创建并配置 QQmlApplicationEngine
