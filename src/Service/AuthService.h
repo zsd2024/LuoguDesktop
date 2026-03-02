@@ -1,5 +1,6 @@
 #pragma once
 
+#include "ModelViews/UserWrapper.h"
 #include "Repository/AuthRepository.h"
 #include "Repository/UserRepository.h"
 #include <QImage>
@@ -8,8 +9,8 @@ class AuthService : public QObject
 {
     Q_OBJECT
 
-    Q_PROPERTY(bool loggedIn READ isLoggedIn NOTIFY loggedInChanged)
-    Q_PROPERTY(User currentUser READ currentUser NOTIFY currentUserChanged)
+    Q_PROPERTY(bool isLoggedIn READ isLoggedIn NOTIFY loggedInChanged)
+    Q_PROPERTY(UserWrapper *currentUser READ currentUser NOTIFY currentUserChanged)
 
 public:
     explicit AuthService(AuthRepository *authRepo, UserRepository *userRepo, QObject *parent = nullptr);
@@ -27,8 +28,11 @@ public:
     // 是否已登录
     bool isLoggedIn() const;
 
-    // 当前登录用户
-    const User &currentUser() const;
+    // 当前登录用户数据（非响应式）
+    const User &currentUserData() const;
+
+    // 当前登录用户（响应式包装器）
+    UserWrapper *currentUser() const;
 
     // 重新获取用户信息
     Q_INVOKABLE void refreshCurrentUser();
@@ -48,7 +52,7 @@ Q_SIGNALS:
     // 登出成功
     void logoutSucceeded();
     // 验证码刷新成功
-    void captchaRefreshed(const QImage &captcha);
+    void captchaRefreshed(const QString &captcha);
 
 private:
     AuthRepository *m_authRepo;
@@ -56,4 +60,7 @@ private:
 
     bool m_loggedIn = false;
     User m_currentUser;
+    UserWrapper *m_currentUserWrapper;
+
+    void updateCurrentUser(User &&user);
 };

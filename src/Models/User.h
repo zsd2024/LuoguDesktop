@@ -124,9 +124,8 @@ struct UserProfile
     bool operator==(const UserProfile &profile) const;
 };
 
-class User
+struct User
 {
-public:
     // ===== 基础信息 =====
     UserProfile profile;
 
