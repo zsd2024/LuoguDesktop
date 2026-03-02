@@ -11,6 +11,8 @@ class AuthService : public QObject
 
     Q_PROPERTY(bool isLoggedIn READ isLoggedIn NOTIFY loggedInChanged)
     Q_PROPERTY(UserWrapper *currentUser READ currentUser NOTIFY currentUserChanged)
+    Q_PROPERTY(bool buzyLogin READ buzyLogin NOTIFY buzyLoginChanged)
+    Q_PROPERTY(bool buzyCaptcha READ buzyCaptcha NOTIFY buzyCaptchaChanged)
 
 public:
     explicit AuthService(AuthRepository *authRepo, UserRepository *userRepo, QObject *parent = nullptr);
@@ -34,6 +36,12 @@ public:
     // 当前登录用户（响应式包装器）
     UserWrapper *currentUser() const;
 
+    // 当前登录忙碌状态
+    bool buzyLogin() const;
+
+    // 当前验证码忙碌状态
+    bool buzyCaptcha() const;
+
     // 重新获取用户信息
     Q_INVOKABLE void refreshCurrentUser();
 
@@ -53,6 +61,10 @@ Q_SIGNALS:
     void logoutSucceeded();
     // 验证码刷新成功
     void captchaRefreshed(const QString &captcha);
+    // 登录忙碌状态改变
+    void buzyLoginChanged();
+    // 验证码忙碌状态改变
+    void buzyCaptchaChanged();
 
 private:
     AuthRepository *m_authRepo;
@@ -61,6 +73,9 @@ private:
     bool m_loggedIn = false;
     User m_currentUser;
     UserWrapper *m_currentUserWrapper;
+
+    bool m_buzyLogin = false;
+    bool m_buzyCaptcha = false;
 
     void updateCurrentUser(User &&user);
 };

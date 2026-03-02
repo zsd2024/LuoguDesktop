@@ -12,10 +12,14 @@ void AuthService::login(const QString &username, const QString &password, const 
         this,
         [=]()
         {
+            m_buzyLogin = true;
+            Q_EMIT buzyLoginChanged();
             AuthResult loginResult = m_authRepo->login(username, password, captcha);
             if (!loginResult.success)
             {
                 Q_EMIT loginFailed(loginResult.errorMessage);
+                m_buzyLogin = false;
+                Q_EMIT buzyLoginChanged();
                 return;
             }
             m_loggedIn = true;
@@ -23,6 +27,8 @@ void AuthService::login(const QString &username, const QString &password, const 
             Q_EMIT loggedInChanged();
             User user = m_userRepo->fetchUser(loginResult.uid);
             updateCurrentUser(std::move(user));
+            m_buzyLogin = false;
+            Q_EMIT buzyLoginChanged();
         },
         Qt::QueuedConnection);
 }
@@ -63,6 +69,16 @@ UserWrapper *AuthService::currentUser() const
     return m_currentUserWrapper;
 }
 
+bool AuthService::buzyLogin() const
+{
+    return m_buzyLogin;
+}
+
+bool AuthService::buzyCaptcha() const
+{
+    return m_buzyCaptcha;
+}
+
 void AuthService::refreshCurrentUser()
 {
     // 异步调用
@@ -87,6 +103,8 @@ void AuthService::refreshCaptcha()
         this,
         [=]()
         {
+            m_buzyCaptcha = true;
+            Q_EMIT buzyCaptchaChanged();
             QByteArray data = m_authRepo->fetchCaptcha();
             if (data.isEmpty())
                 return;
@@ -95,6 +113,8 @@ void AuthService::refreshCaptcha()
             image.loadFromData(data);
             if (image.isNull())
                 Q_EMIT captchaRefreshed(image);
+            m_buzyCaptcha = false;
+            Q_EMIT buzyCaptchaChanged();
         },
         Qt::QueuedConnection);
 }
